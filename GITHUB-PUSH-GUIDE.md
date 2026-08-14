@@ -635,5 +635,4 @@ tmp/
 
 **You're all set! Happy coding! 🎉**
 
-Need help with any step? Let me know!
 
