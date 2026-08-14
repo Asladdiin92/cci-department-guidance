@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCI Department Choice Guidance System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CCI Department Choice Guidance System</h1>
+            <p>Find the best department match for you</p>
+        </header>
+
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="screen active">
+            <div class="welcome-content">
+                <h2>Welcome to the Department Guidance Assessment</h2>
+                <p>This assessment will help you discover which CCI department best matches your interests, skills, and career goals.</p>
+                
+                <div class="info-box">
+                    <h3>What to expect:</h3>
+                    <ul>
+                        <li>📝 20 questions about your preferences and goals</li>
+                        <li>⏱️ Takes approximately 10-15 minutes</li>
+                        <li>🎯 Get personalized department recommendations</li>
+                        <li>📊 See your compatibility score with each department</li>
+                    </ul>
+                </div>
+
+                <div class="departments-info">
+                    <p><strong>Available Departments:</strong></p>
+                    <div class="dept-tags">
+                        <span class="dept-tag cs">Computer Science</span>
+                        <span class="dept-tag swe">Software Engineering</span>
+                        <span class="dept-tag it">Information Technology</span>
+                        <span class="dept-tag is">Information System</span>
+                        <span class="dept-tag stat">Statistics</span>
+                    </div>
+                </div>
+
+                <button id="startBtn" class="btn btn-primary">Start Assessment</button>
+            </div>
+        </div>
+
+        <!-- Assessment Screen -->
+        <div id="assessmentScreen" class="screen">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <p id="progressText" class="progress-text">Question 1 of 20</p>
+            </div>
+
+            <div class="question-container">
+                <h2 id="questionText" class="question-text"></h2>
+                <div id="optionsContainer" class="options-container"></div>
+            </div>
+
+            <div class="navigation">
+                <button id="prevBtn" class="btn btn-secondary" disabled>Previous</button>
+                <button id="nextBtn" class="btn btn-primary" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="screen">
+            <div class="results-content">
+                <h2>Your Department Recommendations</h2>
+                <p class="results-subtitle">Based on your responses, here are your top department matches:</p>
+                
+                <div id="recommendationsContainer" class="recommendations-container">
+                    <!-- Recommendations will be inserted here -->
+                </div>
+
+                <div class="actions">
+                    <button id="restartBtn" class="btn btn-secondary">Take Assessment Again</button>
+                    <button id="compareBtn" class="btn btn-primary">Compare All Departments</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
