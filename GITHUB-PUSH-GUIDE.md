@@ -1,7 +1,5 @@
 # Complete Guide: Push Your Project to GitHub from Kiro/VS Code
 
-**Step-by-step instructions to get your code on GitHub**
-
 ---
 
 ## 📋 Prerequisites
