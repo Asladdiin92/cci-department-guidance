@@ -1,6 +1,6 @@
 # Team Share - My Component Analysis
 
-**Name:** [Your Name]  
+**Name:** [Asladin Abdukedir]  
 **Component:** Student Assessment System (Interactive Questionnaire)  
 **Date:** August 14, 2026
 
@@ -260,5 +260,5 @@ Let me know what you think and if you have suggestions.
 
 ---
 
-_Note: All mockups and analysis are in the project folder. No coding done yet - today was pure theory and design as advised._
+_Note: All mockups and analysis are in the project folder. No coding done yet - today was pure theory and design.
 
