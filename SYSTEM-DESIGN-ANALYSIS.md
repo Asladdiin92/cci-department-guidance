@@ -1,6 +1,6 @@
 # CCI Department Choice Guidance System - Design Analysis
 
-**Created by:** [Your Name]  
+**Created by:** [Asladin Abdukadir]  
 **Date:** August 14, 2026  
 **Purpose:** Initial system exploration and UI/UX design planning
 
