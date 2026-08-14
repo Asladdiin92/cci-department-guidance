@@ -336,21 +336,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📸 Screenshots
 
-*(Screenshots will be added as development progresses)*
-
-## 📸 Screenshots
-## 📸 Screenshots
-
-*(Screenshots will be added as development progresses)*
-
 ### Welcome Screen
 ![Welcome Screen](screenshots/welcome-screen.png)
 
-### More Screenshots Coming Soon
-- Assessment Interface - In development
-- Results Display - In development
-- Department Comparison - In development
-- Mobile View - In development
+### Development Progress
+More screenshots will be added as features are completed:
+
+- **Assessment Interface** - In development 🔨
+- **Results Display** - In development 🔨
+- **Department Comparison** - In development 🔨
+- **Mobile View** - In development 🔨
+- **Admin Dashboard** - Planned 📋
 
 
 
