@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CCI Department Guidance</title>
+    <link rel="stylesheet" href="../src/css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>CCI Dashboard</h2>
+                <p>Admin Panel</p>
+            </div>
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-item active" data-section="overview">
+                    <span class="icon">📊</span>
+                    <span>Overview</span>
+                </a>
+                <a href="#departments" class="nav-item" data-section="departments">
+                    <span class="icon">🎓</span>
+                    <span>Departments</span>
+                </a>
+                <a href="#students" class="nav-item" data-section="students">
+                    <span class="icon">👥</span>
+                    <span>Student Data</span>
+                </a>
+                <a href="#questions" class="nav-item" data-section="questions">
+                    <span class="icon">❓</span>
+                    <span>Questions</span>
+                </a>
+                <a href="#reports" class="nav-item" data-section="reports">
+                    <span class="icon">📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="index.html" class="nav-item" style="margin-top: auto;">
+                    <span class="icon">🏠</span>
+                    <span>Back to App</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <h1>Admin Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn-icon" title="Notifications">🔔</button>
+                    <button class="btn-icon" title="Settings">⚙️</button>
+                    <div class="user-profile">
+                        <span>Admin</span>
+                        <div class="avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overview-section" class="content-section active">
+                <h2 class="section-title">Overview</h2>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #3b82f620;">📝</div>
+                        <div class="stat-content">
+                            <h3 id="totalAssessments">0</h3>
+                            <p>Total Assessments</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #10b98120;">👥</div>
+                        <div class="stat-content">
+                            <h3 id="totalStudents">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f59e0b20;">📊</div>
+                        <div class="stat-content">
+                            <h3 id="avgCompletion">0%</h3>
+                            <p>Avg Completion</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #8b5cf620;">🎯</div>
+                        <div class="stat-content">
+                            <h3 id="topDepartment">-</h3>
+                            <p>Most Popular</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Department Distribution Chart -->
+                <div class="chart-container">
+                    <h3>Department Recommendation Distribution</h3>
+                    <div id="departmentChart" class="chart">
+                        <!-- Chart will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-container">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list">
+                        <!-- Activity items will be inserted here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Departments Section -->
+            <section id="departments-section" class="content-section">
+                <h2 class="section-title">Department Analytics</h2>
+                
+                <div id="departmentStats" class="department-stats-grid">
+                    <!-- Department cards will be inserted here -->
+                </div>
+            </section>
+
+            <!-- Students Section -->
+            <section id="students-section" class="content-section">
+                <h2 class="section-title">Student Data</h2>
+                
+                <div class="table-controls">
+                    <input type="text" id="searchStudent" class="search-input" placeholder="Search students...">
+                    <button class="btn btn-primary" id="exportBtn">Export Data</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="studentsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Top Match</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTableBody">
+                            <!-- Student rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Questions Section -->
+            <section id="questions-section" class="content-section">
+                <h2 class="section-title">Question Analytics</h2>
+                
+                <div id="questionStats" class="question-stats">
+                    <!-- Question statistics will be inserted here -->
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports-section" class="content-section">
+                <h2 class="section-title">Reports & Insights</h2>
+                
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h4>📄 Weekly Report</h4>
+                        <p>Generate weekly assessment summary</p>
+                        <button class="btn btn-secondary">Generate</button>
+                    </div>
+                    <div class="report-card">
+                        <h4>📊 Department Trends</h4>
+                        <p>View department popularity trends</p>
+                        <button class="btn btn-secondary">View Trends</button>
+                    </div>
+                    <div class="report-card">
+                        <h4>🎯 Success Metrics</h4>
+                        <p>Track student satisfaction rates</p>
+                        <button class="btn btn-secondary">View Metrics</button>
+                    </div>
+                    <div class="report-card">
+                        <h4>📈 Custom Report</h4>
+                        <p>Create custom analytics report</p>
+                        <button class="btn btn-secondary">Create</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../src/data/questions.js"></script>
+    <script src="../src/js/dashboard.js"></script>
+</body>
+</html>
