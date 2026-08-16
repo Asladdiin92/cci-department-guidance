@@ -58,6 +58,15 @@ header p {
     }
 }
 
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 /* Welcome Screen */
 .welcome-content h2 {
     color: #333;
@@ -118,6 +127,17 @@ header p {
     font-size: 0.9rem;
     font-weight: 500;
     color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dept-tag:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dept-tag:active {
+    transform: translateY(-1px) scale(1.02);
 }
 
 .dept-tag.cs {

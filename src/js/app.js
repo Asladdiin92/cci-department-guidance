@@ -582,6 +582,138 @@ document.addEventListener('keydown', (e) => {
 // ========================================
 // INITIALIZE APP
 // ========================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Make department tags on welcome screen clickable
+    const deptTags = document.querySelectorAll('.dept-tag');
+    deptTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            const deptClass = tag.className.match(/\b(cs|swe|it|is|stat)\b/)[0].toUpperCase();
+            showDepartmentPreview(deptClass);
+        });
+    });
+});
+
+// Show department preview from welcome screen
+function showDepartmentPreview(deptCode) {
+    const dept = departments[deptCode];
+    
+    // Create a simple preview modal
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    const content = document.createElement('div');
+    content.style.cssText = `
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+        animation: slideUp 0.3s ease;
+    `;
+    
+    content.innerHTML = `
+        <button id="closeModal" style="
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f3f4f6;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        ">×</button>
+        
+        <h2 style="color: ${dept.color}; margin-bottom: 20px; font-size: 2rem;">
+            ${dept.fullName}
+        </h2>
+        
+        <p style="color: #555; line-height: 1.8; margin-bottom: 25px; font-size: 1.05rem;">
+            ${dept.description}
+        </p>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+            <h3 style="color: #333; margin-bottom: 15px;">💼 Top Career Paths</h3>
+            <ul style="padding-left: 20px; color: #555;">
+                ${dept.careers.slice(0, 3).map(career => `<li style="margin-bottom: 8px;">${career}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div style="background: ${dept.color}10; padding: 20px; border-radius: 12px; border-left: 4px solid ${dept.color};">
+            <h3 style="color: #333; margin-bottom: 15px;">💪 Key Strengths</h3>
+            <ul style="padding-left: 20px; color: #555;">
+                ${dept.strengths.slice(0, 3).map(strength => `<li style="margin-bottom: 8px;">${strength}</li>`).join('')}
+            </ul>
+        </div>
+        
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button id="startAssessmentFromModal" class="btn btn-primary" style="flex: 1;">
+                Start Assessment
+            </button>
+            <button id="learnMoreBtn" class="btn btn-secondary" style="flex: 1;">
+                Learn More
+            </button>
+        </div>
+    `;
+    
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+    
+    // Add animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Close modal handlers
+    document.getElementById('closeModal').addEventListener('click', () => {
+        modal.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => document.body.removeChild(modal), 300);
+    });
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => document.body.removeChild(modal), 300);
+        }
+    });
+    
+    // Start assessment from modal
+    document.getElementById('startAssessmentFromModal').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        startAssessment();
+    });
+    
+    // Learn more button - initialize mock scores
+    document.getElementById('learnMoreBtn').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        // Initialize mock scores for preview
+        appState.scores = { CS: 0, SWE: 0, IT: 0, IS: 0, STAT: 0 };
+        appState.scores[deptCode] = 50; // Give the selected department a base score
+        showDepartmentDetail(deptCode);
+    });
+}
+
 console.log('CCI Department Choice Guidance System Loaded');
 console.log(`Total Questions: ${questions.length}`);
 console.log('Ready to start assessment!');
