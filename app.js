@@ -18,24 +18,29 @@ const appState = {
 const welcomeScreen = document.getElementById('welcomeScreen');
 const assessmentScreen = document.getElementById('assessmentScreen');
 const resultsScreen = document.getElementById('resultsScreen');
+const comparisonScreen = document.getElementById('comparisonScreen');
 
 const startBtn = document.getElementById('startBtn');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const restartBtn = document.getElementById('restartBtn');
 const compareBtn = document.getElementById('compareBtn');
+const backToResultsBtn = document.getElementById('backToResultsBtn');
+const restartFromCompareBtn = document.getElementById('restartFromCompareBtn');
 
 const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
 const questionText = document.getElementById('questionText');
 const optionsContainer = document.getElementById('optionsContainer');
 const recommendationsContainer = document.getElementById('recommendationsContainer');
+const allScoresContainer = document.getElementById('allScoresContainer');
+const comparisonTableContainer = document.getElementById('comparisonTableContainer');
 
 // ========================================
 // SCREEN MANAGEMENT
 // ========================================
 function showScreen(screenToShow) {
-    [welcomeScreen, assessmentScreen, resultsScreen].forEach(screen => {
+    [welcomeScreen, assessmentScreen, resultsScreen, comparisonScreen].forEach(screen => {
         screen.classList.remove('active');
     });
     screenToShow.classList.add('active');
@@ -241,6 +246,138 @@ function createRecommendationCard(result, rank) {
 }
 
 // ========================================
+// COMPARISON SCREEN
+// ========================================
+function displayComparison() {
+    const maxScore = 60;
+    
+    // Get all results
+    const results = Object.keys(appState.scores).map(dept => ({
+        department: dept,
+        score: appState.scores[dept],
+        percentage: Math.round((appState.scores[dept] / maxScore) * 100),
+        info: departments[dept]
+    }));
+    
+    // Sort by percentage
+    results.sort((a, b) => b.percentage - a.percentage);
+    
+    // Display score cards
+    allScoresContainer.innerHTML = '';
+    results.forEach((result, index) => {
+        const scoreCard = createScoreCard(result, index === 0);
+        allScoresContainer.appendChild(scoreCard);
+    });
+    
+    // Display detailed comparison table
+    comparisonTableContainer.innerHTML = '';
+    results.forEach(result => {
+        const compRow = createComparisonRow(result);
+        comparisonTableContainer.appendChild(compRow);
+    });
+    
+    showScreen(comparisonScreen);
+}
+
+function createScoreCard(result, isTopMatch) {
+    const card = document.createElement('div');
+    card.className = 'score-card' + (isTopMatch ? ' top-match' : '');
+    
+    const deptName = document.createElement('div');
+    deptName.className = 'score-card-dept';
+    deptName.textContent = result.info.name;
+    deptName.style.color = result.info.color;
+    
+    const percentage = document.createElement('div');
+    percentage.className = 'score-card-percentage';
+    percentage.textContent = result.percentage + '%';
+    percentage.style.color = result.info.color;
+    
+    const label = document.createElement('div');
+    label.className = 'score-card-label';
+    label.textContent = 'Match Score';
+    
+    if (isTopMatch) {
+        const badge = document.createElement('div');
+        badge.style.cssText = 'background: #fbbf24; color: #78350f; padding: 5px 10px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; margin-top: 10px;';
+        badge.textContent = '🥇 Best Match';
+        card.appendChild(badge);
+    }
+    
+    card.appendChild(deptName);
+    card.appendChild(percentage);
+    card.appendChild(label);
+    
+    return card;
+}
+
+function createComparisonRow(result) {
+    const row = document.createElement('div');
+    row.className = `dept-comparison-row ${result.department.toLowerCase()}`;
+    
+    // Header with name and score
+    const header = document.createElement('div');
+    header.className = 'dept-comparison-header';
+    
+    const name = document.createElement('div');
+    name.className = 'dept-comparison-name';
+    name.textContent = result.info.fullName;
+    name.style.color = result.info.color;
+    
+    const score = document.createElement('div');
+    score.className = 'dept-comparison-score';
+    score.textContent = result.percentage + '%';
+    score.style.background = result.info.color + '20';
+    score.style.color = result.info.color;
+    
+    header.appendChild(name);
+    header.appendChild(score);
+    row.appendChild(header);
+    
+    // Description
+    const desc = document.createElement('p');
+    desc.style.cssText = 'color: #555; line-height: 1.6; margin-bottom: 15px;';
+    desc.textContent = result.info.description;
+    row.appendChild(desc);
+    
+    // Details grid
+    const details = document.createElement('div');
+    details.className = 'dept-comparison-details';
+    
+    // Strengths
+    const strengthsItem = document.createElement('div');
+    strengthsItem.className = 'dept-detail-item';
+    strengthsItem.innerHTML = `
+        <div class="dept-detail-icon">💪</div>
+        <div class="dept-detail-content">
+            <h4>Key Strengths</h4>
+            <ul>
+                ${result.info.strengths.slice(0, 3).map(s => `<li>${s}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+    
+    // Careers
+    const careersItem = document.createElement('div');
+    careersItem.className = 'dept-detail-item';
+    careersItem.innerHTML = `
+        <div class="dept-detail-icon">💼</div>
+        <div class="dept-detail-content">
+            <h4>Career Paths</h4>
+            <ul>
+                ${result.info.careers.slice(0, 3).map(c => `<li>${c}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+    
+    details.appendChild(strengthsItem);
+    details.appendChild(careersItem);
+    row.appendChild(details);
+    
+    return row;
+}
+
+// ========================================
 // EVENT LISTENERS
 // ========================================
 startBtn.addEventListener('click', startAssessment);
@@ -250,7 +387,13 @@ restartBtn.addEventListener('click', () => {
     showScreen(welcomeScreen);
 });
 compareBtn.addEventListener('click', () => {
-    alert('Department comparison feature coming soon! This will show a detailed side-by-side comparison of all 5 departments.');
+    displayComparison();
+});
+backToResultsBtn.addEventListener('click', () => {
+    showScreen(resultsScreen);
+});
+restartFromCompareBtn.addEventListener('click', () => {
+    showScreen(welcomeScreen);
 });
 
 // ========================================
