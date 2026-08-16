@@ -500,7 +500,52 @@ const departments = {
         color: "#3b82f6",
         description: "Focuses on theoretical foundations, algorithms, and computational problem-solving. Best for those who enjoy mathematics, abstract thinking, and understanding how computers work at a fundamental level.",
         careers: ["Algorithm Developer", "Research Scientist", "AI/ML Engineer", "Compiler Engineer", "Computer Scientist"],
-        strengths: ["Strong mathematical foundation", "Algorithm design", "Theoretical knowledge", "Research skills"]
+        strengths: ["Strong mathematical foundation", "Algorithm design", "Theoretical knowledge", "Research skills"],
+        // Extended information for detail page
+        overview: "Computer Science is the study of computation, information processing, and the theoretical foundations of computing. This program provides deep knowledge in algorithms, data structures, artificial intelligence, and theoretical computer science.",
+        idealFor: [
+            "Students who love mathematics and logic",
+            "Those interested in research and innovation",
+            "People who enjoy solving complex theoretical problems",
+            "Future PhD candidates or academic researchers"
+        ],
+        keySubjects: [
+            "Data Structures & Algorithms",
+            "Theory of Computation",
+            "Artificial Intelligence",
+            "Machine Learning",
+            "Compiler Design",
+            "Computer Architecture",
+            "Discrete Mathematics",
+            "Advanced Calculus"
+        ],
+        careerPaths: [
+            {
+                title: "AI/ML Research Scientist",
+                salary: "80,000 - 150,000 ETB/month",
+                demand: "Very High"
+            },
+            {
+                title: "Algorithm Developer",
+                salary: "60,000 - 120,000 ETB/month",
+                demand: "High"
+            },
+            {
+                title: "Computer Scientist (PhD)",
+                salary: "70,000 - 140,000 ETB/month",
+                demand: "Medium"
+            }
+        ],
+        mathRequirement: "Very High - Advanced calculus, discrete math, linear algebra",
+        practiceRatio: "30% Practical, 70% Theoretical",
+        jobMarket: "Growing rapidly in AI/ML fields, especially internationally",
+        localCompanies: ["iCog Labs", "Gebeya", "International Tech Companies"],
+        studyTips: [
+            "Master discrete mathematics early",
+            "Practice algorithmic problem-solving daily",
+            "Participate in competitive programming",
+            "Read academic papers regularly"
+        ]
     },
     SWE: {
         name: "Software Engineering",
@@ -508,7 +553,51 @@ const departments = {
         color: "#10b981",
         description: "Emphasizes practical software development, design patterns, and building reliable applications. Ideal for those who want to create software products and enjoy hands-on coding.",
         careers: ["Software Developer", "Full-Stack Engineer", "Mobile App Developer", "DevOps Engineer", "Solutions Architect"],
-        strengths: ["Software development lifecycle", "Coding best practices", "Project-based learning", "Team collaboration"]
+        strengths: ["Software development lifecycle", "Coding best practices", "Project-based learning", "Team collaboration"],
+        overview: "Software Engineering focuses on the systematic design, development, testing, and maintenance of software systems. This program emphasizes practical skills, modern frameworks, and industry best practices.",
+        idealFor: [
+            "Students who love building things",
+            "Those who enjoy hands-on coding",
+            "People interested in product development",
+            "Future software developers and engineers"
+        ],
+        keySubjects: [
+            "Software Design Patterns",
+            "Web Development (Frontend & Backend)",
+            "Mobile Application Development",
+            "Software Testing & Quality Assurance",
+            "DevOps & CI/CD",
+            "Agile Methodologies",
+            "Database Design",
+            "Cloud Computing"
+        ],
+        careerPaths: [
+            {
+                title: "Full-Stack Developer",
+                salary: "50,000 - 100,000 ETB/month",
+                demand: "Very High"
+            },
+            {
+                title: "Mobile App Developer",
+                salary: "45,000 - 95,000 ETB/month",
+                demand: "Very High"
+            },
+            {
+                title: "Software Architect",
+                salary: "80,000 - 150,000 ETB/month",
+                demand: "High"
+            }
+        ],
+        mathRequirement: "Moderate - Basic calculus and statistics",
+        practiceRatio: "60% Practical, 40% Theoretical",
+        jobMarket: "Highest demand in Ethiopia, many startups hiring",
+        localCompanies: ["Gebeya", "Gebeta Maps", "Ride", "ZayRide", "Local Startups"],
+        studyTips: [
+            "Build projects consistently",
+            "Learn modern frameworks (React, Node.js)",
+            "Contribute to open source",
+            "Create a strong GitHub portfolio"
+        ]
     },
     IT: {
         name: "Information Technology",
@@ -516,7 +605,51 @@ const departments = {
         color: "#f59e0b",
         description: "Concentrates on infrastructure, networking, security, and system administration. Perfect for those interested in hardware, networks, and keeping systems running smoothly.",
         careers: ["Network Administrator", "Systems Administrator", "IT Security Specialist", "Cloud Engineer", "IT Support Manager"],
-        strengths: ["Infrastructure management", "Network configuration", "Security implementation", "Technical support"]
+        strengths: ["Infrastructure management", "Network configuration", "Security implementation", "Technical support"],
+        overview: "Information Technology focuses on the implementation, management, and support of computer systems and networks. This program emphasizes hands-on skills in networking, security, and infrastructure management.",
+        idealFor: [
+            "Students interested in hardware and networks",
+            "Those who enjoy troubleshooting and problem-solving",
+            "People who like hands-on technical work",
+            "Future network engineers and system administrators"
+        ],
+        keySubjects: [
+            "Computer Networks",
+            "Network Security & Cryptography",
+            "Server Administration (Linux/Windows)",
+            "Cloud Computing (AWS, Azure)",
+            "Virtualization & Containerization",
+            "IT Service Management",
+            "Cybersecurity",
+            "Hardware & System Architecture"
+        ],
+        careerPaths: [
+            {
+                title: "Network Engineer",
+                salary: "40,000 - 85,000 ETB/month",
+                demand: "High"
+            },
+            {
+                title: "System Administrator",
+                salary: "35,000 - 75,000 ETB/month",
+                demand: "High"
+            },
+            {
+                title: "Cloud Engineer",
+                salary: "55,000 - 110,000 ETB/month",
+                demand: "Very High"
+            }
+        ],
+        mathRequirement: "Low - Basic mathematics",
+        practiceRatio: "70% Practical, 30% Theoretical",
+        jobMarket: "Stable demand in banks, telecoms, government",
+        localCompanies: ["Ethio Telecom", "Banks (CBE, Awash, etc.)", "Safaricom Ethiopia", "Government IT"],
+        studyTips: [
+            "Get hands-on with hardware early",
+            "Set up home lab for practice",
+            "Pursue industry certifications (CCNA, CompTIA)",
+            "Practice with real network scenarios"
+        ]
     },
     IS: {
         name: "Information System",
@@ -524,7 +657,51 @@ const departments = {
         color: "#8b5cf6",
         description: "Bridges technology and business, focusing on how information systems support organizational goals. Great for those interested in business analysis and strategic technology use.",
         careers: ["Business Analyst", "IT Consultant", "Systems Analyst", "ERP Specialist", "IT Project Manager"],
-        strengths: ["Business-IT alignment", "Requirements analysis", "Process optimization", "Stakeholder management"]
+        strengths: ["Business-IT alignment", "Requirements analysis", "Process optimization", "Stakeholder management"],
+        overview: "Information Systems combines technology knowledge with business acumen. This program focuses on how organizations use information systems to achieve strategic objectives and improve operations.",
+        idealFor: [
+            "Students who enjoy both tech and business",
+            "Those interested in consulting",
+            "People with strong communication skills",
+            "Future business analysts and IT managers"
+        ],
+        keySubjects: [
+            "Management Information Systems",
+            "Business Process Analysis",
+            "Enterprise Resource Planning (ERP)",
+            "IT Strategy & Governance",
+            "Database Management Systems",
+            "Systems Analysis & Design",
+            "IT Project Management",
+            "E-Commerce & Digital Business"
+        ],
+        careerPaths: [
+            {
+                title: "Business Analyst",
+                salary: "45,000 - 90,000 ETB/month",
+                demand: "Very High"
+            },
+            {
+                title: "IT Consultant",
+                salary: "50,000 - 110,000 ETB/month",
+                demand: "High"
+            },
+            {
+                title: "ERP Specialist",
+                salary: "55,000 - 100,000 ETB/month",
+                demand: "High"
+            }
+        ],
+        mathRequirement: "Low-Moderate - Statistics and business math",
+        practiceRatio: "50% Practical, 50% Theoretical",
+        jobMarket: "Growing demand in consulting and large organizations",
+        localCompanies: ["Banks", "Consulting Firms", "Large Enterprises", "Government Organizations"],
+        studyTips: [
+            "Develop strong communication skills",
+            "Learn popular ERP systems (SAP, Oracle)",
+            "Understand business fundamentals",
+            "Practice requirements gathering"
+        ]
     },
     STAT: {
         name: "Statistics",
@@ -532,6 +709,50 @@ const departments = {
         color: "#ef4444",
         description: "Centers on data analysis, probability, and statistical modeling. Excellent for those who love working with data and mathematical methods to derive insights.",
         careers: ["Data Scientist", "Statistical Analyst", "Quantitative Analyst", "Data Engineer", "Research Statistician"],
-        strengths: ["Statistical methods", "Data analysis", "Probability theory", "Predictive modeling"]
+        strengths: ["Statistical methods", "Data analysis", "Probability theory", "Predictive modeling"],
+        overview: "Statistics focuses on collecting, analyzing, and interpreting data to make informed decisions. This program provides strong mathematical foundations and modern data science skills.",
+        idealFor: [
+            "Students who love mathematics and data",
+            "Those interested in research and analysis",
+            "People who enjoy finding patterns",
+            "Future data scientists and analysts"
+        ],
+        keySubjects: [
+            "Probability Theory",
+            "Statistical Inference",
+            "Regression Analysis",
+            "Machine Learning",
+            "Data Mining",
+            "Time Series Analysis",
+            "Bayesian Statistics",
+            "R & Python Programming"
+        ],
+        careerPaths: [
+            {
+                title: "Data Scientist",
+                salary: "60,000 - 130,000 ETB/month",
+                demand: "Very High"
+            },
+            {
+                title: "Statistical Analyst",
+                salary: "40,000 - 85,000 ETB/month",
+                demand: "High"
+            },
+            {
+                title: "Quantitative Analyst",
+                salary: "70,000 - 140,000 ETB/month",
+                demand: "Medium"
+            }
+        ],
+        mathRequirement: "Very High - Advanced calculus, probability, linear algebra",
+        practiceRatio: "40% Practical, 60% Theoretical",
+        jobMarket: "Rapidly growing, especially in data science",
+        localCompanies: ["Banks (Risk Analysis)", "Research Institutions", "Tech Companies", "NGOs"],
+        studyTips: [
+            "Master probability and calculus",
+            "Learn R and Python early",
+            "Work on real datasets",
+            "Participate in Kaggle competitions"
+        ]
     }
 };

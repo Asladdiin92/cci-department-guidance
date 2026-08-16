@@ -19,6 +19,7 @@ const welcomeScreen = document.getElementById('welcomeScreen');
 const assessmentScreen = document.getElementById('assessmentScreen');
 const resultsScreen = document.getElementById('resultsScreen');
 const comparisonScreen = document.getElementById('comparisonScreen');
+const departmentDetailScreen = document.getElementById('departmentDetailScreen');
 
 const startBtn = document.getElementById('startBtn');
 const prevBtn = document.getElementById('prevBtn');
@@ -40,7 +41,7 @@ const comparisonTableContainer = document.getElementById('comparisonTableContain
 // SCREEN MANAGEMENT
 // ========================================
 function showScreen(screenToShow) {
-    [welcomeScreen, assessmentScreen, resultsScreen, comparisonScreen].forEach(screen => {
+    [welcomeScreen, assessmentScreen, resultsScreen, comparisonScreen, departmentDetailScreen].forEach(screen => {
         screen.classList.remove('active');
     });
     screenToShow.classList.add('active');
@@ -235,12 +236,20 @@ function createRecommendationCard(result, rank) {
         careersList.appendChild(li);
     });
     
+    // Add "Learn More" button
+    const learnMoreBtn = document.createElement('button');
+    learnMoreBtn.className = 'btn btn-secondary';
+    learnMoreBtn.style.cssText = 'width: 100%; margin-top: 20px;';
+    learnMoreBtn.textContent = 'Learn More About ' + result.info.name;
+    learnMoreBtn.addEventListener('click', () => showDepartmentDetail(result.department));
+    
     card.appendChild(badge);
     card.appendChild(deptName);
     card.appendChild(scoreContainer);
     card.appendChild(description);
     card.appendChild(careersTitle);
     card.appendChild(careersList);
+    card.appendChild(learnMoreBtn);
     
     return card;
 }
@@ -314,6 +323,9 @@ function createScoreCard(result, isTopMatch) {
 function createComparisonRow(result) {
     const row = document.createElement('div');
     row.className = `dept-comparison-row ${result.department.toLowerCase()}`;
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', () => showDepartmentDetail(result.department));
+    row.title = 'Click to learn more about ' + result.info.fullName;
     
     // Header with name and score
     const header = document.createElement('div');
@@ -375,6 +387,150 @@ function createComparisonRow(result) {
     row.appendChild(details);
     
     return row;
+}
+
+// ========================================
+// DEPARTMENT DETAIL PAGE
+// ========================================
+function showDepartmentDetail(deptCode) {
+    const maxScore = 60;
+    const dept = departments[deptCode];
+    const score = appState.scores[deptCode];
+    const percentage = Math.round((score / maxScore) * 100);
+    
+    const detailContent = departmentDetailScreen.querySelector('.detail-content');
+    detailContent.innerHTML = '';
+    
+    // Header
+    const header = document.createElement('div');
+    header.className = 'detail-header';
+    header.innerHTML = `
+        <h2 class="detail-dept-name" style="color: ${dept.color}">${dept.fullName}</h2>
+        <div class="detail-score-badge" style="background: ${dept.color}20; color: ${dept.color}">
+            Your Match: ${percentage}%
+        </div>
+        <p class="detail-overview">${dept.overview}</p>
+    `;
+    detailContent.appendChild(header);
+    
+    // Ideal For Section
+    const idealSection = createDetailSection('👤 Ideal For', dept.idealFor.map(item => `<li>${item}</li>`).join(''), dept.color);
+    detailContent.appendChild(idealSection);
+    
+    // Key Subjects Section
+    const subjectsSection = createDetailSection('📚 Key Subjects You\'ll Study', 
+        '<div class="detail-grid">' + 
+        dept.keySubjects.map(subject => 
+            `<div class="detail-card" style="border-left-color: ${dept.color}">
+                <p style="color: #333; font-weight: 500;">${subject}</p>
+            </div>`
+        ).join('') + 
+        '</div>',
+        dept.color
+    );
+    detailContent.appendChild(subjectsSection);
+    
+    // Career Paths Section
+    const careersSection = document.createElement('div');
+    careersSection.className = 'detail-section';
+    careersSection.innerHTML = `
+        <h3 class="detail-section-title" style="color: ${dept.color}">💼 Career Opportunities</h3>
+        <div class="detail-grid">
+            ${dept.careerPaths.map(career => `
+                <div class="career-card">
+                    <div class="career-title" style="color: ${dept.color}">${career.title}</div>
+                    <div class="career-info">
+                        <div class="career-info-item">
+                            <span class="career-info-label">Salary Range:</span>
+                            <span class="career-info-value">${career.salary}</span>
+                        </div>
+                        <div class="career-info-item">
+                            <span class="career-info-label">Market Demand:</span>
+                            <span class="demand-badge demand-${career.demand.toLowerCase().replace(' ', '-')}">${career.demand}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    detailContent.appendChild(careersSection);
+    
+    // Program Details Section
+    const detailsSection = document.createElement('div');
+    detailsSection.className = 'detail-section';
+    detailsSection.innerHTML = `
+        <h3 class="detail-section-title" style="color: ${dept.color}">📊 Program Details</h3>
+        <div class="detail-grid">
+            <div class="info-box-detail">
+                <h4>📐 Math Requirement</h4>
+                <p>${dept.mathRequirement}</p>
+            </div>
+            <div class="info-box-detail">
+                <h4>⚖️ Theory vs Practice</h4>
+                <p>${dept.practiceRatio}</p>
+            </div>
+        </div>
+        <div class="info-box-detail" style="margin-top: 20px;">
+            <h4>📈 Job Market in Ethiopia</h4>
+            <p>${dept.jobMarket}</p>
+        </div>
+    `;
+    detailContent.appendChild(detailsSection);
+    
+    // Companies Section
+    const companiesSection = document.createElement('div');
+    companiesSection.className = 'detail-section';
+    companiesSection.innerHTML = `
+        <h3 class="detail-section-title" style="color: ${dept.color}">🏢 Where Graduates Work</h3>
+        <div class="companies-list">
+            ${dept.localCompanies.map(company => 
+                `<span class="company-badge">${company}</span>`
+            ).join('')}
+        </div>
+    `;
+    detailContent.appendChild(companiesSection);
+    
+    // Study Tips Section
+    const tipsSection = document.createElement('div');
+    tipsSection.className = 'detail-section';
+    tipsSection.innerHTML = `
+        <h3 class="detail-section-title" style="color: ${dept.color}">💡 Study Tips for Success</h3>
+        <div class="tips-list">
+            ${dept.studyTips.map(tip => `<div class="tip-item">${tip}</div>`).join('')}
+        </div>
+    `;
+    detailContent.appendChild(tipsSection);
+    
+    // Actions
+    const actions = document.createElement('div');
+    actions.className = 'detail-actions';
+    actions.innerHTML = `
+        <button class="btn btn-secondary" id="backFromDetailBtn">Back to Comparison</button>
+        <button class="btn btn-primary" id="chooseThisDeptBtn">I Choose This Department!</button>
+    `;
+    detailContent.appendChild(actions);
+    
+    // Add event listeners
+    document.getElementById('backFromDetailBtn').addEventListener('click', () => {
+        showScreen(comparisonScreen);
+    });
+    document.getElementById('chooseThisDeptBtn').addEventListener('click', () => {
+        alert(`Great choice! ${dept.fullName} seems like a perfect fit for you with a ${percentage}% match!\n\nNext steps:\n1. Talk to the department head\n2. Review the curriculum\n3. Register for ${dept.fullName}`);
+    });
+    
+    showScreen(departmentDetailScreen);
+}
+
+function createDetailSection(title, content, color) {
+    const section = document.createElement('div');
+    section.className = 'detail-section';
+    section.innerHTML = `
+        <h3 class="detail-section-title" style="color: ${color}">${title}</h3>
+        <div class="detail-card" style="border-left-color: ${color}">
+            <ul>${content}</ul>
+        </div>
+    `;
+    return section;
 }
 
 // ========================================
