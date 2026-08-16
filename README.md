@@ -193,11 +193,11 @@ http://localhost:3000
 
 | Name | Role | GitHub | Focus Area |
 |------|------|--------|------------|
-| Nuri Irko | Frontend Developer | [@asladdiin92](https://github.com/asladdiin92) | Assessment System |
+| Asladin Abdukedir | Frontend Developer & Lead | [@asladdiin92](https://github.com/asladdiin92) | Assessment System |
 | Arafat Bule | Backend Developer | TBA | API & Database |
 | Burqa Jemal | UI/UX Designer | TBA | Interface Design |
 | Usman Abdi | Full Stack | TBA | Integration |
-| Asledin Abdul-Qadir | Project Lead | TBA | Coordination |
+| Asledin Abdul-Qadir | Project Coordinator | TBA | Team Coordination |
 
 **Supervisor:** [ICT Center Supervisor Name]  
 **Academic Advisor:** [Advisor Name]

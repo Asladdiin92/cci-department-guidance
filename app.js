@@ -1,5 +1,6 @@
 // CCI Department Choice Guidance System - Main Application
-// Author: Nuri Irko & Team
+// Author: Asladin Abdukedir (asladdiin92)
+// Email: asladdiinabduqaadir@gmail.com
 // Date: August 2026
 
 // ========================================
