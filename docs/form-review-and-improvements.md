@@ -4,7 +4,7 @@
 
 ### ✅ What You Have (Good Structure):
 - Email collection
-- Department selection (CS, SWE, IT, IS, Statistics)
+- Department selection (CS, SWE, IT, IS, ISC, Statistics)
 - Name and title field
 - Well-organized sections (A-G)
 - Professional layout
@@ -25,7 +25,7 @@ These are the MOST IMPORTANT questions for your recommendation system:
 - **Issue**: Too vague, doesn't emphasize "what students are trained to DO"
 - **Fix**: Add clarification in parentheses
 
-**❌ MISSING Q2**: "What's the main thing that separates this department from the other three (CS/SWE/IT/IS)? Where do people most often confuse it with another?"
+**❌ MISSING Q2**: "What's the main thing that separates this department from the other CCI departments (CS/SWE/IT/IS/ISC/STAT)? Where do people most often confuse it with another?"
 - **Your current Q**: "What specifically distinguishes this department from the other CCI departments?"
 - **Issue**: Doesn't ask about CONFUSION POINTS (critical for recommendation logic)
 - **Fix**: Add second part about confusion
@@ -106,7 +106,7 @@ These extra questions make the form **too long** (estimated 20-30 minutes vs. ta
 
 **Section 2: Distinguishing Identity (Recommendation Core)**
 4. In your own words, what is the core focus of this department — what does it train students to actually do?
-5. What specifically distinguishes this department from the other CCI departments (CS/SWE/IT/IS)? Where do students most often confuse it with another? *(TWO-PART QUESTION)*
+5. What specifically distinguishes this department from the other CCI departments (CS/SWE/IT/IS/ISC/STAT)? Where do students most often confuse it with another? *(TWO-PART QUESTION)*
 6. What kind of student — interests, strengths, working style — tends to succeed and feel fulfilled in this department?
 
 **Section 3: Curriculum & Academic Focus**
@@ -136,7 +136,7 @@ These extra questions make the form **too long** (estimated 20-30 minutes vs. ta
 > "What specifically distinguishes this department from the other CCI departments? Where do students most often confuse it with another?"
 
 **Improved Version:**
-> "What specifically distinguishes this department from the other CCI departments (CS/SWE/IT/IS)?
+> "What specifically distinguishes this department from the other CCI departments (CS/SWE/IT/IS/ISC/STAT)?
 > 
 > In the second text box below, please tell us: **Which department is this one most often confused with, and why?**"
 

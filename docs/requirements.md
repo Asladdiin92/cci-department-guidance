@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The Department Choice Guidance System is a web-based platform designed to assist prospective students at Haramaya University's College of Computing and Informatics (CCI) in making informed decisions about their department selection. The system will provide an interactive assessment mechanism, comprehensive department information, and personalized recommendations to match students with departments (Computer Science, Software Engineering, Information Technology, Information System, Statistics) based on their interests, skills, and career goals.
+The Department Choice Guidance System is a web-based platform designed to assist prospective students at Haramaya University's College of Computing and Informatics (CCI) in making informed decisions about their department selection. The system will provide an interactive assessment mechanism, comprehensive department information, and personalized recommendations to match students with departments (Computer Science, Software Engineering, Information Technology, Information System, Information Science, Statistics) based on their interests, skills, and career goals.
 
 The system addresses the current challenge where students lack structured guidance in understanding the differences between departments and making optimal choices aligned with their capabilities and aspirations. Based on survey data from 29 CCI students, the system aims to improve student satisfaction and reduce department transfer rates by providing evidence-based guidance.
 
@@ -12,7 +12,7 @@ The system addresses the current challenge where students lack structured guidan
 - **Student**: A prospective or current CCI student seeking department selection guidance
 - **Admin**: A system administrator responsible for managing content and viewing analytics
 - **Assessment**: An interactive questionnaire that evaluates student interests, skills, and goals
-- **Department**: One of five CCI academic programs (Computer Science, Software Engineering, Information Technology, Information System, Statistics)
+- **Department**: One of six CCI academic programs (Computer Science, Software Engineering, Information Technology, Information System, Information Science, Statistics)
 - **Recommendation_Engine**: The algorithmic component that matches student responses to suitable departments
 - **Department_Profile**: Comprehensive information about a department including courses, career paths, and required skills
 - **Response_Data**: Student answers collected during the assessment process
@@ -41,7 +41,7 @@ The system addresses the current challenge where students lack structured guidan
 5. THE System SHALL save assessment progress automatically at each question completion
 6. WHEN a student exits mid-assessment, THE System SHALL allow resumption from the last saved question upon return
 7. THE System SHALL complete the assessment within 10-15 minutes for typical student interaction
-8. THE Assessment SHALL include 20-25 questions strategically designed to distinguish between commonly confused departments (CS/SWE, IT/IS, etc.)
+8. THE Assessment SHALL include 20-25 questions strategically designed to distinguish between commonly confused departments (CS/SWE, IT/IS, IS/ISC, etc.)
 9. THE Assessment SHALL include scenario-based questions reflecting real department course challenges (e.g., "Would you rather debug code, design network infrastructure, analyze business requirements, or prove mathematical theorems?")
 10. THE System SHALL ask at least one question directly borrowed from each department head's decision-guiding questions
 
@@ -51,7 +51,7 @@ The system addresses the current challenge where students lack structured guidan
 
 #### Acceptance Criteria
 
-1. THE System SHALL maintain Department_Profiles for all five CCI departments (Computer Science, Software Engineering, Information Technology, Information System, Statistics)
+1. THE System SHALL maintain Department_Profiles for all six CCI departments (Computer Science, Software Engineering, Information Technology, Information System, Information Science, Statistics)
 2. FOR EACH Department_Profile, THE System SHALL store:
    - **Distinguishing Identity**: Core focus, what students are trained to do, key differentiators from other departments, common confusion points, and student success profiles
    - **Curriculum & Skill Signals**: 2-3 defining/hardest courses, required thinking styles (math/theory vs hands-on vs systems vs business-process), theory-to-practice balance ratio
@@ -69,7 +69,7 @@ The system addresses the current challenge where students lack structured guidan
 
 #### Acceptance Criteria
 
-1. WHEN a student completes the assessment, THE Recommendation_Engine SHALL analyze Response_Data and generate Match_Scores for all five departments
+1. WHEN a student completes the assessment, THE Recommendation_Engine SHALL analyze Response_Data and generate Match_Scores for all six departments
 2. THE Recommendation_Engine SHALL base matching logic on department-head-defined criteria:
    - Student skills, interests, and mindset alignment with "thriving student profile"
    - Preference for thinking styles (theory/math vs hands-on building vs systems/infrastructure vs business-process)
@@ -94,7 +94,7 @@ The system addresses the current challenge where students lack structured guidan
 
 #### Acceptance Criteria
 
-1. THE System SHALL allow students to select 2-5 departments for comparison
+1. THE System SHALL allow students to select 2-6 departments for comparison
 2. WHEN a student requests comparison, THE System SHALL generate a Comparison_Report displaying selected departments in parallel columns
 3. THE Comparison_Report SHALL include comparison criteria (core courses, career outcomes, required skills, difficulty level, job market demand)
 4. THE System SHALL highlight key differences between departments using visual indicators (color coding, icons)

@@ -1,0 +1,623 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}          % Times New Roman font
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{mdframed}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% ── Colors ────────────────────────────────────────────────────────────────────
+\definecolor{uniblue}{RGB}{0, 51, 102}
+\definecolor{unigreen}{RGB}{34, 139, 34}
+\definecolor{accentgold}{RGB}{180, 140, 0}
+\definecolor{lightblue}{RGB}{235, 243, 255}
+\definecolor{lightgray}{RGB}{245, 245, 245}
+\definecolor{darkgray}{RGB}{80, 80, 80}
+\definecolor{linkblue}{RGB}{52, 152, 219}
+
+% ── Hyperref ──────────────────────────────────────────────────────────────────
+\hypersetup{
+    colorlinks=true,
+    linkcolor=uniblue,
+    urlcolor=linkblue,
+    pdftitle={CCI Department Choice Guidance System - Project Proposal},
+    pdfauthor={Haramaya University}
+}
+
+% ── Section heading styles ────────────────────────────────────────────────────
+\titleformat{\section}
+    {\large\bfseries\color{uniblue}}
+    {\thesection.}{0.6em}{}
+    [{\color{unigreen}\titlerule[1.5pt]}]
+\titlespacing{\section}{0pt}{14pt}{6pt}
+
+\titleformat{\subsection}
+    {\normalsize\bfseries\color{uniblue}}
+    {\thesubsection}{0.5em}{}
+\titlespacing{\subsection}{0pt}{10pt}{4pt}
+
+\titleformat{\subsubsection}
+    {\normalsize\bfseries\color{darkgray}}
+    {}{0em}{}
+\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+
+% ── Header / Footer ───────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{uniblue}{\textbf{CCI Department Choice Guidance System}}}
+\fancyhead[R]{\small\textcolor{uniblue}{Haramaya University --- ICT Center}}
+\fancyfoot[C]{\textcolor{darkgray}{\thepage}}
+\fancyfoot[L]{\small\textcolor{darkgray}{Project Proposal \& Requirements Summary}}
+\fancyfoot[R]{\small\textcolor{darkgray}{June 2026}}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{uniblue}\leaders\hrule height \headrulewidth\hfill}}
+
+% ── Line spacing ──────────────────────────────────────────────────────────────
+\onehalfspacing
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+% ══════════════════════════════════════════════════════════════════════════════
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COVER PAGE
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{titlepage}
+\thispagestyle{empty}
+
+% ── TikZ border decoration ────────────────────────────────────────────────────
+\begin{tikzpicture}[remember picture, overlay]
+    \draw[uniblue, line width=4pt]
+        ([xshift=1cm, yshift=-1cm]current page.north west) --
+        ([xshift=-1cm, yshift=-1cm]current page.north east);
+    \draw[unigreen, line width=1.5pt]
+        ([xshift=1cm, yshift=-1.4cm]current page.north west) --
+        ([xshift=-1cm, yshift=-1.4cm]current page.north east);
+    
+    \draw[uniblue, line width=4pt]
+        ([xshift=1cm, yshift=-1cm]current page.north west) --
+        ([xshift=1cm, yshift=1cm]current page.south west);
+    \draw[unigreen, line width=1.5pt]
+        ([xshift=1.4cm, yshift=-1cm]current page.north west) --
+        ([xshift=1.4cm, yshift=1cm]current page.south west);
+    
+    \draw[uniblue, line width=4pt]
+        ([xshift=-1cm, yshift=-1cm]current page.north east) --
+        ([xshift=-1cm, yshift=1cm]current page.south east);
+    \draw[unigreen, line width=1.5pt]
+        ([xshift=-1.4cm, yshift=-1cm]current page.north east) --
+        ([xshift=-1.4cm, yshift=1cm]current page.south east);
+    
+    \draw[uniblue, line width=4pt]
+        ([xshift=1cm, yshift=1cm]current page.south west) --
+        ([xshift=-1cm, yshift=1cm]current page.south east);
+    \draw[unigreen, line width=1.5pt]
+        ([xshift=1cm, yshift=1.4cm]current page.south west) --
+        ([xshift=-1cm, yshift=1.4cm]current page.south east);
+
+    % Bottom-right submission info
+    \node[anchor=south east] at ([xshift=-1.8cm, yshift=1.8cm]current page.south east) {
+        \begin{tabular}{rl}
+            \textbf{\textcolor{uniblue}{Prepared For:}}    & ICT Center, Haramaya University\\[0.1cm]
+            \textbf{\textcolor{uniblue}{Submission Date:}} & June 8, 2026\\
+        \end{tabular}
+    };
+\end{tikzpicture}
+
+\begin{center}
+\vspace*{0.5cm}
+
+% ── University Logo ───────────────────────────────────────────────────────────
+% Replace with your actual logo file
+\includegraphics[width=10cm,height=2.8cm]{471176784_2043471396101486_7681983394768805797_n.jpg}
+
+\vspace{0.25cm}
+
+% ── University Names ──────────────────────────────────────────────────────────
+{\large\bfseries\textcolor{uniblue}{YUUNIVARSIITII HARAMAAYAA}}\\[0.1cm]
+{\Large\bfseries\textcolor{uniblue}{HARAMAYA UNIVERSITY}}\\[0.05cm]
+{\small\itshape\textcolor{unigreen}{Building the Basis for Development}}\\[0.35cm]
+
+% ── Decorative rules ──────────────────────────────────────────────────────────
+{\color{uniblue}\rule{0.78\textwidth}{2.5pt}}\\[0.1cm]
+{\color{unigreen}\rule{0.78\textwidth}{1pt}}\\[0.3cm]
+
+% ── Document title box ────────────────────────────────────────────────────────
+\begin{tcolorbox}[
+    enhanced, 
+    colback=uniblue, 
+    colframe=accentgold,
+    arc=4pt, 
+    boxrule=1.5pt, 
+    width=0.82\textwidth,
+    halign=center, 
+    top=8pt, 
+    bottom=8pt
+]
+    {\LARGE\bfseries\textcolor{white}{CCI DEPARTMENT CHOICE}}\\[2pt]
+    {\LARGE\bfseries\textcolor{white}{GUIDANCE SYSTEM}}\\[4pt]
+    {\normalsize\textcolor{white!80!gray}{Project Proposal \& Requirements Summary}}\\[3pt]
+    {\small\textcolor{white!70!gray}{College of Computing and Informatics}}
+\end{tcolorbox}
+
+\vspace{0.2cm}
+{\color{unigreen}\rule{0.78\textwidth}{1pt}}\\[0.08cm]
+{\color{uniblue}\rule{0.78\textwidth}{2.5pt}}\\[0.3cm]
+
+% ── Group Members + Program Info ──────────────────────────────────────────────
+\begin{tcolorbox}[
+    enhanced, 
+    colback=lightblue, 
+    colframe=uniblue,
+    arc=4pt, 
+    boxrule=1pt, 
+    width=0.82\textwidth,
+    top=6pt, 
+    bottom=6pt, 
+    left=10pt, 
+    right=10pt
+]
+\begin{flushleft}
+{\bfseries\normalsize\textcolor{uniblue}{Prepared By:}}\\[0.2cm]
+
+\begin{tabular}{cl}
+\textbf{\textcolor{uniblue}{No.}} & \textbf{\textcolor{uniblue}{Full Name}} \\[3pt]
+\hline\\[-7pt]
+1. & Asledin Abdukadir \\[2pt]
+2. & Arafat Bule \\[2pt]
+3. & Burqa Jemal \\[2pt]
+4. & Usman Abdi \\[2pt]
+5. & Nuri Irko \\[2pt]
+\end{tabular}
+
+\vspace{0.2cm}
+\textcolor{uniblue}{\rule{0.70\textwidth}{0.5pt}}\\[0.15cm]
+
+\begin{tabular}{ll}
+\textbf{\textcolor{uniblue}{College:}}     & College of Computing and Informatics \\[2pt]
+\textbf{\textcolor{uniblue}{Institution:}} & Haramaya University, Oromia, Ethiopia \\[2pt]
+\textbf{\textcolor{uniblue}{Date:}}        & June 8, 2026 \\[2pt]
+\end{tabular}
+\end{flushleft}
+\end{tcolorbox}
+
+\end{center}
+\end{titlepage}
+
+% ── Table of Contents ─────────────────────────────────────────────────────────
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Introduction and Problem Statement}
+% ══════════════════════════════════════════════════════════════════════════════
+
+Every year, incoming students at the College of Computing and Informatics (CCI) at Haramaya University must select a department from among Computer Science (CS), Software Engineering (SWE), Information Technology (IT), Information System (IS), Information Science (ISC), and Statistics (STAT). This decision, made early in a student's academic life, shapes their coursework, skill development, and career direction for the following four or more years. Yet many students make this choice without a clear, department-specific understanding of what each option actually involves.
+
+This project began from a firsthand experience: upon joining the university, one member of this team faced exactly this uncertainty, unable to find guidance specific enough to Haramaya's CCI structure. General web searches and AI tools returned only generic descriptions of these fields, not information grounded in the actual courses, career outcomes, and departmental character at this university. 
+
+To verify that this was not an isolated experience, the team conducted a structured survey of current CCI students. The results, presented in the following section, confirm that this challenge is widely shared.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Evidence Gathered: Student Survey Findings}
+% ══════════════════════════════════════════════════════════════════════════════
+
+A structured questionnaire was distributed to CCI students across departments and class years via official student communication channels. The survey received \textbf{43 valid responses}, distributed as follows:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{0.85\textwidth}{lX}
+\toprule
+\textbf{Respondent Department} & \textbf{Share of Respondents} \\
+\midrule
+Computer Science      & 58.1\% \\
+Information Technology & 23.3\% \\
+Software Engineering  & 18.6\% \\
+\bottomrule
+\end{tabularx}
+\caption{Survey respondents by department}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth, height=7cm, keepaspectratio]{Picture2.png}
+\caption{Respondent department distribution}
+\end{figure}
+
+Respondents were predominantly upper-class students (46.5\% third year, 39.5\% fourth year, 11.6\% second year, 2.3\% first year), meaning most had already lived through the outcomes of their own department choice and could reflect on it meaningfully.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth, height=7cm, keepaspectratio]{Picture3.png}
+\caption{Respondent year level distribution}
+\end{figure}
+
+\subsection{Confidence at the Time of Choosing}
+
+Only \textbf{55.8\%} of respondents felt fully confident they understood the differences between CS, SWE, IT, and IS before choosing their department, while \textbf{41.9\%} felt only ``somewhat'' confident and \textbf{2.3\%} felt not confident at all. In other words, close to half of surveyed students entered their department without a clear understanding of how it differed from the alternatives.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth, height=7cm, keepaspectratio]{Picture4.png}
+\caption{Student confidence level when choosing department}
+\end{figure}
+
+\subsection{Demand for a Recommendation Tool}
+
+When asked whether they would have used a system that recommends a best-fit department based on their interests and skills, \textbf{67.4\%} said yes and \textbf{30.2\%} said maybe — meaning \textbf{97.7\%} of respondents were open to using such a tool, with only 2.3\% opposed. This represents strong validated demand for the proposed system.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth, height=7cm, keepaspectratio]{Picture5.png}
+\caption{Student willingness to use a recommendation tool}
+\end{figure}
+
+\subsection{What Drives the Decision}
+
+Personal interest (65.1\%) and job market considerations (39.5\%) were the dominant factors students weighed when choosing a department, with family expectation (4.7\%) playing a much smaller role. This directly informs the criteria the recommendation engine should weigh most heavily.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth, height=7cm, keepaspectratio]{Picture6.png}
+\caption{Factors that matter most when choosing a department}
+\end{figure}
+
+\subsection{Common Themes in Open-Ended Responses}
+
+Reviewing the open-ended responses on what information students wished they had before choosing, several recurring themes emerged:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item Clearer information on career opportunities and job prospects for each department
+\item A clearer breakdown of the practical differences between CS and SWE specifically, which several respondents noted as the most confusing pair
+\item Awareness of which skills each department emphasizes, and how much practical/project work to expect versus theory
+\item A desire for information from current students or graduates, not just official descriptions
+\end{itemize}
+
+These themes map directly onto the functional requirements outlined in Section~\ref{sec:requirements}.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Department-Level Input}
+% ══════════════════════════════════════════════════════════════════════════════
+
+To ensure the system's recommendation logic reflects accurate, department-specific realities rather than assumptions, a structured questionnaire was sent to the heads of all four CCI departments. 
+
+\subsubsection*{Computer Science Department Response}
+
+The Computer Science HOD has responded in full; responses from SWE, IT, and IS are pending and will be incorporated as they arrive. Key points from the CS HOD's response include:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item Computer Science is the oldest department in CCI, originally established under the Faculty of Business and Economics roughly two decades ago before CCI was formed; the Information Technology department later split off from what was then a combined ``Computer Science and IT'' unit.
+
+\item The department currently enrolls 90–100 new students per year, with 350–400 students across all batches, supported by 15 full-time instructors (2 PhD, 10 MSc, 3 graduate assistants) at roughly a 25:1 student-to-instructor ratio.
+
+\item The department's core focus is developing a problem-solving mindset through algorithmic thinking and software development, delivered across roughly 48 courses with a generally balanced mix of theory and practical work.
+
+\item Facilities include five computing labs (four active, one under construction) with 24/7 student access.
+
+\item According to the department's most recent tracer study (2016 E.C.), graduate employability exceeds 80\%.
+
+\item The HOD noted that new students most commonly underestimate the department's creativity and high market demand — suggesting prospective students consistently receive an incomplete picture, which reinforces the core problem this project addresses.
+\end{itemize}
+
+The CS Department also shared its official orientation material, which will serve as a verified content source for the platform's Computer Science profile, ensuring the information presented to students matches what the department itself considers essential.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Proposed System Overview}
+% ══════════════════════════════════════════════════════════════════════════════
+
+The team proposes to design and develop a \textbf{web-based Department-Choice Guidance System} for CCI students. The system will present students with a short, structured questionnaire covering their interests, academic strengths, and priorities (e.g., theoretical vs.\ practical work, personal interest vs.\ job market focus). 
+
+Based on department-specific criteria verified directly by each department's leadership, the system will generate a recommended best-fit department along with a clear explanation of why it was recommended — addressing the core gap identified in the survey, where generic search and AI tools fail to provide guidance specific to Haramaya's CCI structure.
+
+\subsection{Technology Stack Justification}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Technology} & \textbf{Justification} \\
+\midrule
+React.js & Modern, component-based UI framework; excellent for building interactive questionnaires; progressive web app capabilities for mobile; team has prior experience from coursework \\[4pt]
+
+Node.js + Express & Fast, scalable backend; excellent for building RESTful APIs; JavaScript throughout the stack (single language for full development); large ecosystem of packages \\[4pt]
+
+MongoDB & Flexible NoSQL schema ideal for storing varied department criteria; easy to update as HOD responses arrive; JSON-native storage matches JavaScript ecosystem; free cloud hosting via MongoDB Atlas \\[4pt]
+
+LLM API (OpenAI/Gemini) & Generates personalized explanation text dynamically based on student profile; adapts language to each unique combination of responses; free tier available for development and testing \\[4pt]
+
+Vercel/Netlify & Free hosting platform for frontend; automatic deployments from Git; built-in SSL and CDN; suitable for university project deployment \\[4pt]
+\bottomrule
+\end{tabularx}
+\caption{Proposed technology stack and rationale}
+\end{table}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Proposed Functional Requirements}
+\label{sec:requirements}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Student-Facing Features}
+
+\subsubsection*{Assessment Questionnaire}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+\item 20–25 questions covering: interests (theory vs.\ hands-on), academic strengths (math, logic, creativity), career priorities (job market vs.\ passion), work preferences (individual vs.\ team)
+\item Progress indicator and save/resume functionality
+\item Skip/neutral option for uncertain students
+\item Estimated completion time: 10–15 minutes
+\end{itemize}
+
+\subsubsection*{Recommendation Results}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+\item Top-matched department with percentage score (e.g., ``Computer Science — 87\% match'')
+\item Personalized explanation: ``You were matched with CS because you showed strong interest in problem-solving and algorithmic thinking...''
+\item Alternative recommendations (2nd and 3rd place) with brief rationale
+\item Disclaimer: ``This is guidance, not a requirement — final choice is yours''
+\end{itemize}
+
+\subsubsection*{Department Comparison Tool}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+\item Side-by-side comparison of any 2–4 departments
+\item Categories: Core focus, career paths, theory/practice balance, facilities, admission requirements, employability data
+\item Filter by: ``Most similar to CS'' or ``Best job market''
+\end{itemize}
+
+\subsection{Admin-Facing Features}
+
+\subsubsection*{Content Management Dashboard}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+\item Edit department profiles (focus areas, career paths, facilities)
+\item Update matching criteria weights (e.g., increase weight on ``job market'' factor)
+\item Add/edit questionnaire questions
+\item View system analytics (usage stats, popular departments, common concerns)
+\end{itemize}
+
+\subsubsection*{Analytics Dashboard}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+\item Total users, completion rate, department recommendation distribution
+\item Common themes from open-ended feedback
+\item Export data as CSV for further analysis
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Non-Functional Requirements}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Performance Requirements}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item Page load time: $<$ 2 seconds on standard university internet
+\item Questionnaire completion: 10–15 minutes maximum
+\item Concurrent users: Support at least 50 simultaneous users
+\item Recommendation generation: $<$ 3 seconds per student
+\end{itemize}
+
+\subsection{Usability Requirements}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item Mobile-responsive design (students often use phones)
+\item Accessible to users with disabilities (WCAG 2.1 Level AA)
+\item Available in English (with potential for Amharic in future versions)
+\item No user manual required for students — intuitive interface
+\end{itemize}
+
+\subsection{Security \& Privacy}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item Student responses stored anonymously (no personal identification required)
+\item Admin panel requires authentication
+\item Data retention: Student responses auto-deleted after 30 days
+\item No tracking or sharing of individual student choices with departments
+\end{itemize}
+
+\subsection{Maintainability}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item Department criteria editable by ICT Center staff without developer access
+\item Clear documentation for handover
+\item Modular code structure for future enhancements
+\item Version control using Git for code management
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Data Collection Status}
+% ══════════════════════════════════════════════════════════════════════════════
+
+As of this proposal, \textbf{43 student survey responses} have been collected via a structured Google Form distributed through official student channels, and data collection is ongoing. 
+
+A structured written questionnaire has been sent to the heads of all four CCI departments; the \textbf{Computer Science HOD has responded in full}, and the team is following up with the SWE, IT, and IS departments to complete the remaining responses before the system's matching criteria are finalized.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Proposed Scope and Timeline (6 Weeks)}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{>{\bfseries}l>{\centering\arraybackslash}p{2.5cm}X}
+\toprule
+\textbf{Phase} & \textbf{Weeks} & \textbf{Focus} \\
+\midrule
+Requirement Gathering \& Analysis & Weeks 1–2 (current) & Problem validation (student survey), HOD data collection, proposal approval, finalized functional/non-functional requirements \\[8pt]
+
+System Analysis \& Design & Week 3 & Department schema design (criteria stored as weighted, editable data), system architecture, UI wireframes, scoring algorithm designed on paper, LLM prompt design for explanation generation \\[8pt]
+
+Implementation — Backend Core & Week 4 & Express + MongoDB setup; Department schema built and seeded with real HOD data; weighted matching/scoring engine implemented and tested \\[8pt]
+
+Implementation — AI Layer + Frontend & Week 5 & LLM API integrated to generate personalized explanation text; React questionnaire UI built and connected to backend; results page and comparison view completed \\[8pt]
+
+Testing \& Deployment Handover & Week 6 & Usability testing with real students, bug fixes/polish, documentation finalized, handover briefing for ICT Center \\
+\bottomrule
+\end{tabularx}
+\caption{Proposed 6-week project timeline}
+\end{table}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Expected Outcomes and Impact}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Immediate Benefits (Year 1)}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item \textbf{Increased confidence}: Reduce the 44.2\% of students who felt uncertain by providing data-driven, personalized recommendations
+\item \textbf{Reduced transfers}: Fewer students switching departments mid-program (costly in time and resources for both students and university)
+\item \textbf{Better alignment}: Students enter departments that genuinely match their interests, strengths, and career goals
+\item \textbf{Time savings}: Prospective students save hours of research by accessing centralized, verified information
+\end{itemize}
+
+\subsection{Long-Term Impact (Years 2–5)}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item \textbf{Higher retention rates}: Students satisfied with their department choice are less likely to drop out or change programs
+\item \textbf{Improved academic performance}: Students in well-aligned departments demonstrate higher motivation and better grades
+\item \textbf{Data-driven insights}: CCI leadership gains valuable analytics on student preferences, concerns, and decision-making trends
+\item \textbf{Replicability}: System framework can be adapted for other colleges at Haramaya University (e.g., Engineering, Health Sciences, Agriculture)
+\item \textbf{Institutional reputation}: Demonstrates Haramaya's commitment to student success and evidence-based decision support
+\end{itemize}
+
+\subsection{Success Metrics}
+
+The system's effectiveness will be measured through:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{0.95\textwidth}{lX}
+\toprule
+\textbf{Metric} & \textbf{Target} \\
+\midrule
+Usage Rate & 70\% of incoming CCI students use the system before department selection \\[3pt]
+User Satisfaction & Post-use survey showing 80\%+ found recommendations helpful and explanations clear \\[3pt]
+Recommendation Accuracy & Follow-up survey after Year 1 — 75\%+ of users still satisfied with their chosen department \\[3pt]
+Transfer Rate Reduction & 20\% decrease in department transfer requests compared to previous academic years \\[3pt]
+HOD Feedback & Positive feedback from at least 3 out of 4 department heads on system accuracy \\
+\bottomrule
+\end{tabularx}
+\caption{Success metrics and evaluation criteria}
+\end{table}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Risk Management}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{4.2cm}cX}
+\toprule
+\textbf{Risk} & \textbf{Probability} & \textbf{Mitigation Strategy} \\
+\midrule
+Delayed HOD responses from SWE, IT, IS departments & High & CS response already secured and can serve as template; system designed to allow easy addition of remaining departments later; can launch with partial data and update incrementally \\[8pt]
+
+LLM API costs exceed available budget & Medium & Use free tier initially (OpenAI: \$5 free credit, Google Gemini: generous free tier); implement response caching for common patterns; fallback to template-based explanations if API quota exhausted \\[8pt]
+
+Low student adoption rate & Medium & Promote through student representatives and social media; integrate into official freshman orientation program; gather early feedback from beta testers; make system optional but encouraged \\[8pt]
+
+Timeline overruns due to technical challenges & Low & Agile development approach with MVP delivered by Week 5; Week 6 serves as buffer for polish and fixes; core features prioritized over nice-to-have enhancements \\[8pt]
+
+Data privacy concerns from students & Low & Clear privacy policy displayed; anonymous usage (no login required); data auto-deleted after 30 days; transparent about what data is collected and why \\[8pt]
+
+Server/hosting availability issues & Low & Deploy on reliable free-tier platforms (Vercel + MongoDB Atlas); both have 99.9\% uptime SLAs; ICT Center can optionally host on university servers later \\
+\bottomrule
+\end{tabularx}
+\caption{Risk assessment and mitigation strategies}
+\end{table}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Resource Requirements}
+% ══════════════════════════════════════════════════════════════════════════════
+
+\subsection{Human Resources}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item \textbf{Development team}: 5 members (listed on cover page) — full-time commitment for 6 weeks
+\item \textbf{ICT Center supervisor}: Weekly progress check-ins (1 hour/week) and final system approval
+\item \textbf{Department HODs}: One-time questionnaire completion (estimated 1 hour each)
+\item \textbf{Beta testers}: 10–15 volunteer students from different departments (Week 6, 30 minutes each)
+\item \textbf{Faculty advisor}: Bi-weekly consultation and guidance on academic requirements
+\end{itemize}
+
+\subsection{Technical Resources}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{0.9\textwidth}{lXr}
+\toprule
+\textbf{Resource} & \textbf{Description} & \textbf{Cost} \\
+\midrule
+Development laptops & Team-owned equipment & \$0 \\[2pt]
+Internet access & University WiFi + personal data & \$0 \\[2pt]
+Frontend hosting & Vercel free tier (100GB bandwidth/month) & \$0 \\[2pt]
+Database hosting & MongoDB Atlas free tier (512MB storage) & \$0 \\[2pt]
+LLM API & OpenAI/Gemini free tier for development & \$0 \\[2pt]
+Domain name & Optional (can use free subdomain) & \$0–\$12/year \\[2pt]
+SSL certificate & Included free with Vercel/Netlify & \$0 \\[2pt]
+Git repository & GitHub free tier (unlimited repos) & \$0 \\[2pt]
+\midrule
+\textbf{Total Estimated Cost} & \textbf{6-month operational budget} & \textbf{\$0–\$12} \\
+\bottomrule
+\end{tabularx}
+\caption{Technical resource requirements and budget}
+\end{table}
+
+\subsection{Support from ICT Center}
+
+The team requests the following support from the ICT Center:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+\item \textbf{Policy guidance}: Advice on university IT policies, data privacy regulations, and student data handling procedures
+\item \textbf{Promotion access}: Permission to promote the system through official CCI student communication channels (email lists, notice boards, orientation sessions)
+\item \textbf{Testing environment}: Access to a test group of students for usability testing (Week 6)
+\item \textbf{Optional hosting}: Consideration for hosting on university servers after successful pilot deployment (post-handover)
+\item \textbf{Sustainability planning}: Discussion on long-term maintenance and potential integration into official CCI processes
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Request for Approval}
+% ══════════════════════════════════════════════════════════════════════════════
+
+The team respectfully requests the ICT Center's review and approval of the proposed project title and scope described above, so that the team may proceed into detailed system design and development within the proposed timeline. The team remains open to any adjustments in focus or functionality the ICT Center recommends. 
+
+Thank you for your continued guidance and support throughout this project.
+
+\vspace{1.5cm}
+
+% ── Final signature block ─────────────────────────────────────────────────────
+\begin{tcolorbox}[
+    enhanced,
+    colback=lightblue,
+    colframe=uniblue,
+    arc=4pt,
+    boxrule=1pt,
+    top=8pt, 
+    bottom=8pt, 
+    left=10pt, 
+    right=10pt
+]
+\centering
+{\small\textcolor{uniblue}{%
+Asledin Abdukadir $\cdot$ 
+Arafat Bule $\cdot$ 
+Burqa Jemal $\cdot$ 
+Usman Abdi $\cdot$ 
+Nuri Irko
+}}\\[4pt]
+{\small\textcolor{darkgray}{%
+Haramaya University $\cdot$ 
+College of Computing and Informatics $\cdot$ 
+Oromia, Ethiopia $\cdot$ 
+June 2026
+}}
+\end{tcolorbox}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\end{document}
+% ══════════════════════════════════════════════════════════════════════════════

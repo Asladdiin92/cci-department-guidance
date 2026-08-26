@@ -8,7 +8,26 @@
 </head>
 <body>
     <div class="container">
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-content">
+                <div class="spinner">
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-ring"></div>
+                </div>
+                <div class="loading-text">Processing your answers...</div>
+                <div class="loading-subtext">Finding your perfect department match</div>
+                <div class="loading-progress-bar">
+                    <div class="loading-progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
         <header>
+            <a href="index.html" class="logo-link" title="Go to home">
+                <img src="assets/cci-logo.png" alt="Haramaya University CCI Logo" class="header-logo">
+            </a>
             <h1>CCI Department Choice Guidance System</h1>
             <p>Find the best department match for you</p>
             <a href="public/dashboard.html" class="dashboard-link" title="Admin Dashboard">
@@ -18,7 +37,7 @@
 
         <!-- Welcome Screen -->
         <div id="welcomeScreen" class="screen active">
-            <div class="welcome-content">
+            <div class="welcome-content" style="background-image: url('assets/images/hero-bg.jpg'); background-size: cover; background-position: center;">
                 <h2>Welcome to the Department Guidance Assessment</h2>
                 <p>This assessment will help you discover which CCI department best matches your interests, skills, and career goals.</p>
                 
@@ -35,11 +54,30 @@
                 <div class="departments-info">
                     <p><strong>Available Departments:</strong></p>
                     <div class="dept-tags">
-                        <span class="dept-tag cs">Computer Science</span>
-                        <span class="dept-tag swe">Software Engineering</span>
-                        <span class="dept-tag it">Information Technology</span>
-                        <span class="dept-tag is">Information System</span>
-                        <span class="dept-tag stat">Statistics</span>
+                        <span class="dept-tag cs">
+                            <img src="assets/icons/computer-science-icon.png" alt="CS" class="dept-tag-icon" onerror="this.style.display='none'">
+                            Computer Science
+                        </span>
+                        <span class="dept-tag swe">
+                            <img src="assets/icons/software-engineering-icon.png" alt="SWE" class="dept-tag-icon" onerror="this.style.display='none'">
+                            Software Engineering
+                        </span>
+                        <span class="dept-tag it">
+                            <img src="assets/icons/information-technology-icon.png" alt="IT" class="dept-tag-icon" onerror="this.style.display='none'">
+                            Information Technology
+                        </span>
+                        <span class="dept-tag is">
+                            <img src="assets/icons/information-system-icon.png" alt="IS" class="dept-tag-icon" onerror="this.style.display='none'">
+                            Information System
+                        </span>
+                        <span class="dept-tag isc">
+                            <img src="assets/icons/information-science-icon.png" alt="ISC" class="dept-tag-icon" onerror="this.style.display='none'">
+                            Information Science
+                        </span>
+                        <span class="dept-tag stat">
+                            <img src="assets/icons/statistics-icon.png" alt="STAT" class="dept-tag-icon" onerror="this.style.display='none'">
+                            Statistics
+                        </span>
                     </div>
                 </div>
 
@@ -112,6 +150,20 @@
         <div id="departmentDetailScreen" class="screen">
             <div class="detail-content">
                 <!-- Department detail will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">
+                <span id="loadingMessage" class="loading-dots">Processing</span>
+            </div>
+            <div class="loading-subtext" id="loadingSubtext">Please wait...</div>
+            <div class="progress-loading">
+                <div class="progress-loading-bar" id="progressLoadingBar"></div>
             </div>
         </div>
     </div>

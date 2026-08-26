@@ -1,28 +1,47 @@
-# Dependencies
+# Node modules
 node_modules/
-package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Environment variables
-.env
-.env.local
-
-# Build outputs
+# Build artifacts
 build/
 dist/
-.next/
+*.exe
+*.dmg
+*.AppImage
+
+# LaTeX build artifacts
+docs/**/build/
+**/*.aux
+**/*.log
+**/*.out
+**/*.toc
+**/*.lot
+**/*.lof
+**/*.synctex(busy)
+**/*.fdb_latexmk
+**/*.fls
+
+# Environment
+.env
+.env.local
 
 # IDE
 .vscode/
 .idea/
+.vs/
+*.swp
+*.swo
+*~
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-npm-debug.log*
+# Electron
+out/
 
-# Temporary files
-*.tmp
-*.swp
+# Test coverage
+coverage/
+.nyc_output/

@@ -32,6 +32,7 @@ The **CCI Department Choice Guidance System** is a full-stack web application de
 - Software Engineering (SWE)
 - Information Technology (IT)
 - Information System (IS)
+- Information Science (ISC)
 - Statistics (STAT)
 
 ---
@@ -41,7 +42,7 @@ The **CCI Department Choice Guidance System** is a full-stack web application de
 Students at the College of Computing and Informatics (CCI) often face challenges when choosing their department:
 
 - **Lack of structured guidance** for department selection
-- **Limited understanding** of differences between departments (CS/SWE/IT/IS/Statistics)
+- **Limited understanding** of differences between departments (CS/SWE/IT/IS/ISC/Statistics)
 - **Peer-based decisions** rather than interest/skill-based choices
 - **High department transfer rates** indicating poor initial choices
 - **Confusion about career paths** and skill requirements
@@ -75,32 +76,50 @@ Students at the College of Computing and Informatics (CCI) often face challenges
 
 ## 🛠️ Technology Stack
 
-### Frontend
-- **React.js** - UI framework
-- **Tailwind CSS** - Styling
-- **Chart.js** - Data visualization
-- **React Router** - Navigation
+This repository is an Electron-based desktop application that uses plain HTML, CSS, and vanilla JavaScript for its user interface. It does not include a separate backend API in this distribution — the app is a client-side/static Electron app.
 
-### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **PostgreSQL** - Database
-- **JWT** - Authentication
+### Core
+- **Electron** - Desktop application shell (main runtime)
+- **HTML / CSS / JavaScript** - UI and application logic
+- **Chart.js** (optional) - Data visualization (used in dashboard)
 
 ### Development Tools
+- **Node.js / npm** - Dependency management and scripts
 - **Git** - Version control
-- **VS Code** - Code editor
-- **Postman** - API testing
-- **Draw.io** - Diagrams
+- **VS Code** - Recommended editor
 
-### Deployment
-- **Nginx** - Web server
-- **PM2** - Process manager
-- **Docker** - Containerization (optional)
+### Packaging / Deployment (optional)
+- **electron-builder** or **electron-forge** - Packaging the app for Windows/macOS/Linux
+- **Docker** (optional) - For any auxiliary services if added later
 
 ---
 
 ## 📁 Project Structure
+
+This project is structured as an Electron desktop application with static frontend resources. Key files and folders:
+
+```
+department-choice-system/
+├── index.html               # App entry (renderer)
+├── package.json             # npm scripts and Electron main
+├── src/
+│   ├── main/                # Electron main process
+│   │   └── main.js
+│   ├── js/                  # Renderer JavaScript
+│   │   ├── app.js
+│   │   └── dashboard.js
+│   ├── css/                 # Styles
+│   │   └── styles.css
+│   ├── data/                # Questions and department data (JS files)
+│   └── renderer/            # (optional renderer subfolders)
+├── assets/                  # Images and icons
+├── public/                  # Static HTML builds (dashboard, etc.)
+├── docs/                    # Project documentation
+└── README.md
+```
+
+Notes:
+- There is no separate backend API or database in this repository by default. If a server is added later, place it under a top-level `server/` folder.
 
 ```
 cci-department-guidance/
@@ -142,48 +161,37 @@ cci-department-guidance/
 
 ### Prerequisites
 
-- **Node.js** (v18 or higher)
-- **npm** or **yarn**
-- **PostgreSQL** (v13 or higher)
+- **Node.js** (v16 or higher)
+- **npm** (bundled with Node)
 - **Git**
 
-### Installation
+> This repository is an Electron desktop app. There is no bundled backend service or database required to run the UI in this repository.
 
-1. **Clone the repository**
-```bash
+### Install & Run (Development)
+
+1. Clone the repository
+```
 git clone https://github.com/asladdiin92/cci-department-guidance.git
-cd cci-department-guidance
+cd department-choice-system
 ```
 
-2. **Install dependencies**
-```bash
+2. Install dependencies
+```
 npm install
 ```
 
-3. **Set up environment variables**
-```bash
-cp .env.example .env
-# Edit .env with your configuration
+3. Start the app (opens the Electron window)
+```
+npm start
 ```
 
-4. **Set up the database**
-```bash
-# Create PostgreSQL database
-createdb dept_guidance
+Notes:
+- The main application entry is `index.html` and the Electron main process is `src/main/main.js`.
+- A small admin dashboard is available at `public/dashboard.html` and can be opened directly in a browser for preview.
 
-# Run migrations (when available)
-npm run migrate
-```
+### Packaging (optional)
 
-5. **Start development server**
-```bash
-npm run dev
-```
-
-6. **Open in browser**
-```
-http://localhost:3000
-```
+To create distributable installers, add a packaging tool such as `electron-builder` or `electron-forge` and follow their documentation.
 
 ---
 

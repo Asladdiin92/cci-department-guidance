@@ -6,14 +6,15 @@
 // MOCK DATA (Replace with real API calls later)
 // ========================================
 const mockData = {
-    totalAssessments: 127,
-    totalStudents: 127,
+    totalAssessments: 141,
+    totalStudents: 141,
     avgCompletion: 94,
     departmentDistribution: {
         CS: 28,
         SWE: 45,
         IT: 22,
         IS: 20,
+        ISC: 14,
         STAT: 12
     },
     recentActivity: [
@@ -28,7 +29,8 @@ const mockData = {
         { id: "STD002", date: "2026-08-16", topMatch: "CS", score: 92, status: "completed" },
         { id: "STD003", date: "2026-08-15", topMatch: "IT", score: 78, status: "completed" },
         { id: "STD004", date: "2026-08-15", topMatch: "IS", score: 81, status: "completed" },
-        { id: "STD005", date: "2026-08-15", topMatch: "SWE", score: 88, status: "completed" }
+        { id: "STD005", date: "2026-08-15", topMatch: "SWE", score: 88, status: "completed" },
+        { id: "STD006", date: "2026-08-14", topMatch: "ISC", score: 79, status: "completed" }
     ]
 };
 

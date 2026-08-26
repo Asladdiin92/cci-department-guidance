@@ -4,13 +4,89 @@
 // Date: August 2026
 
 // ========================================
+// LOADING ANIMATION SYSTEM
+// ========================================
+
+const loadingOverlay = document.getElementById('loadingOverlay');
+const loadingMessage = document.getElementById('loadingMessage');
+const loadingSubtext = document.getElementById('loadingSubtext');
+const progressLoadingBar = document.getElementById('progressLoadingBar');
+
+// Show loading overlay
+function showLoading(message = 'Processing', subtext = 'Please wait...') {
+    loadingMessage.textContent = message;
+    loadingSubtext.textContent = subtext;
+    loadingOverlay.classList.add('active');
+    progressLoadingBar.style.width = '0%';
+}
+
+// Hide loading overlay
+function hideLoading() {
+    loadingOverlay.classList.remove('active');
+}
+
+// Update loading progress
+function updateLoadingProgress(percentage) {
+    progressLoadingBar.style.width = percentage + '%';
+}
+
+// Simulate progress (for operations without real progress tracking)
+function simulateProgress(duration = 2000) {
+    let progress = 0;
+    const interval = 50;
+    const increment = (interval / duration) * 100;
+    
+    const progressInterval = setInterval(() => {
+        progress += increment;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(progressInterval);
+        }
+        updateLoadingProgress(progress);
+    }, interval);
+    
+    return progressInterval;
+}
+
+// Show button loading state
+function setButtonLoading(button, isLoading) {
+    if (isLoading) {
+        button.classList.add('loading');
+        button.disabled = true;
+    } else {
+        button.classList.remove('loading');
+        button.disabled = false;
+    }
+}
+
+// ========================================
 // APPLICATION STATE
 // ========================================
 const appState = {
     currentQuestionIndex: 0,
     answers: [],
-    scores: { CS: 0, SWE: 0, IT: 0, IS: 0, STAT: 0 }
+    scores: { CS: 0, SWE: 0, IT: 0, IS: 0, ISC: 0, STAT: 0 },
+    hasCompletedAssessment: false
 };
+
+// ========================================
+// LOADING FUNCTIONS
+// ========================================
+function showLoading(message = 'Loading...', submessage = 'Please wait') {
+    const overlay = document.getElementById('loadingOverlay');
+    const textEl = overlay.querySelector('.loading-text');
+    const subtextEl = overlay.querySelector('.loading-subtext');
+    
+    if (textEl) textEl.textContent = message;
+    if (subtextEl) subtextEl.textContent = submessage;
+    
+    overlay.classList.add('active');
+}
+
+function hideLoading() {
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.classList.remove('active');
+}
 
 // ========================================
 // DOM ELEMENTS
@@ -52,11 +128,21 @@ function showScreen(screenToShow) {
 // ASSESSMENT FUNCTIONS
 // ========================================
 function startAssessment() {
+    // Show loading
+    showLoading('Preparing Assessment', 'Loading questions...');
+    
+    // Reset state
     appState.currentQuestionIndex = 0;
     appState.answers = [];
-    appState.scores = { CS: 0, SWE: 0, IT: 0, IS: 0, STAT: 0 };
-    showScreen(assessmentScreen);
-    displayQuestion();
+    appState.scores = { CS: 0, SWE: 0, IT: 0, IS: 0, ISC: 0, STAT: 0 };
+    appState.hasCompletedAssessment = false;
+    
+    // Simulate loading (small delay for smooth transition)
+    setTimeout(() => {
+        showScreen(assessmentScreen);
+        displayQuestion();
+        hideLoading();
+    }, 800);
 }
 
 function displayQuestion() {
@@ -124,18 +210,40 @@ function goToNextQuestion() {
         appState.currentQuestionIndex++;
         displayQuestion();
     } else {
-        // Last question - show results
-        calculateResults();
-        displayResults();
+        // Last question - show loading and calculate results
+        showLoading('Analyzing Your Responses', 'Calculating your department matches...');
+        
+        // Simulate progress for better UX
+        const progressInterval = simulateProgress(2500);
+        
+        // Calculate after brief delay
+        setTimeout(() => {
+            calculateResults();
+            clearInterval(progressInterval);
+            updateLoadingProgress(100);
+            
+            // Small delay before showing results
+            setTimeout(() => {
+                displayResults();
+                hideLoading();
+            }, 500);
+        }, 2000);
     }
 }
 
 // ========================================
 // SCORING AND RESULTS
 // ========================================
+function getDepartmentMaxScore(deptCode) {
+    return questions.reduce((total, question) => {
+        const bestOptionScore = Math.max(...question.options.map(option => option.scores[deptCode] || 0));
+        return total + bestOptionScore;
+    }, 0);
+}
+
 function calculateResults() {
     // Reset scores
-    appState.scores = { CS: 0, SWE: 0, IT: 0, IS: 0, STAT: 0 };
+    appState.scores = { CS: 0, SWE: 0, IT: 0, IS: 0, ISC: 0, STAT: 0 };
     
     // Calculate scores based on answers
     appState.answers.forEach((answerIndex, questionIndex) => {
@@ -147,18 +255,21 @@ function calculateResults() {
             appState.scores[dept] += selectedOption.scores[dept];
         });
     });
+    
+    appState.hasCompletedAssessment = true;
 }
 
 function displayResults() {
     // Convert scores to percentages and sort
-    const maxScore = 60; // Maximum possible score per department (20 questions × 3 max points)
-    
-    const results = Object.keys(appState.scores).map(dept => ({
-        department: dept,
-        score: appState.scores[dept],
-        percentage: Math.round((appState.scores[dept] / maxScore) * 100),
-        info: departments[dept]
-    }));
+    const results = Object.keys(appState.scores).map(dept => {
+        const maxScore = getDepartmentMaxScore(dept);
+        return {
+            department: dept,
+            score: appState.scores[dept],
+            percentage: maxScore > 0 ? Math.round((appState.scores[dept] / maxScore) * 100) : 0,
+            info: departments[dept]
+        };
+    });
     
     // Sort by percentage (highest first)
     results.sort((a, b) => b.percentage - a.percentage);
@@ -241,7 +352,7 @@ function createRecommendationCard(result, rank) {
     learnMoreBtn.className = 'btn btn-secondary';
     learnMoreBtn.style.cssText = 'width: 100%; margin-top: 20px;';
     learnMoreBtn.textContent = 'Learn More About ' + result.info.name;
-    learnMoreBtn.addEventListener('click', () => showDepartmentDetail(result.department));
+    learnMoreBtn.addEventListener('click', () => showDepartmentDetail(result.department, 'results'));
     
     card.appendChild(badge);
     card.appendChild(deptName);
@@ -258,34 +369,41 @@ function createRecommendationCard(result, rank) {
 // COMPARISON SCREEN
 // ========================================
 function displayComparison() {
-    const maxScore = 60;
+    // Show loading
+    showLoading('Preparing Comparison', 'Loading department data...');
     
-    // Get all results
-    const results = Object.keys(appState.scores).map(dept => ({
-        department: dept,
-        score: appState.scores[dept],
-        percentage: Math.round((appState.scores[dept] / maxScore) * 100),
-        info: departments[dept]
-    }));
-    
-    // Sort by percentage
-    results.sort((a, b) => b.percentage - a.percentage);
-    
-    // Display score cards
-    allScoresContainer.innerHTML = '';
-    results.forEach((result, index) => {
-        const scoreCard = createScoreCard(result, index === 0);
-        allScoresContainer.appendChild(scoreCard);
-    });
-    
-    // Display detailed comparison table
-    comparisonTableContainer.innerHTML = '';
-    results.forEach(result => {
-        const compRow = createComparisonRow(result);
-        comparisonTableContainer.appendChild(compRow);
-    });
-    
-    showScreen(comparisonScreen);
+    setTimeout(() => {
+        // Get all results
+        const results = Object.keys(appState.scores).map(dept => {
+            const maxScore = getDepartmentMaxScore(dept);
+            return {
+                department: dept,
+                score: appState.scores[dept],
+                percentage: maxScore > 0 ? Math.round((appState.scores[dept] / maxScore) * 100) : 0,
+                info: departments[dept]
+            };
+        });
+        
+        // Sort by percentage
+        results.sort((a, b) => b.percentage - a.percentage);
+        
+        // Display score cards
+        allScoresContainer.innerHTML = '';
+        results.forEach((result, index) => {
+            const scoreCard = createScoreCard(result, index === 0);
+            allScoresContainer.appendChild(scoreCard);
+        });
+        
+        // Display detailed comparison table
+        comparisonTableContainer.innerHTML = '';
+        results.forEach(result => {
+            const compRow = createComparisonRow(result);
+            comparisonTableContainer.appendChild(compRow);
+        });
+        
+        showScreen(comparisonScreen);
+        hideLoading();
+    }, 800);
 }
 
 function createScoreCard(result, isTopMatch) {
@@ -324,7 +442,7 @@ function createComparisonRow(result) {
     const row = document.createElement('div');
     row.className = `dept-comparison-row ${result.department.toLowerCase()}`;
     row.style.cursor = 'pointer';
-    row.addEventListener('click', () => showDepartmentDetail(result.department));
+    row.addEventListener('click', () => showDepartmentDetail(result.department, 'comparison'));
     row.title = 'Click to learn more about ' + result.info.fullName;
     
     // Header with name and score
@@ -392,24 +510,33 @@ function createComparisonRow(result) {
 // ========================================
 // DEPARTMENT DETAIL PAGE
 // ========================================
-function showDepartmentDetail(deptCode) {
-    const maxScore = 60;
+function showDepartmentDetail(deptCode, source = 'comparison') {
+    // Show loading
+    showLoading('Loading Department Info', 'Getting details...');
+    
+    const maxScore = getDepartmentMaxScore(deptCode);
     const dept = departments[deptCode];
-    const score = appState.scores[deptCode];
-    const percentage = Math.round((score / maxScore) * 100);
+    const score = appState.scores[deptCode] || 0;
+    const percentage = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+    const showMatchScore = source !== 'preview' && appState.hasCompletedAssessment;
     
     const detailContent = departmentDetailScreen.querySelector('.detail-content');
     detailContent.innerHTML = '';
+    
+    // Simulate loading for smooth transition
+    setTimeout(() => {
     
     // Header
     const header = document.createElement('div');
     header.className = 'detail-header';
     header.innerHTML = `
         <h2 class="detail-dept-name" style="color: ${dept.color}">${dept.fullName}</h2>
+        ${showMatchScore ? `
         <div class="detail-score-badge" style="background: ${dept.color}20; color: ${dept.color}">
             Your Match: ${percentage}%
-        </div>
+        </div>` : ''}
         <p class="detail-overview">${dept.overview}</p>
+        ${!showMatchScore ? '<p style="margin-top: 10px; color: #666; font-weight: 500;">This is general department information. Take the assessment to get your personalized match score.</p>' : ''}
     `;
     detailContent.appendChild(header);
     
@@ -429,6 +556,41 @@ function showDepartmentDetail(deptCode) {
         dept.color
     );
     detailContent.appendChild(subjectsSection);
+    
+    // Curriculum Blueprint Section (if available)
+    if (dept.curriculum) {
+        const curriculumSection = document.createElement('div');
+        curriculumSection.className = 'detail-section';
+        curriculumSection.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 class="detail-section-title" style="color: ${dept.color}; margin-bottom: 0;">📖 Detailed Curriculum Blueprint</h3>
+                <button id="downloadCurriculumBtn" class="btn btn-secondary" style="padding: 10px 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                    <img src="assets/images/download.svg" alt="" style="width: 16px; height: 16px; filter: brightness(0) invert(1);" onerror="this.style.display='none'">
+                    Download PDF
+                </button>
+            </div>
+            ${Object.entries(dept.curriculum).map(([category, topics]) => `
+                <div class="curriculum-category" style="border-left-color: ${dept.color};">
+                    <h4 style="color: ${dept.color}; font-size: 1.1rem; margin-bottom: 12px; font-weight: 600;">
+                        ${category}
+                    </h4>
+                    <ul style="list-style: none; padding-left: 0;">
+                        ${topics.map(topic => `
+                            <li style="padding: 10px 15px; background: #f8f9fa; border-left: 3px solid ${dept.color}; margin-bottom: 8px; border-radius: 5px;">
+                                <span style="color: #555;">${topic}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `).join('')}
+        `;
+        detailContent.appendChild(curriculumSection);
+        
+        // Add download functionality
+        document.getElementById('downloadCurriculumBtn').addEventListener('click', () => {
+            downloadCurriculumAsPDF(dept, deptCode);
+        });
+    }
     
     // Career Paths Section
     const careersSection = document.createElement('div');
@@ -501,24 +663,40 @@ function showDepartmentDetail(deptCode) {
     `;
     detailContent.appendChild(tipsSection);
     
+    const backButtonText = source === 'results' ? 'Back to Results' : source === 'preview' ? 'Back to Welcome' : 'Back to Comparison';
+    const primaryButtonText = showMatchScore ? 'I Choose This Department!' : 'Start Assessment for My Match';
+    
     // Actions
     const actions = document.createElement('div');
     actions.className = 'detail-actions';
     actions.innerHTML = `
-        <button class="btn btn-secondary" id="backFromDetailBtn">Back to Comparison</button>
-        <button class="btn btn-primary" id="chooseThisDeptBtn">I Choose This Department!</button>
+        <button class="btn btn-secondary" id="backFromDetailBtn">${backButtonText}</button>
+        <button class="btn btn-primary" id="chooseThisDeptBtn">${primaryButtonText}</button>
     `;
     detailContent.appendChild(actions);
     
     // Add event listeners
     document.getElementById('backFromDetailBtn').addEventListener('click', () => {
-        showScreen(comparisonScreen);
+        if (source === 'results') {
+            showScreen(resultsScreen);
+        } else if (source === 'preview') {
+            showScreen(welcomeScreen);
+        } else {
+            showScreen(comparisonScreen);
+        }
     });
     document.getElementById('chooseThisDeptBtn').addEventListener('click', () => {
-        alert(`Great choice! ${dept.fullName} seems like a perfect fit for you with a ${percentage}% match!\n\nNext steps:\n1. Talk to the department head\n2. Review the curriculum\n3. Register for ${dept.fullName}`);
+        if (!showMatchScore) {
+            startAssessment();
+            return;
+        }
+        
+        alert(`Great choice! ${dept.fullName} seems like a strong fit for you with a ${percentage}% match!\n\nNext steps:\n1. Talk to the department head\n2. Review the curriculum\n3. Register for ${dept.fullName}`);
     });
     
     showScreen(departmentDetailScreen);
+    hideLoading();
+    }, 600);
 }
 
 function createDetailSection(title, content, color) {
@@ -557,9 +735,9 @@ restartFromCompareBtn.addEventListener('click', () => {
 // ========================================
 document.addEventListener('keydown', (e) => {
     if (assessmentScreen.classList.contains('active')) {
-        // Number keys 1-5 for selecting options
-        if (e.key >= '1' && e.key <= '5') {
-            const optionIndex = parseInt(e.key) - 1;
+        // Number keys 1-9 for selecting visible options
+        if (e.key >= '1' && e.key <= '9') {
+            const optionIndex = parseInt(e.key, 10) - 1;
             const question = questions[appState.currentQuestionIndex];
             if (optionIndex < question.options.length) {
                 selectOption(optionIndex);
@@ -587,7 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deptTags = document.querySelectorAll('.dept-tag');
     deptTags.forEach(tag => {
         tag.addEventListener('click', () => {
-            const deptClass = tag.className.match(/\b(cs|swe|it|is|stat)\b/)[0].toUpperCase();
+            const deptClass = tag.className.match(/\b(cs|swe|it|is|isc|stat)\b/)[0].toUpperCase();
             showDepartmentPreview(deptClass);
         });
     });
@@ -704,16 +882,185 @@ function showDepartmentPreview(deptCode) {
         startAssessment();
     });
     
-    // Learn more button - initialize mock scores
+    // Learn more button - show general department information only
     document.getElementById('learnMoreBtn').addEventListener('click', () => {
         document.body.removeChild(modal);
-        // Initialize mock scores for preview
-        appState.scores = { CS: 0, SWE: 0, IT: 0, IS: 0, STAT: 0 };
-        appState.scores[deptCode] = 50; // Give the selected department a base score
-        showDepartmentDetail(deptCode);
+        showDepartmentDetail(deptCode, 'preview');
     });
 }
 
 console.log('CCI Department Choice Guidance System Loaded');
 console.log(`Total Questions: ${questions.length}`);
 console.log('Ready to start assessment!');
+
+
+// ========================================
+// CURRICULUM PDF DOWNLOAD FUNCTION
+// ========================================
+function downloadCurriculumAsPDF(dept, deptCode) {
+    // Show loading
+    showLoading('Generating PDF', 'Preparing curriculum document...');
+    
+    // Simulate progress
+    const progressInterval = simulateProgress(1500);
+    
+    setTimeout(() => {
+        clearInterval(progressInterval);
+        updateLoadingProgress(100);
+        
+        // Create printable HTML content
+        const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>${dept.fullName} - Curriculum</title>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                    font-family: 'Segoe UI', Arial, sans-serif;
+                    padding: 40px;
+                    background: white;
+                    color: #333;
+                    line-height: 1.6;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 40px;
+                    padding-bottom: 20px;
+                    border-bottom: 3px solid ${dept.color};
+                }
+                .header h1 {
+                    color: ${dept.color};
+                    font-size: 2.5rem;
+                    margin-bottom: 10px;
+                }
+                .header p {
+                    color: #666;
+                    font-size: 1.1rem;
+                }
+                .metadata {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 30px;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
+                    font-size: 0.9rem;
+                }
+                .overview {
+                    background: ${dept.color}10;
+                    padding: 20px;
+                    border-left: 4px solid ${dept.color};
+                    margin-bottom: 30px;
+                    border-radius: 5px;
+                }
+                .overview h2 {
+                    color: ${dept.color};
+                    font-size: 1.3rem;
+                    margin-bottom: 10px;
+                }
+                .curriculum-section {
+                    margin-bottom: 30px;
+                }
+                .curriculum-category {
+                    margin-bottom: 25px;
+                    page-break-inside: avoid;
+                }
+                .curriculum-category h3 {
+                    color: ${dept.color};
+                    font-size: 1.3rem;
+                    margin-bottom: 15px;
+                    padding-bottom: 10px;
+                    border-bottom: 2px solid ${dept.color};
+                }
+                .curriculum-category ul {
+                    list-style: none;
+                    padding-left: 0;
+                }
+                .curriculum-category li {
+                    padding: 10px 15px;
+                    margin-bottom: 8px;
+                    background: #f8f9fa;
+                    border-left: 4px solid ${dept.color};
+                    border-radius: 4px;
+                }
+                .footer {
+                    margin-top: 50px;
+                    padding-top: 20px;
+                    border-top: 2px solid #e5e7eb;
+                    text-align: center;
+                    color: #666;
+                    font-size: 0.9rem;
+                }
+                @media print {
+                    body { padding: 20px; }
+                    .curriculum-category { page-break-inside: avoid; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>${dept.fullName}</h1>
+                <p>Curriculum Blueprint</p>
+            </div>
+            
+            <div class="metadata">
+                <div><strong>Department:</strong> ${dept.fullName}</div>
+                <div><strong>Code:</strong> ${deptCode}</div>
+                <div><strong>Generated:</strong> ${new Date().toLocaleDateString()}</div>
+            </div>
+            
+            <div class="overview">
+                <h2>Department Overview</h2>
+                <p>${dept.overview}</p>
+            </div>
+            
+            <div class="curriculum-section">
+                <h2 style="color: ${dept.color}; font-size: 1.8rem; margin-bottom: 20px;">
+                    📖 Detailed Curriculum
+                </h2>
+                ${Object.entries(dept.curriculum).map(([category, topics]) => `
+                    <div class="curriculum-category">
+                        <h3>${category}</h3>
+                        <ul>
+                            ${topics.map(topic => `<li>${topic}</li>`).join('')}
+                        </ul>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div class="footer">
+                <p><strong>Haramaya University</strong></p>
+                <p>College of Computing and Informatics (CCI)</p>
+                <p>Department of ${dept.fullName}</p>
+                <p style="margin-top: 10px; font-size: 0.85rem;">
+                    This document was generated by the CCI Department Choice Guidance System
+                </p>
+            </div>
+        </body>
+        </html>
+    `;
+    
+    // Open print dialog with the content
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    
+    // Wait for content to load, then trigger print
+    printWindow.onload = function() {
+        printWindow.focus();
+        printWindow.print();
+        
+        // Optional: Close window after printing (commented out for user preference)
+        // printWindow.onafterprint = function() {
+        //     printWindow.close();
+        // };
+        
+        // Hide loading after print dialog opens
+        hideLoading();
+    };
+    
+    console.log(`Curriculum PDF generated for ${dept.fullName}`);
+    }, 1200);
+}
