@@ -1,0 +1,8 @@
+{
+  "name": "CCI Department Choice Guidance System",
+  "description": "Department choice assessment and guidance system for students at Haramaya University College of Computing and Informatics (CCI)",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
