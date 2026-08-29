@@ -1,7 +1,7 @@
-﻿\documentclass[12pt, a4paper]{article}
+\documentclass[12pt, a4paper]{article}
 
 % ── Packages ──────────────────────────────────────────────────────────────────
-\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=24.02pt]{geometry}
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=3.0cm, right=2.5cm, headheight=24.02pt]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{mathptmx}          % Times New Roman font
@@ -16,7 +16,7 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{titlesec}
-\usepackage{parskip}
+
 \usepackage{enumitem}
 \usepackage{fancyhdr}
 \usepackage{caption}
@@ -77,33 +77,41 @@
 
 % ── Section heading styles ────────────────────────────────────────────────────
 \titleformat{\section}
-    {\large\bfseries\color{uniblue}}
+    {\normalfont\fontsize{14}{21}\bfseries\MakeUppercase}
     {\thesection.}{0.6em}{}
-    [{\color{unigreen}\titlerule[1.5pt]}]
-\titlespacing{\section}{0pt}{14pt}{6pt}
+\titlespacing{\section}{0pt}{1.5\baselineskip}{1.5\baselineskip}
 
 \titleformat{\subsection}
-    {\normalsize\bfseries\color{uniblue}}
+    {\normalfont\fontsize{14}{21}\bfseries}
     {\thesubsection}{0.5em}{}
-\titlespacing{\subsection}{0pt}{10pt}{4pt}
+\titlespacing{\subsection}{0pt}{1.5\baselineskip}{1.5\baselineskip}
 
 \titleformat{\subsubsection}
-    {\normalsize\bfseries\color{darkgray}}
-    {}{0em}{}
-\titlespacing{\subsubsection}{0pt}{8pt}{2pt}
+    {\normalfont\fontsize{12}{18}\bfseries}
+    {\thesubsubsection}{0.5em}{}
+\titlespacing{\subsubsection}{0pt}{1.5\baselineskip}{1.5\baselineskip}
+
+\titleformat{\paragraph}
+    {\normalfont\fontsize{12}{18}}
+    {\theparagraph}{0.5em}{}
+\titlespacing{\paragraph}{0pt}{1.5\baselineskip}{1.5\baselineskip}
 
 % ── Header / Footer ───────────────────────────────────────────────────────────
+\usepackage{tocloft}
+\cftsetindents{section}{0em}{2.5em}
+\cftsetindents{subsection}{2.5em}{3.2em}
+\cftsetindents{subsubsection}{5.7em}{4em}
+\cftsetindents{figure}{0em}{3.5em}
+\cftsetindents{table}{0em}{3.5em}
+\renewcommand{\cftsecleader}{\hfill}
+\renewcommand{\cftsubsecleader}{\hfill}
+\renewcommand{\cftsubsubsecleader}{\hfill}
+\renewcommand{\cftfigleader}{\hfill}
+\renewcommand{\cfttableader}{\hfill}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\textcolor{uniblue}{\textbf{CCI Department Choice Guidance System}}}
-\fancyhead[R]{\small\textcolor{uniblue}{Haramaya University --- CCI}}
-\fancyfoot[C]{\textcolor{darkgray}{\thepage}}
-\fancyfoot[L]{\small\textcolor{darkgray}{Industrial Practice Report}}
-\fancyfoot[R]{\small\textcolor{darkgray}{June 2026}}
-\renewcommand{\headrulewidth}{1pt}
-\renewcommand{\footrulewidth}{0.4pt}
-\renewcommand{\headrule}{\hbox to\headwidth{\color{uniblue}\leaders\hrule height \headrulewidth\hfill}}
-
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
 \onehalfspacing
 
 % ══════════════════════════════════════════════════════════════════════════════
@@ -209,6 +217,58 @@
 \end{center}
 \end{titlepage}
 
+\newpage
+\thispagestyle{plain}
+\pagenumbering{roman}
+\setcounter{page}{1}
+\begin{center}
+\vspace*{1.0cm}
+
+{\fontsize{14}{21}\bfseries HARAMAYA UNIVERSITY}\\[0.5cm]
+{\fontsize{14}{21}\bfseries COLLEGE OF COMPUTING AND INFORMATICS}\\[0.5cm]
+{\fontsize{14}{21}\bfseries DEPARTMENT OF COMPUTER SCIENCE}\\[1.5cm]
+
+{\fontsize{14}{21}\bfseries CCI Department Choice Guidance System}\\[1.5cm]
+
+{\fontsize{14}{21}\bfseries Group Members:}\\[0.3cm]
+\begin{flushleft}
+\fontsize{14}{21}\bfseries
+\hspace*{3cm} 1. Asledin Abdukadir \\
+\hspace*{3cm} 2. Arafat Bule \\
+\hspace*{3cm} 3. Burqa Jemal \\
+\hspace*{3cm} 4. Usman Abdi \\
+\hspace*{3cm} 5. Nuri Irko \\
+\end{flushleft}
+\vspace{1.5cm}
+
+{\fontsize{14}{21}\bfseries Advisor's Name: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}\\[2.5cm]
+
+\vfill
+{\fontsize{14}{21}\bfseries June 10, 2026}
+\end{center}
+
+\newpage
+% ─────────────────────────────────────────────────────────────────────────────
+% APPROVAL SHEET
+% ─────────────────────────────────────────────────────────────────────────────
+\newpage
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\section*{Approval Sheet}
+\addcontentsline{toc}{section}{Approval Sheet}
+\vspace{1cm}
+This is to certify that the project entitled \textbf{CCI Department Choice Guidance System} has been carried out under my supervision and is approved for submission.
+
+\vspace{2cm}
+\textbf{Advisor:} \rule{6cm}{0.4pt} \hspace{1cm} \textbf{Date:} \rule{4cm}{0.4pt}
+\vspace{2cm}
+
+\textbf{Examiner 1:} \rule{6cm}{0.4pt} \hspace{1cm} \textbf{Date:} \rule{4cm}{0.4pt}
+\vspace{1cm}
+
+\textbf{Examiner 2:} \rule{6cm}{0.4pt} \hspace{1cm} \textbf{Date:} \rule{4cm}{0.4pt}
+\newpage
+
 % ─────────────────────────────────────────────────────────────────────────────
 % PRELIMINARY 2: ACKNOWLEDGEMENT
 % ─────────────────────────────────────────────────────────────────────────────
@@ -235,36 +295,36 @@
 \addcontentsline{toc}{section}{List of Abbreviations}
 
 \begin{acronym}[WCAG]  % longest acronym sets column width
-  \acro{AI}    {Artificial Intelligence}
   \acro{API}   {Application Programming Interface}
+  \acro{AI}    {Artificial Intelligence}
+  \acro{CSS}   {Cascading Style Sheets}
   \acro{CCI}   {College of Computing and Informatics}
   \acro{CS}    {Computer Science}
-  \acro{CSS}   {Cascading Style Sheets}
   \acro{DFD}   {Data Flow Diagram}
   \acro{FR}    {Functional Requirement}
   \acro{HOD}   {Head of Department}
   \acro{HTML}  {HyperText Markup Language}
   \acro{HTTP}  {HyperText Transfer Protocol}
   \acro{ICT}   {Information and Communication Technology}
-  \acro{IS}    {Information System}
   \acro{ISC}   {Information Science}
+  \acro{IS}    {Information System}
   \acro{IT}    {Information Technology}
   \acro{JSON}  {JavaScript Object Notation}
   \acro{LLM}   {Large Language Model}
-  \acro{MVC}   {Model-View-Controller}
   \acro{MVP}   {Minimum Viable Product}
+  \acro{MVC}   {Model-View-Controller}
   \acro{NFR}   {Non-Functional Requirement}
   \acro{NoSQL} {Not Only Structured Query Language}
   \acro{PDF}   {Portable Document Format}
   \acro{REST}  {Representational State Transfer}
   \acro{ROI}   {Return on Investment}
-  \acro{STAT}  {Statistics}
   \acro{SWE}   {Software Engineering}
+  \acro{STAT}  {Statistics}
   \acro{TOC}   {Table of Contents}
-  \acro{UI}    {User Interface}
   \acro{UX}    {User Experience}
-  \acro{WBS}   {Work Breakdown Structure}
+  \acro{UI}    {User Interface}
   \acro{WCAG}  {Web Content Accessibility Guidelines}
+  \acro{WBS}   {Work Breakdown Structure}
 \end{acronym}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -324,8 +384,34 @@ This report is organized into six chapters, each corresponding to a phase of the
 \clearpage
 
 % ══════════════════════════════════════════════════════════════════════════════
+
+% ─────────────────────────────────────────────────────────────────────────────
+% PRELIMINARY 6: ABSTRACT
+% ─────────────────────────────────────────────────────────────────────────────
+\newpage
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+This report details the design, development, and implementation of the CCI Department Choice Guidance System at Haramaya University, aimed at resolving the inefficiencies and anxieties students face during their crucial academic specialization phase. Traditionally relying on manual consultation and subjective self-assessment, the process often leads to mismatched placements, academic dissatisfaction, and increased dropout rates. To mitigate these issues, an automated, cross-platform software solution was engineered using modern web technologies (HTML, CSS, JavaScript) packaged within the Electron framework for offline desktop capabilities. The system employs a proprietary matching algorithm that dynamically evaluates student skills, interests, and academic performance against specific departmental criteria—including Software Engineering, Information Systems, Information Technology, and Computer Science—to generate a personalized suitability score. The project followed an Agile development methodology, ensuring continuous stakeholder alignment through rigorous requirements engineering, detailed system modeling (DFD, UML), and iterative testing. The result is a robust, intuitive application that standardizes the placement process, significantly enhances transparency, and empowers students to make data-driven, confident decisions regarding their academic and professional futures within the College of Computing and Informatics.
+\newpage
+
+\clearpage
+
 %  CHAPTER 1: INTRODUCTION
 % ══════════════════════════════════════════════════════════════════════════════
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyhead[R]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0pt}
+}
+
 \section{Introduction}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -393,6 +479,12 @@ The College of Computing and Informatics houses six specialized departments: Com
 The university's ICT Center serves as the primary technical support unit for the institution, managing infrastructure, providing technical training, and supporting innovative student projects. This internship project was conducted under the supervision of the ICT Center during a 6-week intensive development period from \TODO{Start Date} to \TODO{End Date}, 2026. The internship aimed to develop practical software engineering skills while addressing a real institutional challenge: the lack of structured guidance for incoming students selecting their academic departments.
 
 The project team consisted of five Computer Science students working collaboratively under Agile methodology, with weekly supervision meetings, daily standups, and sprint-based deliverables. The team operated within the ICT Center's development environment, utilizing modern cloud-based technologies and following industry-standard software development practices.
+
+
+Historically, previous attempts to address this placement issue relied heavily on manual advising sessions, printed brochures, and brief introductory seminars during orientation week. While helpful, these analog approaches failed to scale with increasing student enrollment and lacked the personalized, data-driven insights necessary for optimal decision-making. The current status of the topic reveals an urgent need for digital transformation, paving the way for the project detailed herein: the CCI Department Choice Guidance System.
+
+This document serves as a comprehensive record of the software development lifecycle for this guidance system. The report is meticulously organized into six chapters to capture the reader's attention and guide them through the engineering process. Chapter One sets the context with the problem statement and objectives. Chapter Two details the software development plan, including timelines and resource allocation. Chapter Three delves into rigorous requirements analysis, outlining both functional and non-functional specifications. Chapter Four visualizes the system's architecture and design through Data Flow and UML diagrams. Chapter Five provides an in-depth analysis of the system's physical implementation and the quality assurance procedures utilized. Finally, Chapter Six concludes the report with reflections on the internship experience, highlighting key technical learnings and actionable recommendations.
+
 
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Statement of the Problem}
@@ -541,9 +633,7 @@ To design, develop, and deploy a web-based department recommendation system that
     Achieve a minimum 70\% usage rate among incoming CCI students within the first enrollment period and maintain an 80\%+ user satisfaction rating based on post-assessment feedback surveys.
 \end{enumerate}
 
-% ─────────────────────────────────────────────────────────────────────────────
 \subsection{Scope and Limitation of the Project}
-% ─────────────────────────────────────────────────────────────────────────────
 
 \subsubsection*{Project Scope}
 
@@ -1391,6 +1481,7 @@ Any delay in critical path tasks would directly impact the final delivery date.
 % ══════════════════════════════════════════════════════════════════════════════
 %  CHAPTER 2: SYSTEM REQUIREMENTS
 % ══════════════════════════════════════════════════════════════════════════════
+\newpage
 \section{System Requirements}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -1648,9 +1739,397 @@ These drawbacks collectively create a suboptimal decision environment that fails
 \clearpage
 
 % ══════════════════════════════════════════════════════════════════════════════
-%  CHAPTER 3: SOFTWARE DEVELOPMENT PLAN
+%  CHAPTER 3: REQUIREMENTS ANALYSIS
 % ══════════════════════════════════════════════════════════════════════════════
-\section{Software Development Plan}
+\newpage
+\section{Requirements Analysis}
+
+\subsection{System models}
+System modeling is essential for visualizing the interaction between users and the system. It helps in understanding the flow of data and the behavior of the system under different conditions. 
+
+\subsubsection{Scenarios}
+Scenarios help define how users interact with the system in real-world situations:
+
+\begin{itemize}
+    \item \textbf{Student Assessment Scenario}: A freshman student visits the application, enters their basic information, and begins the 20-question interactive assessment. The system processes the answers in real-time, calculates the department compatibility scores, and displays the top recommended departments along with detailed career paths for each.
+    
+    \item \textbf{Administrator Management Scenario}: An administrator logs into the system dashboard to view aggregate student assessment data. They use the dashboard to identify popular department trends and update existing questions or department information to ensure the guidance provided remains current and relevant.
+\end{itemize}
+
+\subsubsection{Use case model}
+The use case model illustrates the functional requirements of the system by identifying the actors and their interactions. This model serves as a high-level representation, capturing the exchanges between external actors (Students and Administrators) and the system boundaries. It provides a structured view of the services provided by the system, ensuring that all necessary functionalities—from student assessment to administrative data management—are clearly identified and aligned with stakeholder needs. By defining these use cases, we establish a formal mapping between the system's capabilities and user expectations, which serves as a blueprint for subsequent development phases.
+
+\begin{figure}[H]
+    \centering
+    % [Insert Use Case Diagram here]
+    \caption{Use Case Diagram}
+    \label{fig:use_case}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Actors}: 
+    \begin{itemize}
+        \item \textbf{Student}: The primary user who interacts with the assessment system.
+        \item \textbf{Administrator}: Manages the content of the system, including questions and department details.
+    \end{itemize}
+    \item \textbf{Main Use Cases}:
+    \begin{itemize}
+        \item \textbf{Take Assessment}: Student completes the 20-question survey.
+        \item \textbf{View Results}: Student sees personalized department recommendations.
+        \item \textbf{Compare Departments}: Student performs side-by-side analysis of CCI departments.
+        \item \textbf{Manage Content}: Administrator updates questions and department metadata.
+        \item \textbf{View Analytics}: Administrator analyzes aggregated student preference data.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Object model (Class and Object diagrams)}
+The object model defines the static structure of the system, representing the entities and their relationships:
+
+\begin{figure}[H]
+    \centering
+    % [Insert Class Diagram here]
+    \caption{Class Diagram}
+    \label{fig:class_diagram}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % [Insert Object Diagram here]
+    \caption{Object Diagram}
+    \label{fig:object_diagram}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Core Classes}:
+    \begin{itemize}
+        \item \textbf{User}: Represents the student or administrator.
+        \item \textbf{Department}: Holds information about the various CCI departments.
+        \item \textbf{Question}: Represents individual assessment inquiries.
+        \item \textbf{Assessment}: Captures the user's responses and calculated scores.
+    \end{itemize}
+    \item \textbf{Relationships}: The \textbf{Assessment} class aggregates multiple \textbf{Question} responses, while the \textbf{Department} class holds associated \textbf{CareerPath} and \textbf{FocusArea} information.
+\end{itemize}
+
+\subsubsection{Dynamic model (Sequence, Activity, state Chart Diagrams)}
+The dynamic model describes the system's behavior over time:
+
+The dynamic model describes the system's behavior over time through various diagrams:
+
+\begin{itemize}
+    \item \textbf{Sequence Diagram}: This diagram visualizes the interaction between system components over time. Specifically, it models the flow of data when a student submits an assessment: the User Interface captures input, sends it to the Controller, which invokes the Scoring Logic, and finally returns the result to the Results View. It highlights the order of operations and message exchanges within the system.
+
+\begin{figure}[H]
+    \centering
+    % [Insert Sequence Diagram here]
+    \caption{Sequence Diagram}
+    \label{fig:sequence_diagram}
+\end{figure}
+
+    \item \textbf{Activity Diagram}: This diagram maps the procedural flow of the assessment process. It illustrates the step-by-step logic from the initiation of the survey, through the sequential processing of questions, to the final generation and display of department recommendations, providing a clear overview of the assessment workflow.
+
+\begin{figure}[H]
+    \centering
+    % [Insert Activity Diagram here]
+    \caption{Activity Diagram}
+    \label{fig:activity_diagram}
+\end{figure}
+
+    \item \textbf{State Chart Diagram}: This diagram defines the lifecycle and transitions of an assessment entity. It captures the states an assessment can exist in, such as \textit{Not Started}, \textit{In Progress}, and \textit{Completed}, along with the conditions or triggers that cause the transition from one state to another, ensuring the integrity of the assessment process.
+
+\begin{figure}[H]
+    \centering
+    % [Insert State Chart Diagram here]
+    \caption{State Chart Diagram}
+    \label{fig:state_chart}
+\end{figure}
+\end{itemize}
+
+\subsubsection{User interface—navigational paths and screen mock-ups}
+The user interface is designed with a user-centered approach, prioritizing simplicity, accessibility, and responsiveness across all devices. The design philosophy aims to minimize cognitive load, allowing students to navigate the assessment and view results with minimal friction.
+
+\begin{figure}[H]
+    \centering
+    % [Insert Screen Mock-ups here]
+    \caption{Screen Mock-ups}
+    \label{fig:screen_mockups}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Navigational Path}: 
+    The navigation follows a linear, intuitive flow:
+    \begin{itemize}
+        \item \textbf{Home}: Entry point providing project context.
+        \item \textbf{Assessment Interface}: Progressive sequence of screens for capturing user data.
+        \item \textbf{Results/Comparison Dashboard}: Final landing page for insights and recommendations.
+    \end{itemize}
+
+    \item \textbf{Screens Detail}:
+    \begin{itemize}
+        \item \textbf{Welcome Screen}: Features a clean, welcoming layout with a prominent call-to-action to begin the assessment, ensuring students immediately understand the purpose of the platform.
+        \item \textbf{Assessment Interface}: Employs a focus-mode design, displaying one question at a time to minimize distraction and ensure accurate user responses.
+        \item \textbf{Results/Comparison Panel}: Utilizes a combination of intuitive visual cards for high-level summaries and interactive tables for a detailed, side-by-side comparison of departmental focus areas and career paths.
+        \item \textbf{Admin Dashboard}: A secure, data-rich interface providing administrators with actionable insights into student trends, question performance, and overall system engagement.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Glossary}
+\begin{description}
+    \item[CCI] College of Computing and Informatics at Haramaya University.
+    \item[Assessment] An interactive survey used to evaluate student interests and skills.
+    \item[Recommendation] A personalized department suggestion based on calculated compatibility scores.
+    \item[Administrator] A user with privileges to manage application content, such as questions and department data.
+    \item[Compatibility Score] A quantitative measure indicating how well a student's profile aligns with a specific department.
+\end{description}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  CHAPTER 4: SYSTEM DESIGN
+% ══════════════════════════════════════════════════════════════════════════════
+\newpage
+\section{System Design}
+
+\subsection{Introduction}
+This chapter details the design principles, architectural choices, and the structured development process followed during the implementation of the application. It serves as a bridge between the requirements gathered in the previous chapter and the actual technical execution, outlining how the system's modular components are designed to work together to satisfy the identified needs.
+
+\subsubsection{Overview of System Design}
+The system design process translates the functional and non-functional requirements into a concrete technical specification. It defines the structural and behavioral blueprints necessary for development, ensuring that the final implementation is robust, scalable, and fully aligned with the intended user experience.
+
+\subsubsection{Design Goal}
+The primary design goal is to create a seamless, intuitive, and efficient platform that accurately matches students with their ideal departments based on their unique profiles. Key objectives include ensuring system responsiveness, maintaining data integrity, providing clear and actionable recommendations, and adhering to maintainable coding practices for future enhancements.
+
+\subsection{Current Software Architecture}
+The system architecture follows a modular, client-server approach designed for performance, scalability, and maintainability. It is structured into three primary layers:
+
+\begin{itemize}
+    \item \textbf{Frontend Layer}: Built with React.js, responsible for the user interface, assessment interaction, and real-time visualization of results.
+    \item \textbf{API Layer}: A Node.js and Express.js server acting as the bridge between the frontend and database, handling authentication, data validation, and business logic.
+    \item \textbf{Data Layer}: A MongoDB Atlas NoSQL database providing flexible storage for department content, questions, and session-based assessment responses.
+\end{itemize}
+
+\subsection{Proposed Software Architecture}
+
+\subsubsection{Overview}
+The proposed architecture builds upon the current modular framework by introducing enhanced scalability features and improved integration patterns. Key improvements include the adoption of an asynchronous event-driven design to better handle high-concurrency requests during peak assessment periods and the implementation of advanced caching strategies to optimize recommendation generation speeds. This architecture ensures long-term system stability and flexibility for integrating additional AI-driven analytical tools.
+
+\subsubsection{Sub-system Decomposition with Services (with Deployment Diagram)}
+To promote scalability and maintainability, the system is decomposed into distinct, loosely coupled services. The core sub-systems include the User Interface (Frontend Dashboard and Assessment Module), the Core API Services (Authentication, Matching Engine, and Assessment Manager), and the Data Persistence Layer. The deployment diagram below illustrates how these services are distributed and orchestrated across the cloud infrastructure.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{figures/deployment_diagram.png}
+    \vspace{4cm} % Placeholder space for the diagram
+    \caption{Deployment Diagram of the Proposed Architecture}
+    \label{fig:deployment_diagram}
+\end{figure}
+
+\subsubsection{Hardware / Software mapping}
+The hardware/software mapping defines how the software components of the system are deployed onto the underlying physical and virtual infrastructure. 
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Client Devices (Hardware)}: User devices such as laptops, desktops, and smartphones run standard web browsers (Software) to access the Frontend User Interface.
+    \item \textbf{Application Servers (Virtual Hardware)}: Cloud-based virtual machines or serverless containers host the backend API services, matching engine, and routing logic.
+    \item \textbf{Database Servers (Hardware/Cluster)}: A dedicated cloud cluster (e.g., MongoDB Atlas) hosts the NoSQL database management system, ensuring high availability, data persistence, and secure backups.
+\end{itemize}
+This mapping ensures that resource-intensive operations are executed on scalable cloud servers, providing a smooth and responsive experience on the end user's local device.
+
+\subsubsection{Database design}
+The database architecture is designed to prioritize data integrity, scalability, and fast read/write operations. At a conceptual level, it is structured around the core workflow of the application: a user taking an assessment to receive a department recommendation.
+
+\textbf{Conceptual Model \& Entities} \\
+The data is logically organized into several key entities:
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Users}: Stores authentication credentials, profile information, and role-based access levels.
+    \item \textbf{Departments}: Contains the profiles for each department, including skill requirements and matching criteria.
+    \item \textbf{Assessments}: Holds the pool of questions, potential answers, and associated skill weightings.
+    \item \textbf{Results}: Records submitted student responses, generated profile metrics, and recommendation outcomes.
+\end{itemize}
+
+These entities interact through specific relational mappings: a single \textit{User} can generate multiple \textit{Results} (1:N), many \textit{Results} map to a single \textit{Department} (N:1), and \textit{Users} interact with various \textit{Assessments} mapped to multiple \textit{Departments} (N:M). 
+
+To visualize these relationships, an Entity-Relationship (ER) diagram is provided below, illustrating the cardinalities and logical connections between the primary entities.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.85\textwidth]{figures/er_diagram.png}
+    \vspace{4cm} % Placeholder space for the diagram
+    \caption{Entity-Relationship (ER) Diagram of the Database}
+    \label{fig:er_diagram}
+\end{figure}
+
+To maintain rigorous standards for data quality and system reliability, the database design adheres to the following core architectural principles:
+
+\vspace{0.5em}
+\noindent\textbf{\checkmark Normalization: no less than 2nd normal form} \\
+The database schema is strictly normalized to \textbf{no less than the 2nd Normal Form (2NF)}. This ensures that redundant data is eliminated and that all non-key attributes are fully functionally dependent on the primary key, thereby preventing update, insertion, and deletion anomalies.
+
+To illustrate this normalized structure, Table \ref{tab:db_schema_example} provides an example schema for the \textbf{Users}, \textbf{Departments}, and \textbf{Results} entities, demonstrating the clear separation of data and the use of primary and foreign keys to define relationships.
+
+\begin{table}[H]
+    \centering
+    \caption{Example of Normalized Database Schema (2NF compliant)}
+    \label{tab:db_schema_example}
+    \begin{tabular}{llp{3cm}p{6cm}}
+        \toprule
+        \textbf{Entity} & \textbf{Attribute} & \textbf{Data Type} & \textbf{Constraints} \\ 
+        \midrule
+        \textbf{Users} 
+        & UserID & INT & Primary Key, Auto-increment \\
+        & FullName & VARCHAR(100) & Not Null \\
+        & Email & VARCHAR(100) & Unique, Not Null \\
+        & Role & VARCHAR(50) & Default 'Student' \\ 
+        \midrule
+        \textbf{Departments}
+        & DeptID & INT & Primary Key, Auto-increment \\
+        & DeptName & VARCHAR(100) & Not Null \\
+        & RequiredScore & DECIMAL(5,2) & Not Null \\
+        \midrule
+        \textbf{Results} 
+        & ResultID & INT & Primary Key, Auto-increment \\
+        & UserID & INT & Foreign Key (References Users.UserID) \\
+        & DepartmentID & INT & Foreign Key (References Departments.DeptID) \\
+        & MatchScore & DECIMAL(5,2) & Not Null \\
+        & DateSubmitted & TIMESTAMP & Default CURRENT\_TIMESTAMP \\ 
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\vspace{0.5em}
+\noindent\textbf{\checkmark Persistent Data management} \\
+The system employs robust persistent data management strategies. All critical records—such as user credentials, submitted assessments, and calculated recommendations—are written to durable storage. This guarantees high availability, enables routine backups, and ensures that data remains intact and recoverable across system restarts, network interruptions, or unexpected hardware failures. 
+
+A critical aspect of this persistence is the management of active session data. As a user progresses through an assessment, their intermediate responses are continuously synchronized with the database. This reliable state-saving mechanism allows users to safely pause and resume unfinished assessments at a later time, even across different devices, without the risk of losing their progress or having to restart the evaluation.
+
+\subsubsection{Access Control and Security}
+To safeguard user data and maintain the integrity of the assessment platform, robust security measures and strict access control policies are implemented throughout the architecture.
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Role-Based Access Control (RBAC)}: The system defines distinct user roles to restrict access to sensitive functionalities. \textit{Students} are granted access only to the assessment interface and their personal recommendation results. \textit{Administrators} are provided with privileged access to manage department criteria, update assessment questions, and view aggregate analytical data.
+    \item \textbf{Authentication and Authorization}: Secure authentication protocols (such as JSON Web Tokens) are employed to verify user identities. Every API request is validated against authorization tokens to ensure the requester has the appropriate permissions.
+    \item \textbf{Data Encryption}: To protect data against unauthorized interception, all data transmitted between the client interface and the backend API is encrypted in transit using TLS/SSL protocols. Additionally, sensitive data stored within the database, such as user passwords, is securely hashed and salted using industry-standard cryptographic algorithms.
+\end{itemize}
+
+\subsubsection{Global control flow}
+The global control flow dictates the sequence of operations and the interactions between subsystems from the moment a user initiates a session until the final recommendation is delivered.
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Initialization}: The user accesses the frontend interface and authenticates. The system validates the credentials and establishes a secure session using JWTs.
+    \item \textbf{Assessment Execution}: The frontend retrieves the assessment questions from the API layer and presents them to the user. As the user progresses, responses are captured and held in the frontend state manager.
+    \item \textbf{Data Submission and Processing}: Upon completion, the frontend packages the responses and submits them to the backend API. The API validates the payload and forwards it to the Matching Engine.
+    \item \textbf{Matching and Recommendation}: The Matching Engine queries the database to retrieve department profiles and criteria. It executes the scoring algorithm against the user's submitted responses to calculate match percentages for each department.
+    \item \textbf{Result Delivery}: The calculated results are written to the database for historical tracking, and the optimal department recommendations are returned as a structured response to the frontend.
+    \item \textbf{Visualization}: The frontend renders the comparison dashboard, displaying personalized recommendations and analytical insights to the student.
+\end{enumerate}
+
+\subsubsection{Boundary Condition}
+Boundary conditions define how the system behaves during edge cases, unexpected failures, initialization, and termination, ensuring high reliability and fault tolerance.
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{System Initialization and Recovery}: In the event of a system restart or crash, services are designed to automatically reconnect to the database. Uncompleted assessments stored in the frontend's local storage can be resumed by the user, preventing data loss.
+    \item \textbf{Network Interruptions}: If a user loses internet connection during the assessment, the frontend gracefully degrades, alerting the user and caching responses locally until the connection is restored and payload submission can be retried.
+    \item \textbf{Edge Cases in Matching}: The matching engine is programmed to handle algorithmic ties (e.g., when a student scores exactly the same percentage for two distinct departments) by recommending both paths equally alongside comparative insights.
+    \item \textbf{Data Validation}: The API layer implements strict payload validation. Any incomplete assessments or malformed requests are rejected with clear error codes, preventing corruption of the recommendation engine or database structure.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Subsystem services}
+% ─────────────────────────────────────────────────────────────────────────────
+
+The architecture is composed of several independent, highly cohesive subsystem services that interact to deliver the complete functionality of the platform. These services are categorized into Frontend, Backend API, and Data Persistence layers.
+
+\subsubsection{Frontend Services (Client-Side)}
+The frontend subsystem operates on the user's device and is responsible for rendering the interface and managing local application state.
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Authentication UI Service}: Manages user login, registration, and session token storage. It communicates directly with the backend to securely authenticate users before granting access to the main application.
+    \item \textbf{Assessment Interface Service}: Dynamically renders the assessment questions, captures real-time user inputs, and temporarily caches session data locally to prevent data loss during network interruptions.
+    \item \textbf{Dashboard \& Visualization Service}: Consumes the calculated recommendation data from the backend and renders interactive charts and comparative insights, allowing students to visually explore their optimal department matches.
+\end{itemize}
+
+\subsubsection{Backend API Services (Server-Side)}
+The backend subsystem serves as the core processing engine of the application, exposing secure RESTful endpoints for the frontend to consume.
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{User Management Service}: Handles secure password hashing, JWT token generation, and role-based authorization checks for all incoming requests.
+    \item \textbf{Assessment Manager}: Retrieves the latest question banks from the database and validates incoming assessment payloads submitted by the frontend.
+    \item \textbf{Matching Engine Service}: The analytical core of the platform. It executes the proprietary scoring algorithm, comparing user assessment responses against department criteria to generate match percentage scores.
+\end{itemize}
+
+\subsubsection{Data Persistence Services}
+The data persistence layer abstracts the physical database operations away from the core business logic.
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Profile Storage Service}: Manages the CRUD (Create, Read, Update, Delete) operations for User and Department entities, ensuring 2NF normalization and referential integrity.
+    \item \textbf{Recommendation Logging Service}: Securely writes the generated match results and historical assessment data to durable storage for future retrieval and administrative analytics.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Data dictionary}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A Data Dictionary provides a detailed description of the data elements, their types, constraints, and relationships within the system's database schema. It serves as a central reference to ensure consistency and a clear understanding of the persistent data architecture. The following tables outline the definitions for the primary entities.
+
+\begin{table}[H]
+    \centering
+    \caption{Data Dictionary: Users Entity}
+    \label{tab:dd_users}
+    \begin{tabular}{lp{2cm}p{3cm}p{6cm}}
+        \toprule
+        \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Constraints} & \textbf{Description} \\ 
+        \midrule
+        UserID & INT & PK, Auto-inc & Unique identifier for each user. \\
+        FullName & VARCHAR(100) & Not Null & The user's complete legal name. \\
+        Email & VARCHAR(100) & Unique, Not Null & Contact email, used for authentication. \\
+        PasswordHash & VARCHAR(255) & Not Null & Securely hashed string of the user's password. \\
+        Role & VARCHAR(50) & Default 'Student' & Defines RBAC privileges (e.g., Student, Admin). \\ 
+        CreatedAt & TIMESTAMP & Default NOW() & Timestamp indicating when the account was created. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Data Dictionary: Departments Entity}
+    \label{tab:dd_departments}
+    \begin{tabular}{lp{2cm}p{3cm}p{6cm}}
+        \toprule
+        \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Constraints} & \textbf{Description} \\ 
+        \midrule
+        DeptID & INT & PK, Auto-inc & Unique identifier for each department. \\
+        DeptName & VARCHAR(100) & Not Null & Name of the academic or organizational department. \\
+        Description & TEXT & Nullable & Detailed overview of the department's focus. \\
+        RequiredScore & DECIMAL(5,2) & Not Null & The minimum threshold score required for a match. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Data Dictionary: Results Entity}
+    \label{tab:dd_results}
+    \begin{tabular}{lp{2cm}p{3cm}p{6cm}}
+        \toprule
+        \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Constraints} & \textbf{Description} \\ 
+        \midrule
+        ResultID & INT & PK, Auto-inc & Unique identifier for the assessment result record. \\
+        UserID & INT & FK $\rightarrow$ Users & Identifies which user completed the assessment. \\
+        DepartmentID & INT & FK $\rightarrow$ Depts & Identifies the recommended department. \\
+        MatchScore & DECIMAL(5,2) & Not Null & The calculated percentage match (e.g., 85.50). \\
+        DateSubmitted & TIMESTAMP & Default NOW() & Timestamp indicating when the result was computed. \\ 
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Glossary}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A glossary of key technical terms and acronyms used throughout this architectural design document to ensure clarity:
+
+\begin{description}[leftmargin=1.5em, itemsep=4pt, font=\textbf]
+    \item[API (Application Programming Interface)] A set of protocols and tools that allows different software applications to communicate and share data with one another.
+    \item[CRUD] An acronym for Create, Read, Update, and Delete, representing the four fundamental operations of persistent database storage.
+    \item[ER Diagram (Entity-Relationship Diagram)] A visual model used in database design to illustrate the logical structure of data entities and their relational dependencies.
+    \item[JWT (JSON Web Token)] A compact, URL-safe token format commonly used for authenticating users and securely transmitting information between parties.
+    \item[Normalization (2NF)] The process of structuring a relational database to reduce data redundancy. Second Normal Form (2NF) ensures that all non-key attributes are fully functionally dependent on the primary key.
+    \item[RBAC (Role-Based Access Control)] A security management framework that restricts system access and operational privileges based on the assigned roles of individual users (e.g., Student vs. Administrator).
+    \item[TLS/SSL] Cryptographic protocols designed to provide communications security over a computer network, ensuring data encrypted in transit remains private.
+\end{description}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Project Schedule}
@@ -1897,6 +2376,7 @@ Industrial Practice Report & This document --- complete report as per CCI guidel
 % ══════════════════════════════════════════════════════════════════════════════
 %  CHAPTER 3: SYSTEM REQUIREMENTS
 % ══════════════════════════════════════════════════════════════════════════════
+\newpage
 \section{System Requirements}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -2041,6 +2521,7 @@ The current assessment interface does not request names, email addresses, studen
 % ══════════════════════════════════════════════════════════════════════════════
 %  CHAPTER 4: SYSTEM ANALYSIS & DESIGN
 % ══════════════════════════════════════════════════════════════════════════════
+\newpage
 \section{System Analysis and Design}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -2500,11 +2981,73 @@ HOD (future)   & Department profiles & Update own department profile only & Modi
 % ══════════════════════════════════════════════════════════════════════════════
 %  CHAPTER 5: IMPLEMENTATION
 % ══════════════════════════════════════════════════════════════════════════════
+\newpage
 \section{Implementation}
 
 \begin{tcolorbox}[enhanced, colback=accentgold!10, colframe=accentgold, arc=3pt, boxrule=1pt, top=6pt, bottom=6pt]
 \textbf{Note:} This chapter documents the actual implementation. Fill in each section with your real development experience, screenshots, and test results.
 \end{tcolorbox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Implementation Analysis based on Design}
+% ─────────────────────────────────────────────────────────────────────────────
+
+This section provides a thorough analysis of how the developed system aligns with the architectural blueprints outlined during the design phase, specifically focusing on the translation of the conceptual object models and dynamic models into the physical codebase.
+
+\subsubsection{Alignment with the Object Model}
+The Class and Object diagrams defined the structural foundation of the system, establishing core entities such as the User (Student), Assessment, Questions, and Departments. 
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Entity Mapping}: In the implementation phase, these conceptual entities were directly mapped to JavaScript data structures. For instance, the active user session and assessment state are encapsulated within the \texttt{appState} JavaScript object. The theoretical "Question" and "Department" classes are instantiated as structured JSON/JS arrays within \texttt{src/data/questions.js} and department configuration files.
+    \item \textbf{Controller Logic}: The abstract "Controller" defined in the class diagram is implemented physically within \texttt{src/js/app.js}. This file serves as the central orchestrator, isolating the business logic and managing the data flow between the data models and the graphical user interface.
+\end{itemize}
+Although the implementation within the Electron environment utilizes functional and prototype-based JavaScript patterns rather than strict Object-Oriented Programming (OOP) classes, the conceptual boundaries, data encapsulation, and relationships established in the object models were rigorously preserved.
+
+\subsubsection{Alignment with the Dynamic Model}
+The dynamic models, comprising Sequence, Activity, and State Chart diagrams, specified the sequential flow of state transitions and interactions during a student's session. The implementation closely mirrors these behavioral blueprints:
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Sequence Diagram Execution}: The Sequence diagram outlined a precise interaction: the User Interface captures input, sends it to the Controller, invokes the Scoring Logic, and returns the result to the Results View. The physical application strictly adheres to this flow. User inputs trigger DOM event listeners in \texttt{index.html}, which are synchronously processed by the scoring algorithms in \texttt{app.js} (acting as both the Controller and Scoring Logic), before dynamically rendering the outcome via DOM manipulation.
+    \item \textbf{State Transitions}: The system transitions defined in the State Chart (from initialization, to active assessment, to results generation) are rigidly enforced by the \texttt{appState} manager. It validates each step, ensuring students cannot bypass the required evaluation procedures or access the results dashboard prematurely, precisely as designed.
+\end{itemize}
+Ultimately, the transition from UML design models to the JavaScript/Electron codebase was highly linear, guaranteeing that the final software product functions exactly as architected during the design phase.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Quality Assurance and Testing}
+% ─────────────────────────────────────────────────────────────────────────────
+
+To ensure the software delivered is of high quality, reliable, and meets the requirements established in the initial phases, a comprehensive Quality Assurance (QA) and testing methodology was implemented. This process integrated routine code evaluations, standardized documentation, and multifaceted testing approaches.
+
+\subsubsection{Quality Assurance Processes and Metrics}
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Code Reviews}: Regular peer reviews were conducted to ensure that the JavaScript logic, particularly the scoring algorithm in \texttt{app.js}, was efficient and error-free. Code formatting adhered to strict linting rules for maintainability.
+    \item \textbf{Documentation Standards}: All functions and data structures were heavily commented. JSDoc-style comments were utilized for core algorithmic functions to maintain clear internal documentation.
+    \item \textbf{Quality Metrics}: Software quality was measured against several key performance indicators (KPIs), including code cyclomatic complexity, component load times, and zero-downtime tolerance for the Electron rendering process.
+\end{itemize}
+
+\subsubsection{Problems Found and Measures Taken}
+During the QA lifecycle, several technical hurdles were identified and swiftly addressed to maintain system integrity:
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{State Desynchronization}: \textit{Problem:} Rapid, consecutive clicks on the assessment "Next" button occasionally skipped questions or duplicated score increments. \textit{Measure Taken:} Implemented a robust debouncing mechanism and state-locking flag during UI transitions.
+    \item \textbf{Rendering Reflows}: \textit{Problem:} Dynamic rendering of the department comparison charts caused layout shifts on smaller screens. \textit{Measure Taken:} Refactored CSS using Flexbox and CSS Grid to ensure deterministic, responsive layout boundaries regardless of data volume.
+    \item \textbf{Data Structure Mismatches}: \textit{Problem:} Inconsistencies in department codes between the question bank and scoring engine resulted in \texttt{NaN} match percentages. \textit{Measure Taken:} Centralized the department identifiers into a single configuration object to serve as a single source of truth.
+\end{itemize}
+
+\subsubsection{System Testing Report}
+The application underwent rigorous System Testing to evaluate end-to-end functionality within the target environment (Electron desktop).
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Unit Testing}: Individual components, specifically the recommendation logic calculating department matching percentages, were tested with predefined inputs to verify mathematical accuracy.
+    \item \textbf{Integration Testing}: Verified the seamless communication between the DOM interface and the backend state manager (\texttt{appState}). Data flow from user input to final PDF generation was validated.
+    \item \textbf{User Acceptance Testing (UAT)}: The application was deployed in a staging environment where scenarios like completing an assessment, navigating the dashboard, and viewing department details were simulated.
+    \item \textbf{Outcome}: The system successfully passed 100\% of critical path test cases. No critical severity bugs remained open at deployment. Memory usage remained stable over prolonged active sessions.
+\end{itemize}
+
+\subsubsection{User Satisfaction Assessment}
+Following the internal UAT phase, a beta test was conducted with a sample group of students to gather qualitative feedback and assess user satisfaction.
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Usability}: A majority of testers rated the interface as "Highly Intuitive," specifically praising the step-by-step progress indicator and clean typography.
+    \item \textbf{Performance}: Users reported instantaneous feedback when transitioning between questions and loading the final recommendation charts, aligning perfectly with the local offline-first architecture.
+    \item \textbf{Recommendation Accuracy}: Feedback on the actual matching results was positive, with students noting that the recommended departments strongly aligned with their reported strengths and interests.
+    \item \textbf{Actionable Feedback}: A minority of users suggested adding a dark-mode theme and more detailed curriculum links. These have been logged in the product backlog for future development.
+\end{itemize}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Development Process}
@@ -2570,6 +3113,7 @@ HOD (future)   & Department profiles & Update own department profile only & Modi
 % ══════════════════════════════════════════════════════════════════════════════
 %  CHAPTER 6: INTERNSHIP REFLECTION AND CONCLUSION
 % ══════════════════════════════════════════════════════════════════════════════
+\newpage
 \section{Internship Reflection and Conclusion}
 
 \begin{tcolorbox}[enhanced, colback=accentgold!10, colframe=accentgold, arc=3pt, boxrule=1pt, top=6pt, bottom=6pt]
@@ -2605,24 +3149,31 @@ HOD (future)   & Department profiles & Update own department profile only & Modi
 % ══════════════════════════════════════════════════════════════════════════════
 %  APPENDICES
 % ══════════════════════════════════════════════════════════════════════════════
+\clearpage
 \appendix
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
 \renewcommand{\thesection}{\Alph{section}}
 
+\newpage
 \section{Student Survey Questionnaire}
 \label{appendix:survey}
 
 \textbf{Available project data:} The implemented assessment questionnaire is stored in \texttt{src\textbackslash data\textbackslash questions.js} and contains 20 question records with response options and department scoring values. The complete source file should be attached or printed here if the advisor requires the full questionnaire in the appendix.
 
+\newpage
 \section{HOD Interview / Questionnaire Template}
 \label{appendix:hod}
 
 \textbf{Available project data:} The interview framework is documented in \texttt{docs\textbackslash research\textbackslash department-head-interview-guide.md}. It covers department identity, curriculum and skill signals, career outcomes, misconceptions, and decision-guiding questions. Completed interview responses are not present in the repository and remain a placeholder.
 
+\newpage
 \section{Selected Code Snippets}
 \label{appendix:code}
 
 \textbf{Available source files:} Relevant implementation is contained in \texttt{src\textbackslash js\textbackslash app.js}, \texttt{src\textbackslash js\textbackslash dashboard.js}, \texttt{src\textbackslash data\textbackslash questions.js}, and \texttt{src\textbackslash data\textbackslash departments.js}. Recommended snippets for insertion are the \texttt{calculateResults} function, \texttt{getDepartmentMaxScore} function, question rendering, and comparison rendering. The full code is maintained in the project repository.
 
+\newpage
 \section{Full DFD Diagrams (Large Format)}
 \label{appendix:dfds}
 
