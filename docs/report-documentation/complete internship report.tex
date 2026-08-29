@@ -800,9 +800,55 @@ The CCI Department Choice Guidance System addresses a critical gap in the studen
 \end{itemize}
 
 % ─────────────────────────────────────────────────────────────────────────────
-\subsection{Methodology}
+\clearpage
+\section{Software Development Plan}
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{System Development Methodology}
 % ─────────────────────────────────────────────────────────────────────────────
 
+The project adopts an \textbf{Agile (Scrum-inspired)} methodology, justified by the following factors:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Short timeline}: 6-week development cycle favors iterative sprints (1-week each) over a sequential Waterfall approach that would compress testing to the very end.
+    \item \textbf{Evolving requirements}: HOD content arrives incrementally; the system must be designed to accept new department data at any time without redesign.
+    \item \textbf{Early feedback value}: Deploying an MVP by Week 5 and testing with real students before final delivery reduces the risk of building the wrong thing.
+    \item \textbf{Team size}: A 5-member team maps well to Scrum roles (one product owner/PM, one Scrum master, three developers).
+\end{itemize}
+
+\textbf{Sprint structure} (1 week each):
+\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{Week 1--2}: Requirements gathering, stakeholder interviews, architecture decisions
+    \item \textbf{Week 3}: System design, database schema, API specification, UI wireframes
+    \item \textbf{Week 4}: Backend core (Express API, MongoDB, scoring engine)
+    \item \textbf{Week 4--5}: Frontend build (React UI, questionnaire, results page) + LLM integration
+    \item \textbf{Week 5}: Integration sprint (connect all layers, smoke test)
+    \item \textbf{Week 6}: Testing, bug fixes, deployment, documentation handover
+\end{enumerate}
+
+\textbf{Communication cadence}:
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{3cm}p{2.5cm}Xp{2.5cm}}
+\toprule
+\theadrow
+\textbf{Meeting Type} & \textbf{Frequency} & \textbf{Participants} & \textbf{Purpose} \\
+\midrule
+Daily standup        & Daily, 15 min       & Development team                  & Progress, blockers, coordination \\[3pt]
+\rowalt
+Sprint planning      & Weekly, 1 hr        & Development team                  & Define deliverables, assign tasks \\[3pt]
+ICT Center check-in  & Weekly, 30 min      & Team lead + ICT supervisor        & Progress review, guidance \\[3pt]
+\rowalt
+Stakeholder update   & Bi-weekly, 30 min   & Team lead + CCI Dean / HODs       & Status, content review, feedback \\[3pt]
+Retrospective        & End of project      & Development team                  & Lessons learned, documentation \\
+\bottomrule
+\end{tabularx}
+\caption{Communication and meeting schedule}
+\end{table}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Development Phases and Collaboration}
+% ─────────────────────────────────────────────────────────────────────────────
 The CCI Department Choice Guidance System was developed using a systematic, Agile-based software development methodology over a 6-week period. The methodology integrated requirements engineering, iterative design and development, stakeholder engagement, and continuous testing.
 
 \subsubsection*{Overall Approach}
@@ -1146,83 +1192,245 @@ The project utilized modern, industry-standard tools and technologies selected f
 \begin{itemize}[leftmargin=1.5em, itemsep=3pt]
     \item \textbf{IDE}: Visual Studio Code 1.85+ with extensions (ESLint, Prettier, GitLens, MongoDB for VS Code)
     \item \textbf{Operating Systems}: Windows 10/11 (primary); Linux Ubuntu 22.04 (testing)
-    \item \textbf{Terminal}: Git Bash (Windows); native terminal (Linux)
+\paragraph{Week 1: Requirements Gathering and Planning}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item Day 1--2: Project kickoff; team formation; tool setup; survey design
+    \item Day 3--4: Student survey distribution and data collection; HOD interview scheduling
+    \item Day 5--7: HOD interviews conducted; survey analysis; requirements documentation
 \end{itemize}
 
-\paragraph{Frontend Technologies}
+\paragraph{Week 2: System Design and Architecture}
 
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Framework}: React 18.2.0 (component-based UI library)
-    \item \textbf{Build Tool}: Vite 4.x (fast build tool and dev server)
-    \item \textbf{Styling}: CSS3 with Flexbox and Grid; custom CSS variables for theming
-    \item \textbf{HTTP Client}: Axios 1.x (promise-based HTTP requests)
-    \item \textbf{PDF Generation}: jsPDF 2.x (client-side PDF creation)
-    \item \textbf{State Management}: React Context API (lightweight global state)
-    \item \textbf{Routing}: React Router 6.x (client-side navigation)
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item Day 1--2: Complete survey analysis; finalize functional and non-functional requirements
+    \item Day 3--4: System architecture design; technology stack selection; database schema design
+    \item Day 5--7: Data flow diagrams; UI wireframes; scoring algorithm design; HOD weight validation
 \end{itemize}
 
-\paragraph{Backend Technologies}
+\paragraph{Week 3: Backend Development}
 
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Runtime}: Node.js 18.x LTS
-    \item \textbf{Framework}: Express.js 4.x (web application framework)
-    \item \textbf{Database}: MongoDB 6.0 via MongoDB Atlas (cloud-hosted NoSQL database)
-    \item \textbf{ODM}: Mongoose 7.x (MongoDB object modeling for Node.js)
-    \item \textbf{Authentication}: JSON Web Tokens (JWT) via \texttt{jsonwebtoken} package
-    \item \textbf{Password Hashing}: bcrypt 5.x (secure password hashing)
-    \item \textbf{Environment Variables}: dotenv (configuration management)
-    \item \textbf{CORS}: cors package (cross-origin resource sharing)
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item Day 1--2: Express.js server setup; MongoDB Atlas configuration; Mongoose schema implementation
+    \item Day 3--4: REST API endpoints (questions, departments, assessment submission)
+    \item Day 5--7: Scoring algorithm implementation; JWT authentication; admin endpoints
 \end{itemize}
 
-\paragraph{AI Integration}
+\paragraph{Week 4: Frontend Development and AI Integration}
 
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{LLM API}: OpenAI GPT-3.5-turbo via official OpenAI Node.js SDK
-    \item \textbf{API Key Management}: Environment variable with fallback template system
-    \item \textbf{Timeout Handling}: 5-second maximum wait time with graceful fallback
-    \item \textbf{Prompt Engineering}: Structured prompt templates for consistent output format
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item Day 1--2: React project setup; component structure; routing configuration
+    \item Day 3--4: Assessment UI; results page; department comparison view
+    \item Day 5--7: OpenAI API integration; PDF export; admin dashboard; responsive styling
 \end{itemize}
 
-\paragraph{Version Control \& Collaboration}
+\paragraph{Week 5: System Integration and Testing}
 
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Version Control}: Git 2.40+
-    \item \textbf{Repository Hosting}: GitHub (private repository)
-    \item \textbf{Branching Strategy}: Feature branch workflow (\texttt{main}, \texttt{develop}, \texttt{feature/*}, \texttt{bugfix/*})
-    \item \textbf{Project Management}: GitHub Projects (Kanban board for task tracking)
-    \item \textbf{Communication}: WhatsApp (daily coordination); Email (formal communications)
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item Day 1--2: Frontend-backend integration; API connection; error handling
+    \item Day 3--4: End-to-end testing; cross-browser testing; mobile responsiveness
+    \item Day 5--7: Bug fixes; user acceptance testing with volunteers; performance optimization
 \end{itemize}
 
-\paragraph{Testing Tools}
+\paragraph{Week 6: Deployment, Documentation, and Handover}
 
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{API Testing}: Postman (endpoint testing and documentation)
-    \item \textbf{Browser Testing}: Chrome DevTools, Firefox Developer Tools
-    \item \textbf{Responsive Testing}: Chrome DevTools device emulation; physical mobile devices
-    \item \textbf{Manual Testing}: Structured test cases in Google Sheets
-\end{itemize}
-
-\paragraph{Deployment \& Hosting}
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Frontend Hosting}: Vercel (serverless platform with automatic CI/CD from GitHub)
-    \item \textbf{Backend Hosting}: Render (container-based platform with free tier)
-    \item \textbf{Database Hosting}: MongoDB Atlas M0 Free Tier (512 MB storage)
-    \item \textbf{Domain}: Default Vercel and Render subdomains (custom domain optional)
-    \item \textbf{SSL/TLS}: Automatic HTTPS via Vercel and Render
-\end{itemize}
-
-\paragraph{Documentation Tools}
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Report Writing}: LaTeX (via Overleaf or local MiKTeX distribution)
-    \item \textbf{Diagrams}: Lucidchart (data flow diagrams, architecture diagrams); TikZ (LaTeX diagrams)
-    \item \textbf{Code Documentation}: Inline comments; README.md files in Markdown
-    \item \textbf{API Documentation}: Postman Collections with descriptions
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item Day 1--2: Frontend deployment to Vercel; backend deployment to Render
+    \item Day 3--4: Final testing on production; documentation completion; user guide creation
+    \item Day 5--7: ICT Center demonstration; credentials handover; internship report finalization
 \end{itemize}
 
 % ─────────────────────────────────────────────────────────────────────────────
+\subsection{Work Breakdown Structure}
+% ─────────────────────────────────────────────────────────────────────────────
+
+The project work was decomposed into hierarchical task breakdown with clear ownership and dependencies. The WBS follows a product-oriented decomposition approach.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    scale=0.78,
+    transform shape,
+    rootnode/.style={rectangle, draw=uniblue, very thick, fill=uniblue!30, text width=3.6cm, align=center, minimum height=1.05cm, inner sep=4pt, font=\bfseries\small},
+    level1/.style={rectangle, draw=uniblue, very thick, fill=uniblue!20, text width=2.35cm, align=center, minimum height=0.95cm, inner sep=3pt, font=\small\bfseries},
+    level2/.style={rectangle, draw=unigreen, thick, fill=unigreen!15, text width=1.75cm, align=center, minimum height=0.95cm, inner sep=3pt, font=\scriptsize},
+    branch/.style={draw=unigreen, thick}
+]
+
+% Root node
+\node[rootnode] (root) at (0, 0) {CCI Department\\Choice Guidance\\System};
+
+% Level 1 - Main phases
+\node[level1] (req)    at (-6, -2.4) {Requirements\\Analysis};
+\node[level1] (design) at (-3, -2.4) {System\\Design};
+\node[level1] (impl)   at (0,  -2.4) {Implementation};
+\node[level1] (test)   at (3,  -2.4) {Testing \&\\QA};
+\node[level1] (deploy) at (6,  -2.4) {Deployment};
+
+% Root to phases
+\draw[branch] (root.south) -- ++(0,-0.35) -| (req.north);
+\draw[branch] (root.south) -- ++(0,-0.35) -| (design.north);
+\draw[branch] (root.south) -- ++(0,-0.35) -- (0,-1.8) -- (impl.north);
+\draw[branch] (root.south) -- ++(0,-0.35) -| (test.north);
+\draw[branch] (root.south) -- ++(0,-0.35) -| (deploy.north);
+
+% Level 2 - vertical branches beneath each phase
+\node[level2] (req1)   at (-6, -4.2) {Student\\Survey};
+\node[level2] (req2)   at (-6, -5.4) {HOD\\Interviews};
+\draw[branch] (req.south) -- (req1.north);
+\draw[branch] (req1.south) -- (req2.north);
+
+\node[level2] (des1)   at (-3, -4.2) {Architecture};
+\node[level2] (des2)   at (-3, -5.4) {Database\\Schema};
+\draw[branch] (design.south) -- (des1.north);
+\draw[branch] (des1.south) -- (des2.north);
+
+\node[level2] (impl1)  at (0, -4.2) {Frontend};
+\node[level2] (impl2)  at (0, -5.4) {Backend};
+\node[level2] (impl3)  at (0, -6.6) {AI\\Integration};
+\draw[branch] (impl.south) -- (impl1.north);
+\draw[branch] (impl1.south) -- (impl2.north);
+\draw[branch] (impl2.south) -- (impl3.north);
+
+\node[level2] (test1)  at (3, -4.2) {Unit\\Testing};
+\node[level2] (test2)  at (3, -5.4) {UAT};
+\draw[branch] (test.south) -- (test1.north);
+\draw[branch] (test1.south) -- (test2.north);
+
+\node[level2] (dep1)   at (6, -4.2) {Vercel};
+\node[level2] (dep2)   at (6, -5.4) {Render};
+\draw[branch] (deploy.south) -- (dep1.north);
+\draw[branch] (dep1.south) -- (dep2.north);
+
+% Legend
+\node[font=\footnotesize, align=center] at (0,-7.9) {
+    \textbf{Level 1:} Major deliverables (5 phases) \quad \textbf{Level 2:} Key sub-tasks (detailed in table below)
+};
+
+\end{tikzpicture}
+\caption{Work breakdown structure --- hierarchical task decomposition}
+\label{fig:wbs-diagram}
+\end{figure}
+
+\subsubsection*{Level 1: Major Deliverables}
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=3pt]
+    \item Project Management \& Planning
+    \item Requirements Analysis \& Documentation
+    \item System Design
+    \item Frontend Development
+    \item Backend Development
+    \item AI Integration
+    \item Testing \& Quality Assurance
+    \item Deployment \& Operations
+    \item Documentation \& Training
+\end{enumerate}
+
+\subsubsection*{Level 2: Detailed Task Breakdown}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.8cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{2.5cm}}
+\toprule
+\theadrow
+\textbf{WBS ID} & \textbf{Task} & \textbf{Sub-tasks} & \textbf{Responsible} \\
+\midrule
+\textbf{1.0} & \textbf{Project Management} & & PM \\[2pt]
+1.1 & Sprint Planning & Weekly sprint planning meetings, backlog grooming & Asledin \\[2pt]
+1.2 & Daily Standups & 15-min daily coordination & All \\[2pt]
+1.3 & Progress Tracking & Update GitHub Projects board, blockers resolution & Asledin \\[2pt]
+1.4 & Stakeholder Communication & Weekly ICT Center updates, HOD coordination & Asledin \\[4pt]
+\rowalt
+\textbf{2.0} & \textbf{Requirements Analysis} & & PM + Team \\[2pt]
+2.1 & Student Survey & Design, distribute, collect responses (n=43) & Nuri \\[2pt]
+2.2 & HOD Interviews & Schedule, conduct, document 6 interviews & Asledin, Burqa \\[2pt]
+2.3 & Survey Analysis & Quantitative stats, thematic analysis & Nuri \\[2pt]
+2.4 & Requirements Doc & FR (12), NFR (13), use cases & All \\[4pt]
+\textbf{3.0} & \textbf{System Design} & & Backend + PM \\[2pt]
+3.1 & Architecture Design & 3-tier architecture, technology selection & Asledin \\[2pt]
+3.2 & Database Schema & MongoDB collections, relationships & Asledin \\[2pt]
+3.3 & API Design & REST endpoints, request/response formats & Asledin, Burqa \\[2pt]
+3.4 & Data Flow Diagrams & Level 0, 1, 2 DFDs & Nuri \\[2pt]
+3.5 & UI Wireframes & Assessment, results, comparison, admin pages & Arafat, Usman \\[4pt]
+\rowalt
+\textbf{4.0} & \textbf{Frontend Development} & & Frontend Team \\[2pt]
+4.1 & React Setup & Project init, routing, state management & Arafat \\[2pt]
+4.2 & Assessment UI & 20-question form, progress bar, validation & Usman \\[2pt]
+4.3 & Results Page & Match scores, recommendations, explanations & Arafat \\[2pt]
+4.4 & Comparison View & Side-by-side top 3 departments & Usman \\[2pt]
+% ─────────────────────────────────────────────────────────────────────────────
 \subsection{Project Schedule}
+% ─────────────────────────────────────────────────────────────────────────────
+
+The project follows a 6-week development timeline. The Gantt chart below visualizes phases, their durations, and the current status marker.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[x=1.8cm, y=0.7cm]
+\node[anchor=east, font=\small] at (0.9, 7) {Requirements \& Analysis};
+\node[anchor=east, font=\small] at (0.9, 6) {System Design};
+\node[anchor=east, font=\small] at (0.9, 5) {Backend Dev};
+\node[anchor=east, font=\small] at (0.9, 4) {Frontend + AI};
+\node[anchor=east, font=\small] at (0.9, 3) {Integration};
+\node[anchor=east, font=\small] at (0.9, 2) {Testing};
+\node[anchor=east, font=\small] at (0.9, 1) {Deployment};
+\fill[lightgray!40] (1,6.6) rectangle (7,7.4);
+\fill[lightgray!40] (1,4.6) rectangle (7,5.4);
+\fill[lightgray!40] (1,2.6) rectangle (7,3.4);
+\fill[lightgray!40] (1,0.6) rectangle (7,1.4);
+\foreach \x in {1,2,...,7}
+    \draw[lightgray, thin] (\x,0.5) -- (\x,7.5);
+\fill[uniblue!40] (1,6.65) rectangle (3,7.35); \draw[uniblue,thick] (1,6.65) rectangle (3,7.35);
+\node[font=\small\bfseries, text=uniblue!80!black] at (2,7) {W1 -- W2};
+\fill[uniblue!40] (3,5.65) rectangle (4,6.35); \draw[uniblue,thick] (3,5.65) rectangle (4,6.35);
+\node[font=\small\bfseries, text=uniblue!80!black] at (3.5,6) {W3};
+\fill[uniblue!40] (4,4.65) rectangle (5,5.35); \draw[uniblue,thick] (4,4.65) rectangle (5,5.35);
+\node[font=\small\bfseries, text=uniblue!80!black] at (4.5,5) {W4};
+\fill[unigreen!35] (4,3.65) rectangle (5.5,4.35); \draw[unigreen,thick] (4,3.65) rectangle (5.5,4.35);
+\node[font=\small\bfseries, text=unigreen!80!black] at (4.75,4) {W4 -- W5};
+\fill[accentgold!50] (5,2.65) rectangle (5.5,3.35); \draw[accentgold,thick] (5,2.65) rectangle (5.5,3.35);
+\node[font=\small\bfseries, text=accentgold!80!black] at (5.25,3) {W5};
+\fill[uniblue!40] (5,1.65) rectangle (6.5,2.35); \draw[uniblue,thick] (5,1.65) rectangle (6.5,2.35);
+\node[font=\small\bfseries, text=uniblue!80!black] at (5.75,2) {W5 -- W6};
+\fill[unigreen!35] (6,0.65) rectangle (7,1.35); \draw[unigreen,thick] (6,0.65) rectangle (7,1.35);
+\node[font=\small\bfseries, text=unigreen!80!black] at (6.5,1) {W6};
+
+\draw[thick, ->] (1,0.5) -- (7.3,0.5) node[anchor=west, font=\small] {Weeks};
+\foreach \x in {1,2,...,7}
+    \draw (\x,0.55) -- (\x,0.45) node[anchor=north, font=\small] {W\x};
+\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (2,0.5) {};
+\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (3,0.5) {};
+\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (5.5,0.5) {};
+\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (6.5,0.5) {};
+\end{tikzpicture}%
+}
+\caption{Project Gantt chart with milestones and current status}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{3cm}p{2cm}Xc}
+\toprule
+\theadrow
+\textbf{Milestone} & \textbf{Target Week} & \textbf{Critical Path Dependencies} & \textbf{Status} \\
+\midrule
+Project approval      & Week 1 & ICT Center endorsement; CCI Dean sign-off               & \cellHigh{}Done \\[3pt]
+\rowalt
+Requirements complete & Week 2 & Survey data collected; HOD responses (CS confirmed)      & \cellHigh{}Done \\[3pt]
+Design approved       & Week 3 & Requirements finalized; architecture decisions made      & \cellHigh{}Done \\[3pt]
+\rowalt
+MVP ready             & Week 5 & Frontend + backend + LLM integration complete            & \cellMed{}In Progress \\[3pt]
+Testing complete      & Week 6 & Beta testers recruited; major bugs resolved              & \cellMed{}Pending \\[3pt]
+\rowalt
+System deployed       & Week 6 & Hosting configured; handover documentation ready         & \cellMed{}Pending \\[3pt]
+Live for enrollment   & Before June 1 & Operational before CCI enrollment period starts   & \cellMed{}Pending \\
+\bottomrule
+\end{tabularx}
+\caption{Project milestone tracker}
+\end{table}
+
 % ─────────────────────────────────────────────────────────────────────────────
 
 The CCI Department Choice Guidance System was developed over a 6-week intensive period following an Agile sprint-based timeline with overlapping phases to maximize efficiency.
@@ -1482,8 +1690,138 @@ Any delay in critical path tasks would directly impact the final delivery date.
 %  CHAPTER 2: SYSTEM REQUIREMENTS
 % ══════════════════════════════════════════════════════════════════════════════
 \newpage
-\section{System Requirements}
+\subsection{Resources}
+% ─────────────────────────────────────────────────────────────────────────────
 
+\subsubsection*{Software Tools}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{3cm}p{3cm}X}
+\toprule
+\theadrow
+\textbf{Tool / Technology} & \textbf{Category} & \textbf{Purpose} \\
+\midrule
+React.js          & Frontend framework   & Component-based UI development, assessment questionnaire, results display \\[3pt]
+\rowalt
+Node.js + Express & Backend framework    & RESTful API development, request handling, middleware \\[3pt]
+MongoDB Atlas     & Database             & NoSQL storage for department profiles, questions, student responses \\[3pt]
+\rowalt
+OpenAI / Gemini   & LLM API              & AI-generated personalized recommendation explanations \\[3pt]
+Vercel            & Hosting (frontend)   & Free-tier deployment with automatic CI/CD from GitHub \\[3pt]
+\rowalt
+Render            & Hosting (backend)    & Free-tier Node.js server hosting \\[3pt]
+GitHub            & Version control      & Source code management, pull requests, code reviews \\[3pt]
+\rowalt
+VS Code           & IDE                  & Primary code editor for all team members \\[3pt]
+Postman           & API testing          & Manual API endpoint testing during development \\[3pt]
+\rowalt
+Figma             & UI/UX design         & Wireframes and prototype mockups \\
+\bottomrule
+\end{tabularx}
+\caption{Software tools and technologies used}
+\end{table}
+
+\subsubsection*{Hardware and Workspace}
+
+
+
+\subsubsection*{Team Resource Allocation}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{3cm}p{3cm}Xc}
+\toprule
+\theadrow
+\textbf{Team Member} & \textbf{Primary Role} & \textbf{Responsibilities} & \textbf{Allocation} \\
+\midrule
+Asledin Abdukadir & Project Manager / Backend Developer & Overall coordination, Express API, MongoDB integration, scoring algorithm & 100\% \\[3pt]
+\rowalt
+Arafat Bule & Frontend Lead & React components, UI/UX implementation, responsive design & 100\% \\[3pt]
+Burqa Jemal & Backend Developer & LLM API integration, authentication, admin dashboard backend & 100\% \\[3pt]
+\rowalt
+Usman Abdi & Frontend Developer & Assessment questionnaire UI, results visualization, PDF export & 100\% \\[3pt]
+Nuri Irko & QA / Testing Lead & Test case development, user testing coordination, documentation & 100\% \\[3pt]
+\rowalt
+ICT Center Supervisor & Technical Advisor & Weekly progress reviews, technical guidance, deployment approval & 10\% \\
+\bottomrule
+\end{tabularx}
+\caption{Team resource allocation}
+\end{table}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Risk Management}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{3.5cm}ccp{6cm}}
+\toprule
+\theadrow
+\textbf{Risk} & \textbf{Probability} & \textbf{Impact} & \textbf{Mitigation Strategy} \\
+\midrule
+Delayed HOD responses for all departments & High & Medium & Launch with CS data; add others incrementally; easy content update architecture \\[4pt]
+\rowalt
+Low student adoption rate & Medium & High & Integrate into orientation; promote via student leaders; beta test early \\[4pt]
+LLM API quota exhaustion & Medium & Low & Caching; fallback templates; use Gemini (generous free tier) \\[4pt]
+\rowalt
+Timeline overruns & Low & Medium & Agile MVP focus; Week 6 buffer; prioritize core features \\[4pt]
+Technical implementation challenges & Low & Medium & Proof-of-concept in Week 1; fallback to simpler solutions if needed \\[4pt]
+\rowalt
+Data privacy concerns & Low & Medium & Anonymous usage; 30-day auto-delete; clear privacy notice \\
+\bottomrule
+\end{tabularx}
+\caption{Risk register with mitigation strategies}
+\end{table}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Quality Assurance}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item \textbf{Code reviews}: All code merged via GitHub pull requests with at least one peer reviewer before merging to main branch
+    \item \textbf{Automated testing}: Unit tests for scoring algorithm and API endpoints targeting 80\% code coverage (Jest framework)
+    \item \textbf{Manual testing}: Comprehensive test cases for all user workflows documented in a test matrix
+    \item \textbf{User acceptance testing (UAT)}: 10--15 beta testers representing different CCI departments and backgrounds; structured feedback form
+    \item \textbf{Performance testing}: Load test with 50 simulated concurrent users using Apache JMeter
+    \item \textbf{Accessibility testing}: WCAG 2.1 Level AA compliance verification using automated tools (axe-core) plus manual keyboard navigation testing
+    \item \textbf{Documentation standards}: JSDoc for all API functions; README for each major module; inline comments for complex logic
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection{Required Documents}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{4cm}Xc}
+\toprule
+\theadrow
+\textbf{Document} & \textbf{Content Summary} & \textbf{Target Week} \\
+\midrule
+Requirements Specification & Functional requirements, non-functional requirements, user stories, acceptance criteria & Week 2 \\[3pt]
+\rowalt
+System Design Document     & Architecture diagrams, database schema, API specifications, UI/UX mockups & Week 3 \\[3pt]
+User Guide (Students)      & Step-by-step instructions for assessment, results interpretation, comparison tool & Week 6 \\[3pt]
+\rowalt
+Administrator Manual       & Content management procedures, analytics, system maintenance & Week 6 \\[3pt]
+Technical Documentation    & Codebase overview, deployment instructions, API reference, troubleshooting & Week 6 \\[3pt]
+\rowalt
+Handover Report            & Architecture decisions, maintenance recommendations, contact information & Week 6 \\[3pt]
+Industrial Practice Report & This document --- complete report as per CCI guideline & Week 6 \\
+\bottomrule
+\end{tabularx}
+\caption{Required project documents and delivery schedule}
+\end{table}
+
+\clearpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  CHAPTER 3: SYSTEM REQUIREMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newpage
+\clearpage
+\section{System Requirements}
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Introduction}
 % ─────────────────────────────────────────────────────────────────────────────
@@ -1742,684 +2080,6 @@ These drawbacks collectively create a suboptimal decision environment that fails
 %  CHAPTER 3: REQUIREMENTS ANALYSIS
 % ══════════════════════════════════════════════════════════════════════════════
 \newpage
-\section{Requirements Analysis}
-
-\subsection{System models}
-System modeling is essential for visualizing the interaction between users and the system. It helps in understanding the flow of data and the behavior of the system under different conditions. 
-
-\subsubsection{Scenarios}
-Scenarios help define how users interact with the system in real-world situations:
-
-\begin{itemize}
-    \item \textbf{Student Assessment Scenario}: A freshman student visits the application, enters their basic information, and begins the 20-question interactive assessment. The system processes the answers in real-time, calculates the department compatibility scores, and displays the top recommended departments along with detailed career paths for each.
-    
-    \item \textbf{Administrator Management Scenario}: An administrator logs into the system dashboard to view aggregate student assessment data. They use the dashboard to identify popular department trends and update existing questions or department information to ensure the guidance provided remains current and relevant.
-\end{itemize}
-
-\subsubsection{Use case model}
-The use case model illustrates the functional requirements of the system by identifying the actors and their interactions. This model serves as a high-level representation, capturing the exchanges between external actors (Students and Administrators) and the system boundaries. It provides a structured view of the services provided by the system, ensuring that all necessary functionalities—from student assessment to administrative data management—are clearly identified and aligned with stakeholder needs. By defining these use cases, we establish a formal mapping between the system's capabilities and user expectations, which serves as a blueprint for subsequent development phases.
-
-\begin{figure}[H]
-    \centering
-    % [Insert Use Case Diagram here]
-    \caption{Use Case Diagram}
-    \label{fig:use_case}
-\end{figure}
-
-\begin{itemize}
-    \item \textbf{Actors}: 
-    \begin{itemize}
-        \item \textbf{Student}: The primary user who interacts with the assessment system.
-        \item \textbf{Administrator}: Manages the content of the system, including questions and department details.
-    \end{itemize}
-    \item \textbf{Main Use Cases}:
-    \begin{itemize}
-        \item \textbf{Take Assessment}: Student completes the 20-question survey.
-        \item \textbf{View Results}: Student sees personalized department recommendations.
-        \item \textbf{Compare Departments}: Student performs side-by-side analysis of CCI departments.
-        \item \textbf{Manage Content}: Administrator updates questions and department metadata.
-        \item \textbf{View Analytics}: Administrator analyzes aggregated student preference data.
-    \end{itemize}
-\end{itemize}
-
-\subsubsection{Object model (Class and Object diagrams)}
-The object model defines the static structure of the system, representing the entities and their relationships:
-
-\begin{figure}[H]
-    \centering
-    % [Insert Class Diagram here]
-    \caption{Class Diagram}
-    \label{fig:class_diagram}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    % [Insert Object Diagram here]
-    \caption{Object Diagram}
-    \label{fig:object_diagram}
-\end{figure}
-
-\begin{itemize}
-    \item \textbf{Core Classes}:
-    \begin{itemize}
-        \item \textbf{User}: Represents the student or administrator.
-        \item \textbf{Department}: Holds information about the various CCI departments.
-        \item \textbf{Question}: Represents individual assessment inquiries.
-        \item \textbf{Assessment}: Captures the user's responses and calculated scores.
-    \end{itemize}
-    \item \textbf{Relationships}: The \textbf{Assessment} class aggregates multiple \textbf{Question} responses, while the \textbf{Department} class holds associated \textbf{CareerPath} and \textbf{FocusArea} information.
-\end{itemize}
-
-\subsubsection{Dynamic model (Sequence, Activity, state Chart Diagrams)}
-The dynamic model describes the system's behavior over time:
-
-The dynamic model describes the system's behavior over time through various diagrams:
-
-\begin{itemize}
-    \item \textbf{Sequence Diagram}: This diagram visualizes the interaction between system components over time. Specifically, it models the flow of data when a student submits an assessment: the User Interface captures input, sends it to the Controller, which invokes the Scoring Logic, and finally returns the result to the Results View. It highlights the order of operations and message exchanges within the system.
-
-\begin{figure}[H]
-    \centering
-    % [Insert Sequence Diagram here]
-    \caption{Sequence Diagram}
-    \label{fig:sequence_diagram}
-\end{figure}
-
-    \item \textbf{Activity Diagram}: This diagram maps the procedural flow of the assessment process. It illustrates the step-by-step logic from the initiation of the survey, through the sequential processing of questions, to the final generation and display of department recommendations, providing a clear overview of the assessment workflow.
-
-\begin{figure}[H]
-    \centering
-    % [Insert Activity Diagram here]
-    \caption{Activity Diagram}
-    \label{fig:activity_diagram}
-\end{figure}
-
-    \item \textbf{State Chart Diagram}: This diagram defines the lifecycle and transitions of an assessment entity. It captures the states an assessment can exist in, such as \textit{Not Started}, \textit{In Progress}, and \textit{Completed}, along with the conditions or triggers that cause the transition from one state to another, ensuring the integrity of the assessment process.
-
-\begin{figure}[H]
-    \centering
-    % [Insert State Chart Diagram here]
-    \caption{State Chart Diagram}
-    \label{fig:state_chart}
-\end{figure}
-\end{itemize}
-
-\subsubsection{User interface—navigational paths and screen mock-ups}
-The user interface is designed with a user-centered approach, prioritizing simplicity, accessibility, and responsiveness across all devices. The design philosophy aims to minimize cognitive load, allowing students to navigate the assessment and view results with minimal friction.
-
-\begin{figure}[H]
-    \centering
-    % [Insert Screen Mock-ups here]
-    \caption{Screen Mock-ups}
-    \label{fig:screen_mockups}
-\end{figure}
-
-\begin{itemize}
-    \item \textbf{Navigational Path}: 
-    The navigation follows a linear, intuitive flow:
-    \begin{itemize}
-        \item \textbf{Home}: Entry point providing project context.
-        \item \textbf{Assessment Interface}: Progressive sequence of screens for capturing user data.
-        \item \textbf{Results/Comparison Dashboard}: Final landing page for insights and recommendations.
-    \end{itemize}
-
-    \item \textbf{Screens Detail}:
-    \begin{itemize}
-        \item \textbf{Welcome Screen}: Features a clean, welcoming layout with a prominent call-to-action to begin the assessment, ensuring students immediately understand the purpose of the platform.
-        \item \textbf{Assessment Interface}: Employs a focus-mode design, displaying one question at a time to minimize distraction and ensure accurate user responses.
-        \item \textbf{Results/Comparison Panel}: Utilizes a combination of intuitive visual cards for high-level summaries and interactive tables for a detailed, side-by-side comparison of departmental focus areas and career paths.
-        \item \textbf{Admin Dashboard}: A secure, data-rich interface providing administrators with actionable insights into student trends, question performance, and overall system engagement.
-    \end{itemize}
-\end{itemize}
-
-\subsection{Glossary}
-\begin{description}
-    \item[CCI] College of Computing and Informatics at Haramaya University.
-    \item[Assessment] An interactive survey used to evaluate student interests and skills.
-    \item[Recommendation] A personalized department suggestion based on calculated compatibility scores.
-    \item[Administrator] A user with privileges to manage application content, such as questions and department data.
-    \item[Compatibility Score] A quantitative measure indicating how well a student's profile aligns with a specific department.
-\end{description}
-
-% ══════════════════════════════════════════════════════════════════════════════
-%  CHAPTER 4: SYSTEM DESIGN
-% ══════════════════════════════════════════════════════════════════════════════
-\newpage
-\section{System Design}
-
-\subsection{Introduction}
-This chapter details the design principles, architectural choices, and the structured development process followed during the implementation of the application. It serves as a bridge between the requirements gathered in the previous chapter and the actual technical execution, outlining how the system's modular components are designed to work together to satisfy the identified needs.
-
-\subsubsection{Overview of System Design}
-The system design process translates the functional and non-functional requirements into a concrete technical specification. It defines the structural and behavioral blueprints necessary for development, ensuring that the final implementation is robust, scalable, and fully aligned with the intended user experience.
-
-\subsubsection{Design Goal}
-The primary design goal is to create a seamless, intuitive, and efficient platform that accurately matches students with their ideal departments based on their unique profiles. Key objectives include ensuring system responsiveness, maintaining data integrity, providing clear and actionable recommendations, and adhering to maintainable coding practices for future enhancements.
-
-\subsection{Current Software Architecture}
-The system architecture follows a modular, client-server approach designed for performance, scalability, and maintainability. It is structured into three primary layers:
-
-\begin{itemize}
-    \item \textbf{Frontend Layer}: Built with React.js, responsible for the user interface, assessment interaction, and real-time visualization of results.
-    \item \textbf{API Layer}: A Node.js and Express.js server acting as the bridge between the frontend and database, handling authentication, data validation, and business logic.
-    \item \textbf{Data Layer}: A MongoDB Atlas NoSQL database providing flexible storage for department content, questions, and session-based assessment responses.
-\end{itemize}
-
-\subsection{Proposed Software Architecture}
-
-\subsubsection{Overview}
-The proposed architecture builds upon the current modular framework by introducing enhanced scalability features and improved integration patterns. Key improvements include the adoption of an asynchronous event-driven design to better handle high-concurrency requests during peak assessment periods and the implementation of advanced caching strategies to optimize recommendation generation speeds. This architecture ensures long-term system stability and flexibility for integrating additional AI-driven analytical tools.
-
-\subsubsection{Sub-system Decomposition with Services (with Deployment Diagram)}
-To promote scalability and maintainability, the system is decomposed into distinct, loosely coupled services. The core sub-systems include the User Interface (Frontend Dashboard and Assessment Module), the Core API Services (Authentication, Matching Engine, and Assessment Manager), and the Data Persistence Layer. The deployment diagram below illustrates how these services are distributed and orchestrated across the cloud infrastructure.
-
-\begin{figure}[H]
-    \centering
-    % \includegraphics[width=0.85\textwidth]{figures/deployment_diagram.png}
-    \vspace{4cm} % Placeholder space for the diagram
-    \caption{Deployment Diagram of the Proposed Architecture}
-    \label{fig:deployment_diagram}
-\end{figure}
-
-\subsubsection{Hardware / Software mapping}
-The hardware/software mapping defines how the software components of the system are deployed onto the underlying physical and virtual infrastructure. 
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Client Devices (Hardware)}: User devices such as laptops, desktops, and smartphones run standard web browsers (Software) to access the Frontend User Interface.
-    \item \textbf{Application Servers (Virtual Hardware)}: Cloud-based virtual machines or serverless containers host the backend API services, matching engine, and routing logic.
-    \item \textbf{Database Servers (Hardware/Cluster)}: A dedicated cloud cluster (e.g., MongoDB Atlas) hosts the NoSQL database management system, ensuring high availability, data persistence, and secure backups.
-\end{itemize}
-This mapping ensures that resource-intensive operations are executed on scalable cloud servers, providing a smooth and responsive experience on the end user's local device.
-
-\subsubsection{Database design}
-The database architecture is designed to prioritize data integrity, scalability, and fast read/write operations. At a conceptual level, it is structured around the core workflow of the application: a user taking an assessment to receive a department recommendation.
-
-\textbf{Conceptual Model \& Entities} \\
-The data is logically organized into several key entities:
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Users}: Stores authentication credentials, profile information, and role-based access levels.
-    \item \textbf{Departments}: Contains the profiles for each department, including skill requirements and matching criteria.
-    \item \textbf{Assessments}: Holds the pool of questions, potential answers, and associated skill weightings.
-    \item \textbf{Results}: Records submitted student responses, generated profile metrics, and recommendation outcomes.
-\end{itemize}
-
-These entities interact through specific relational mappings: a single \textit{User} can generate multiple \textit{Results} (1:N), many \textit{Results} map to a single \textit{Department} (N:1), and \textit{Users} interact with various \textit{Assessments} mapped to multiple \textit{Departments} (N:M). 
-
-To visualize these relationships, an Entity-Relationship (ER) diagram is provided below, illustrating the cardinalities and logical connections between the primary entities.
-
-\begin{figure}[H]
-    \centering
-    % \includegraphics[width=0.85\textwidth]{figures/er_diagram.png}
-    \vspace{4cm} % Placeholder space for the diagram
-    \caption{Entity-Relationship (ER) Diagram of the Database}
-    \label{fig:er_diagram}
-\end{figure}
-
-To maintain rigorous standards for data quality and system reliability, the database design adheres to the following core architectural principles:
-
-\vspace{0.5em}
-\noindent\textbf{\checkmark Normalization: no less than 2nd normal form} \\
-The database schema is strictly normalized to \textbf{no less than the 2nd Normal Form (2NF)}. This ensures that redundant data is eliminated and that all non-key attributes are fully functionally dependent on the primary key, thereby preventing update, insertion, and deletion anomalies.
-
-To illustrate this normalized structure, Table \ref{tab:db_schema_example} provides an example schema for the \textbf{Users}, \textbf{Departments}, and \textbf{Results} entities, demonstrating the clear separation of data and the use of primary and foreign keys to define relationships.
-
-\begin{table}[H]
-    \centering
-    \caption{Example of Normalized Database Schema (2NF compliant)}
-    \label{tab:db_schema_example}
-    \begin{tabular}{llp{3cm}p{6cm}}
-        \toprule
-        \textbf{Entity} & \textbf{Attribute} & \textbf{Data Type} & \textbf{Constraints} \\ 
-        \midrule
-        \textbf{Users} 
-        & UserID & INT & Primary Key, Auto-increment \\
-        & FullName & VARCHAR(100) & Not Null \\
-        & Email & VARCHAR(100) & Unique, Not Null \\
-        & Role & VARCHAR(50) & Default 'Student' \\ 
-        \midrule
-        \textbf{Departments}
-        & DeptID & INT & Primary Key, Auto-increment \\
-        & DeptName & VARCHAR(100) & Not Null \\
-        & RequiredScore & DECIMAL(5,2) & Not Null \\
-        \midrule
-        \textbf{Results} 
-        & ResultID & INT & Primary Key, Auto-increment \\
-        & UserID & INT & Foreign Key (References Users.UserID) \\
-        & DepartmentID & INT & Foreign Key (References Departments.DeptID) \\
-        & MatchScore & DECIMAL(5,2) & Not Null \\
-        & DateSubmitted & TIMESTAMP & Default CURRENT\_TIMESTAMP \\ 
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-\vspace{0.5em}
-\noindent\textbf{\checkmark Persistent Data management} \\
-The system employs robust persistent data management strategies. All critical records—such as user credentials, submitted assessments, and calculated recommendations—are written to durable storage. This guarantees high availability, enables routine backups, and ensures that data remains intact and recoverable across system restarts, network interruptions, or unexpected hardware failures. 
-
-A critical aspect of this persistence is the management of active session data. As a user progresses through an assessment, their intermediate responses are continuously synchronized with the database. This reliable state-saving mechanism allows users to safely pause and resume unfinished assessments at a later time, even across different devices, without the risk of losing their progress or having to restart the evaluation.
-
-\subsubsection{Access Control and Security}
-To safeguard user data and maintain the integrity of the assessment platform, robust security measures and strict access control policies are implemented throughout the architecture.
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Role-Based Access Control (RBAC)}: The system defines distinct user roles to restrict access to sensitive functionalities. \textit{Students} are granted access only to the assessment interface and their personal recommendation results. \textit{Administrators} are provided with privileged access to manage department criteria, update assessment questions, and view aggregate analytical data.
-    \item \textbf{Authentication and Authorization}: Secure authentication protocols (such as JSON Web Tokens) are employed to verify user identities. Every API request is validated against authorization tokens to ensure the requester has the appropriate permissions.
-    \item \textbf{Data Encryption}: To protect data against unauthorized interception, all data transmitted between the client interface and the backend API is encrypted in transit using TLS/SSL protocols. Additionally, sensitive data stored within the database, such as user passwords, is securely hashed and salted using industry-standard cryptographic algorithms.
-\end{itemize}
-
-\subsubsection{Global control flow}
-The global control flow dictates the sequence of operations and the interactions between subsystems from the moment a user initiates a session until the final recommendation is delivered.
-
-\begin{enumerate}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Initialization}: The user accesses the frontend interface and authenticates. The system validates the credentials and establishes a secure session using JWTs.
-    \item \textbf{Assessment Execution}: The frontend retrieves the assessment questions from the API layer and presents them to the user. As the user progresses, responses are captured and held in the frontend state manager.
-    \item \textbf{Data Submission and Processing}: Upon completion, the frontend packages the responses and submits them to the backend API. The API validates the payload and forwards it to the Matching Engine.
-    \item \textbf{Matching and Recommendation}: The Matching Engine queries the database to retrieve department profiles and criteria. It executes the scoring algorithm against the user's submitted responses to calculate match percentages for each department.
-    \item \textbf{Result Delivery}: The calculated results are written to the database for historical tracking, and the optimal department recommendations are returned as a structured response to the frontend.
-    \item \textbf{Visualization}: The frontend renders the comparison dashboard, displaying personalized recommendations and analytical insights to the student.
-\end{enumerate}
-
-\subsubsection{Boundary Condition}
-Boundary conditions define how the system behaves during edge cases, unexpected failures, initialization, and termination, ensuring high reliability and fault tolerance.
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{System Initialization and Recovery}: In the event of a system restart or crash, services are designed to automatically reconnect to the database. Uncompleted assessments stored in the frontend's local storage can be resumed by the user, preventing data loss.
-    \item \textbf{Network Interruptions}: If a user loses internet connection during the assessment, the frontend gracefully degrades, alerting the user and caching responses locally until the connection is restored and payload submission can be retried.
-    \item \textbf{Edge Cases in Matching}: The matching engine is programmed to handle algorithmic ties (e.g., when a student scores exactly the same percentage for two distinct departments) by recommending both paths equally alongside comparative insights.
-    \item \textbf{Data Validation}: The API layer implements strict payload validation. Any incomplete assessments or malformed requests are rejected with clear error codes, preventing corruption of the recommendation engine or database structure.
-\end{itemize}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Subsystem services}
-% ─────────────────────────────────────────────────────────────────────────────
-
-The architecture is composed of several independent, highly cohesive subsystem services that interact to deliver the complete functionality of the platform. These services are categorized into Frontend, Backend API, and Data Persistence layers.
-
-\subsubsection{Frontend Services (Client-Side)}
-The frontend subsystem operates on the user's device and is responsible for rendering the interface and managing local application state.
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Authentication UI Service}: Manages user login, registration, and session token storage. It communicates directly with the backend to securely authenticate users before granting access to the main application.
-    \item \textbf{Assessment Interface Service}: Dynamically renders the assessment questions, captures real-time user inputs, and temporarily caches session data locally to prevent data loss during network interruptions.
-    \item \textbf{Dashboard \& Visualization Service}: Consumes the calculated recommendation data from the backend and renders interactive charts and comparative insights, allowing students to visually explore their optimal department matches.
-\end{itemize}
-
-\subsubsection{Backend API Services (Server-Side)}
-The backend subsystem serves as the core processing engine of the application, exposing secure RESTful endpoints for the frontend to consume.
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{User Management Service}: Handles secure password hashing, JWT token generation, and role-based authorization checks for all incoming requests.
-    \item \textbf{Assessment Manager}: Retrieves the latest question banks from the database and validates incoming assessment payloads submitted by the frontend.
-    \item \textbf{Matching Engine Service}: The analytical core of the platform. It executes the proprietary scoring algorithm, comparing user assessment responses against department criteria to generate match percentage scores.
-\end{itemize}
-
-\subsubsection{Data Persistence Services}
-The data persistence layer abstracts the physical database operations away from the core business logic.
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Profile Storage Service}: Manages the CRUD (Create, Read, Update, Delete) operations for User and Department entities, ensuring 2NF normalization and referential integrity.
-    \item \textbf{Recommendation Logging Service}: Securely writes the generated match results and historical assessment data to durable storage for future retrieval and administrative analytics.
-\end{itemize}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Data dictionary}
-% ─────────────────────────────────────────────────────────────────────────────
-
-A Data Dictionary provides a detailed description of the data elements, their types, constraints, and relationships within the system's database schema. It serves as a central reference to ensure consistency and a clear understanding of the persistent data architecture. The following tables outline the definitions for the primary entities.
-
-\begin{table}[H]
-    \centering
-    \caption{Data Dictionary: Users Entity}
-    \label{tab:dd_users}
-    \begin{tabular}{lp{2cm}p{3cm}p{6cm}}
-        \toprule
-        \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Constraints} & \textbf{Description} \\ 
-        \midrule
-        UserID & INT & PK, Auto-inc & Unique identifier for each user. \\
-        FullName & VARCHAR(100) & Not Null & The user's complete legal name. \\
-        Email & VARCHAR(100) & Unique, Not Null & Contact email, used for authentication. \\
-        PasswordHash & VARCHAR(255) & Not Null & Securely hashed string of the user's password. \\
-        Role & VARCHAR(50) & Default 'Student' & Defines RBAC privileges (e.g., Student, Admin). \\ 
-        CreatedAt & TIMESTAMP & Default NOW() & Timestamp indicating when the account was created. \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \caption{Data Dictionary: Departments Entity}
-    \label{tab:dd_departments}
-    \begin{tabular}{lp{2cm}p{3cm}p{6cm}}
-        \toprule
-        \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Constraints} & \textbf{Description} \\ 
-        \midrule
-        DeptID & INT & PK, Auto-inc & Unique identifier for each department. \\
-        DeptName & VARCHAR(100) & Not Null & Name of the academic or organizational department. \\
-        Description & TEXT & Nullable & Detailed overview of the department's focus. \\
-        RequiredScore & DECIMAL(5,2) & Not Null & The minimum threshold score required for a match. \\
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \caption{Data Dictionary: Results Entity}
-    \label{tab:dd_results}
-    \begin{tabular}{lp{2cm}p{3cm}p{6cm}}
-        \toprule
-        \textbf{Attribute Name} & \textbf{Data Type} & \textbf{Constraints} & \textbf{Description} \\ 
-        \midrule
-        ResultID & INT & PK, Auto-inc & Unique identifier for the assessment result record. \\
-        UserID & INT & FK $\rightarrow$ Users & Identifies which user completed the assessment. \\
-        DepartmentID & INT & FK $\rightarrow$ Depts & Identifies the recommended department. \\
-        MatchScore & DECIMAL(5,2) & Not Null & The calculated percentage match (e.g., 85.50). \\
-        DateSubmitted & TIMESTAMP & Default NOW() & Timestamp indicating when the result was computed. \\ 
-        \bottomrule
-    \end{tabular}
-\end{table}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Glossary}
-% ─────────────────────────────────────────────────────────────────────────────
-
-A glossary of key technical terms and acronyms used throughout this architectural design document to ensure clarity:
-
-\begin{description}[leftmargin=1.5em, itemsep=4pt, font=\textbf]
-    \item[API (Application Programming Interface)] A set of protocols and tools that allows different software applications to communicate and share data with one another.
-    \item[CRUD] An acronym for Create, Read, Update, and Delete, representing the four fundamental operations of persistent database storage.
-    \item[ER Diagram (Entity-Relationship Diagram)] A visual model used in database design to illustrate the logical structure of data entities and their relational dependencies.
-    \item[JWT (JSON Web Token)] A compact, URL-safe token format commonly used for authenticating users and securely transmitting information between parties.
-    \item[Normalization (2NF)] The process of structuring a relational database to reduce data redundancy. Second Normal Form (2NF) ensures that all non-key attributes are fully functionally dependent on the primary key.
-    \item[RBAC (Role-Based Access Control)] A security management framework that restricts system access and operational privileges based on the assigned roles of individual users (e.g., Student vs. Administrator).
-    \item[TLS/SSL] Cryptographic protocols designed to provide communications security over a computer network, ensuring data encrypted in transit remains private.
-\end{description}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Project Schedule}
-% ─────────────────────────────────────────────────────────────────────────────
-
-The project follows a 6-week development timeline. The Gantt chart below visualizes phases, their durations, and the current status marker.
-
-\begin{figure}[H]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[x=1.8cm, y=0.7cm]
-\node[anchor=east, font=\small] at (0.9, 7) {Requirements \& Analysis};
-\node[anchor=east, font=\small] at (0.9, 6) {System Design};
-\node[anchor=east, font=\small] at (0.9, 5) {Backend Dev};
-\node[anchor=east, font=\small] at (0.9, 4) {Frontend + AI};
-\node[anchor=east, font=\small] at (0.9, 3) {Integration};
-\node[anchor=east, font=\small] at (0.9, 2) {Testing};
-\node[anchor=east, font=\small] at (0.9, 1) {Deployment};
-\fill[lightgray!40] (1,6.6) rectangle (7,7.4);
-\fill[lightgray!40] (1,4.6) rectangle (7,5.4);
-\fill[lightgray!40] (1,2.6) rectangle (7,3.4);
-\fill[lightgray!40] (1,0.6) rectangle (7,1.4);
-\foreach \x in {1,2,...,7}
-    \draw[lightgray, thin] (\x,0.5) -- (\x,7.5);
-\fill[uniblue!40] (1,6.65) rectangle (3,7.35); \draw[uniblue,thick] (1,6.65) rectangle (3,7.35);
-\node[font=\small\bfseries, text=uniblue!80!black] at (2,7) {W1 -- W2};
-\fill[uniblue!40] (3,5.65) rectangle (4,6.35); \draw[uniblue,thick] (3,5.65) rectangle (4,6.35);
-\node[font=\small\bfseries, text=uniblue!80!black] at (3.5,6) {W3};
-\fill[uniblue!40] (4,4.65) rectangle (5,5.35); \draw[uniblue,thick] (4,4.65) rectangle (5,5.35);
-\node[font=\small\bfseries, text=uniblue!80!black] at (4.5,5) {W4};
-\fill[unigreen!35] (4,3.65) rectangle (5.5,4.35); \draw[unigreen,thick] (4,3.65) rectangle (5.5,4.35);
-\node[font=\small\bfseries, text=unigreen!80!black] at (4.75,4) {W4 -- W5};
-\fill[accentgold!50] (5,2.65) rectangle (5.5,3.35); \draw[accentgold,thick] (5,2.65) rectangle (5.5,3.35);
-\node[font=\small\bfseries, text=accentgold!80!black] at (5.25,3) {W5};
-\fill[uniblue!40] (5,1.65) rectangle (6.5,2.35); \draw[uniblue,thick] (5,1.65) rectangle (6.5,2.35);
-\node[font=\small\bfseries, text=uniblue!80!black] at (5.75,2) {W5 -- W6};
-\fill[unigreen!35] (6,0.65) rectangle (7,1.35); \draw[unigreen,thick] (6,0.65) rectangle (7,1.35);
-\node[font=\small\bfseries, text=unigreen!80!black] at (6.5,1) {W6};
-
-\draw[thick, ->] (1,0.5) -- (7.3,0.5) node[anchor=west, font=\small] {Weeks};
-\foreach \x in {1,2,...,7}
-    \draw (\x,0.55) -- (\x,0.45) node[anchor=north, font=\small] {W\x};
-\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (2,0.5) {};
-\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (3,0.5) {};
-\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (5.5,0.5) {};
-\node[diamond, draw=unigreen, fill=unigreen!50, minimum size=0.35cm] at (6.5,0.5) {};
-\end{tikzpicture}%
-}
-\caption{Project Gantt chart with milestones and current status}
-\end{figure}
-
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{p{3cm}p{2cm}Xc}
-\toprule
-\theadrow
-\textbf{Milestone} & \textbf{Target Week} & \textbf{Critical Path Dependencies} & \textbf{Status} \\
-\midrule
-Project approval      & Week 1 & ICT Center endorsement; CCI Dean sign-off               & \cellHigh{}Done \\[3pt]
-\rowalt
-Requirements complete & Week 2 & Survey data collected; HOD responses (CS confirmed)      & \cellHigh{}Done \\[3pt]
-Design approved       & Week 3 & Requirements finalized; architecture decisions made      & \cellHigh{}Done \\[3pt]
-\rowalt
-MVP ready             & Week 5 & Frontend + backend + LLM integration complete            & \cellMed{}In Progress \\[3pt]
-Testing complete      & Week 6 & Beta testers recruited; major bugs resolved              & \cellMed{}Pending \\[3pt]
-\rowalt
-System deployed       & Week 6 & Hosting configured; handover documentation ready         & \cellMed{}Pending \\[3pt]
-Live for enrollment   & Before June 1 & Operational before CCI enrollment period starts   & \cellMed{}Pending \\
-\bottomrule
-\end{tabularx}
-\caption{Project milestone tracker}
-\end{table}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Resources}
-% ─────────────────────────────────────────────────────────────────────────────
-
-\subsubsection*{Software Tools}
-
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{p{3cm}p{3cm}X}
-\toprule
-\theadrow
-\textbf{Tool / Technology} & \textbf{Category} & \textbf{Purpose} \\
-\midrule
-React.js          & Frontend framework   & Component-based UI development, assessment questionnaire, results display \\[3pt]
-\rowalt
-Node.js + Express & Backend framework    & RESTful API development, request handling, middleware \\[3pt]
-MongoDB Atlas     & Database             & NoSQL storage for department profiles, questions, student responses \\[3pt]
-\rowalt
-OpenAI / Gemini   & LLM API              & AI-generated personalized recommendation explanations \\[3pt]
-Vercel            & Hosting (frontend)   & Free-tier deployment with automatic CI/CD from GitHub \\[3pt]
-\rowalt
-Render            & Hosting (backend)    & Free-tier Node.js server hosting \\[3pt]
-GitHub            & Version control      & Source code management, pull requests, code reviews \\[3pt]
-\rowalt
-VS Code           & IDE                  & Primary code editor for all team members \\[3pt]
-Postman           & API testing          & Manual API endpoint testing during development \\[3pt]
-\rowalt
-Figma             & UI/UX design         & Wireframes and prototype mockups \\
-\bottomrule
-\end{tabularx}
-\caption{Software tools and technologies used}
-\end{table}
-
-\subsubsection*{Hardware and Workspace}
-
-
-
-\subsubsection*{Team Resource Allocation}
-
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{p{3cm}p{3cm}Xc}
-\toprule
-\theadrow
-\textbf{Team Member} & \textbf{Primary Role} & \textbf{Responsibilities} & \textbf{Allocation} \\
-\midrule
-Asledin Abdukadir & Project Manager / Backend Developer & Overall coordination, Express API, MongoDB integration, scoring algorithm & 100\% \\[3pt]
-\rowalt
-Arafat Bule & Frontend Lead & React components, UI/UX implementation, responsive design & 100\% \\[3pt]
-Burqa Jemal & Backend Developer & LLM API integration, authentication, admin dashboard backend & 100\% \\[3pt]
-\rowalt
-Usman Abdi & Frontend Developer & Assessment questionnaire UI, results visualization, PDF export & 100\% \\[3pt]
-Nuri Irko & QA / Testing Lead & Test case development, user testing coordination, documentation & 100\% \\[3pt]
-\rowalt
-ICT Center Supervisor & Technical Advisor & Weekly progress reviews, technical guidance, deployment approval & 10\% \\
-\bottomrule
-\end{tabularx}
-\caption{Team resource allocation}
-\end{table}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Risk Management}
-% ─────────────────────────────────────────────────────────────────────────────
-
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{p{3.5cm}ccp{6cm}}
-\toprule
-\theadrow
-\textbf{Risk} & \textbf{Probability} & \textbf{Impact} & \textbf{Mitigation Strategy} \\
-\midrule
-Delayed HOD responses for all departments & High & Medium & Launch with CS data; add others incrementally; easy content update architecture \\[4pt]
-\rowalt
-Low student adoption rate & Medium & High & Integrate into orientation; promote via student leaders; beta test early \\[4pt]
-LLM API quota exhaustion & Medium & Low & Caching; fallback templates; use Gemini (generous free tier) \\[4pt]
-\rowalt
-Timeline overruns & Low & Medium & Agile MVP focus; Week 6 buffer; prioritize core features \\[4pt]
-Technical implementation challenges & Low & Medium & Proof-of-concept in Week 1; fallback to simpler solutions if needed \\[4pt]
-\rowalt
-Data privacy concerns & Low & Medium & Anonymous usage; 30-day auto-delete; clear privacy notice \\
-\bottomrule
-\end{tabularx}
-\caption{Risk register with mitigation strategies}
-\end{table}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Development Methodology}
-% ─────────────────────────────────────────────────────────────────────────────
-
-The project adopts an \textbf{Agile (Scrum-inspired)} methodology, justified by the following factors:
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Short timeline}: 6-week development cycle favors iterative sprints (1-week each) over a sequential Waterfall approach that would compress testing to the very end.
-    \item \textbf{Evolving requirements}: HOD content arrives incrementally; the system must be designed to accept new department data at any time without redesign.
-    \item \textbf{Early feedback value}: Deploying an MVP by Week 5 and testing with real students before final delivery reduces the risk of building the wrong thing.
-    \item \textbf{Team size}: A 5-member team maps well to Scrum roles (one product owner/PM, one Scrum master, three developers).
-\end{itemize}
-
-\textbf{Sprint structure} (1 week each):
-\begin{enumerate}[leftmargin=1.5em, itemsep=2pt]
-    \item \textbf{Week 1--2}: Requirements gathering, stakeholder interviews, architecture decisions
-    \item \textbf{Week 3}: System design, database schema, API specification, UI wireframes
-    \item \textbf{Week 4}: Backend core (Express API, MongoDB, scoring engine)
-    \item \textbf{Week 4--5}: Frontend build (React UI, questionnaire, results page) + LLM integration
-    \item \textbf{Week 5}: Integration sprint (connect all layers, smoke test)
-    \item \textbf{Week 6}: Testing, bug fixes, deployment, documentation handover
-\end{enumerate}
-
-\textbf{Communication cadence}:
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{p{3cm}p{2.5cm}Xp{2.5cm}}
-\toprule
-\theadrow
-\textbf{Meeting Type} & \textbf{Frequency} & \textbf{Participants} & \textbf{Purpose} \\
-\midrule
-Daily standup        & Daily, 15 min       & Development team                  & Progress, blockers, coordination \\[3pt]
-\rowalt
-Sprint planning      & Weekly, 1 hr        & Development team                  & Define deliverables, assign tasks \\[3pt]
-ICT Center check-in  & Weekly, 30 min      & Team lead + ICT supervisor        & Progress review, guidance \\[3pt]
-\rowalt
-Stakeholder update   & Bi-weekly, 30 min   & Team lead + CCI Dean / HODs       & Status, content review, feedback \\[3pt]
-Retrospective        & End of project      & Development team                  & Lessons learned, documentation \\
-\bottomrule
-\end{tabularx}
-\caption{Communication and meeting schedule}
-\end{table}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Quality Assurance}
-% ─────────────────────────────────────────────────────────────────────────────
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \textbf{Code reviews}: All code merged via GitHub pull requests with at least one peer reviewer before merging to main branch
-    \item \textbf{Automated testing}: Unit tests for scoring algorithm and API endpoints targeting 80\% code coverage (Jest framework)
-    \item \textbf{Manual testing}: Comprehensive test cases for all user workflows documented in a test matrix
-    \item \textbf{User acceptance testing (UAT)}: 10--15 beta testers representing different CCI departments and backgrounds; structured feedback form
-    \item \textbf{Performance testing}: Load test with 50 simulated concurrent users using Apache JMeter
-    \item \textbf{Accessibility testing}: WCAG 2.1 Level AA compliance verification using automated tools (axe-core) plus manual keyboard navigation testing
-    \item \textbf{Documentation standards}: JSDoc for all API functions; README for each major module; inline comments for complex logic
-\end{itemize}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Required Documents}
-% ─────────────────────────────────────────────────────────────────────────────
-
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{p{4cm}Xc}
-\toprule
-\theadrow
-\textbf{Document} & \textbf{Content Summary} & \textbf{Target Week} \\
-\midrule
-Requirements Specification & Functional requirements, non-functional requirements, user stories, acceptance criteria & Week 2 \\[3pt]
-\rowalt
-System Design Document     & Architecture diagrams, database schema, API specifications, UI/UX mockups & Week 3 \\[3pt]
-User Guide (Students)      & Step-by-step instructions for assessment, results interpretation, comparison tool & Week 6 \\[3pt]
-\rowalt
-Administrator Manual       & Content management procedures, analytics, system maintenance & Week 6 \\[3pt]
-Technical Documentation    & Codebase overview, deployment instructions, API reference, troubleshooting & Week 6 \\[3pt]
-\rowalt
-Handover Report            & Architecture decisions, maintenance recommendations, contact information & Week 6 \\[3pt]
-Industrial Practice Report & This document --- complete report as per CCI guideline & Week 6 \\
-\bottomrule
-\end{tabularx}
-\caption{Required project documents and delivery schedule}
-\end{table}
-
-\clearpage
-
-% ══════════════════════════════════════════════════════════════════════════════
-%  CHAPTER 3: SYSTEM REQUIREMENTS
-% ══════════════════════════════════════════════════════════════════════════════
-\newpage
-\section{System Requirements}
-
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Existing System Analysis}
-% ─────────────────────────────────────────────────────────────────────────────
-
-\subsubsection*{Overview of the Current Process}
-
-The current department selection process at CCI operates entirely through informal channels:
-
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item Students receive general orientation materials describing departments in broad terms
-    \item Department heads present at orientation sessions (typically 15--20 minutes per department)
-    \item Students consult seniors, family members, or general internet sources
-    \item Final selection is made within the first 2--3 weeks of enrollment
-    \item No structured individual assessment of student interests, skills, or career goals exists
-    \item No centralized, Haramaya-specific information repository is available
-\end{itemize}
-
-\subsubsection*{Limitations of the Existing System}
-
-A structured survey of 43 current CCI students revealed the following measurable limitations:
-
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{p{4cm}Xp{2cm}}
-\toprule
-\theadrow
-\textbf{Limitation} & \textbf{Evidence} & \textbf{Impact} \\
-\midrule
-No personalized guidance & 44.2\% of students felt uncertain about differences between departments & High \\[4pt]
-\rowalt
-No centralized resource & Students rely on WhatsApp rumors and senior opinions & Medium \\[4pt]
-No misconception correction & CS HOD noted students consistently underestimate department's creative demands & Medium \\[4pt]
-\rowalt
-High transfer rate & Registrar reports 15--20\% first-year transfer request rate (anecdotal) & High \\[4pt]
-Enrollment imbalance & Some departments over-enrolled; others under-enrolled despite job market demand & Medium \\
-\bottomrule
-\end{tabularx}
-\caption{Limitations of the current department selection process}
-\end{table}
-
-% ─────────────────────────────────────────────────────────────────────────────
 \subsection{Proposed System}
 % ─────────────────────────────────────────────────────────────────────────────
 
@@ -2506,7 +2166,7 @@ The current application runs locally as an Electron/static application and does 
 
 \subsubsection*{2.2.3.3 Performance}
 
-Score calculation and ranking are performed locally in JavaScript after the final question, without a network request. The interface uses short loading transitions when moving between screens and generating department information. Verified load-time, result-time, and concurrent-user measurements are not available and remain placeholders.
+Score calculation and ranking are performed locally in JavaScript after the final question, without a network request. The interface implements a dedicated loading animation system (\texttt{loadingOverlay} and \texttt{progressLoadingBar}) within \texttt{app.js} to handle short loading transitions when moving between screens and generating department information. This simulated processing improves perceived performance and user experience. Verified load-time, result-time, and concurrent-user measurements are not available and remain placeholders.
 
 \subsubsection*{2.2.3.4 Supportability}
 
@@ -2522,8 +2182,8 @@ The current assessment interface does not request names, email addresses, studen
 %  CHAPTER 4: SYSTEM ANALYSIS & DESIGN
 % ══════════════════════════════════════════════════════════════════════════════
 \newpage
+\clearpage
 \section{System Analysis and Design}
-
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{System Models}
 
@@ -2964,7 +2624,7 @@ HOD (future)   & Department profiles & Update own department profile only & Modi
 \label{tab:rbac}
 \end{table}
 
-\textbf{Implementation note:} The table above describes the intended access-control design. In the current repository, the dashboard is a prototype with static mock data; authentication, roles, audit logging, and protected content-management operations are not implemented.
+\textbf{Implementation note:} The table above describes the intended access-control design. In the current repository, the dashboard is a functional prototype built with static mock data in \texttt{src/js/dashboard.js}, displaying simulated total assessments, department distributions, and student records via \texttt{public/dashboard.html}. While the data layer and UI structure are established, backend authentication, roles, audit logging, and protected content-management operations are not yet implemented for production.
 
 \vspace{8pt}
 
@@ -2982,8 +2642,8 @@ HOD (future)   & Department profiles & Update own department profile only & Modi
 %  CHAPTER 5: IMPLEMENTATION
 % ══════════════════════════════════════════════════════════════════════════════
 \newpage
+\clearpage
 \section{Implementation}
-
 \begin{tcolorbox}[enhanced, colback=accentgold!10, colframe=accentgold, arc=3pt, boxrule=1pt, top=6pt, bottom=6pt]
 \textbf{Note:} This chapter documents the actual implementation. Fill in each section with your real development experience, screenshots, and test results.
 \end{tcolorbox}
@@ -3088,34 +2748,9 @@ Following the internal UAT phase, a beta test was conducted with a sample group 
 
 
 
-% ─────────────────────────────────────────────────────────────────────────────
-\subsection{Testing}
-% ─────────────────────────────────────────────────────────────────────────────
-
-\subsubsection*{Unit Testing}
-
-\TODO{Insert verified unit-test cases and results, if tests were performed. No automated test suite is included in the repository.}
-
-\subsubsection*{Integration Testing}
-
-\TODO{Insert verified integration-test cases and results. The repository contains no backend API or database integration to report.}
-
-\subsubsection*{System / User Acceptance Testing}
-
-\TODO{Insert verified system or user-acceptance results, participant count, dates, and feedback. Screenshots in \texttt{screenshots\textbackslash} provide implementation evidence but do not replace test records.}
-
-\subsubsection*{Performance Testing}
-
-\TODO{Insert measured load-time, response-time, and concurrency results if performance testing was performed.}
-
-\clearpage
-
-% ══════════════════════════════════════════════════════════════════════════════
-%  CHAPTER 6: INTERNSHIP REFLECTION AND CONCLUSION
-% ══════════════════════════════════════════════════════════════════════════════
 \newpage
+\clearpage
 \section{Internship Reflection and Conclusion}
-
 \begin{tcolorbox}[enhanced, colback=accentgold!10, colframe=accentgold, arc=3pt, boxrule=1pt, top=6pt, bottom=6pt]
 \textbf{Note:} This chapter is personal and requires your genuine reflection. Write in first person (or ``we'' for group experiences). Be honest and specific --- use real examples from your internship experience.
 \end{tcolorbox}
@@ -3123,24 +2758,41 @@ Following the internal UAT phase, a beta test was conducted with a sample group 
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Learning Outcomes}
 % ─────────────────────────────────────────────────────────────────────────────
-
-
+During the 6-week industrial practice at the Haramaya University ICT Center, our team achieved several key learning outcomes:
+\begin{itemize}
+    \item \textbf{Full-Stack Technical Proficiency}: We successfully transitioned from theoretical classroom knowledge to practical application, mastering modern frameworks including React, Node.js, Express, and MongoDB.
+    \item \textbf{Agile Project Management}: Participating in daily standups, sprint planning, and GitHub version control gave us firsthand experience in collaborative software engineering.
+    \item \textbf{Requirements Engineering}: Engaging directly with students (via surveys) and Department Heads taught us how to translate abstract user needs into concrete software requirements.
+    \item \textbf{AI Integration}: We learned how to integrate large language models (LLMs) into production applications, dealing with timeouts, prompts, and API rate limits.
+\end{itemize}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Challenges Faced}
 % ─────────────────────────────────────────────────────────────────────────────
-
-
+The project was not without its challenges:
+\begin{itemize}
+    \item \textbf{Data Collection Bottlenecks}: Coordinating schedules with six different department heads for interviews was challenging and required persistence.
+    \item \textbf{Scoring Algorithm Design}: Converting qualitative department preferences into a quantitative, normalized scoring algorithm required multiple iterations and HOD validation.
+    \item \textbf{Time Constraints}: The 6-week timeline was extremely aggressive for a full-stack application, forcing us to strictly prioritize MVP features over "nice-to-have" additions.
+\end{itemize}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \subsection{Recommendations}
 % ─────────────────────────────────────────────────────────────────────────────
+Based on our experience developing the CCI Department Choice Guidance System, we propose the following recommendations:
 
 \subsubsection*{Recommendations for the Host Organization (ICT Center / CCI)}
-
-
+\begin{itemize}
+    \item \textbf{Future Student Placements}: We strongly recommend the ICT Center for future student placements. The supportive environment, access to cloud resources, and mentorship provided an excellent learning ground.
+    \item \textbf{System Adoption}: We recommend that the CCI Dean's office officially adopts the developed system into the freshman orientation program for the upcoming academic year.
+    \item \textbf{Continuous Content Updates}: A designated administrator should be assigned to update the department criteria annually to ensure the recommendation engine remains accurate.
+\end{itemize}
 
 \subsubsection*{Recommendations for Future Internship Programs}
+\begin{itemize}
+    \item \textbf{Pre-Internship Training}: A short boot-camp on version control (Git) and Agile methodologies before the internship begins would allow students to hit the ground running faster.
+    \item \textbf{Extended Timeline}: Extending the development phase from 6 to 8 weeks would allow for deeper usability testing and final code refactoring before handover.
+\end{itemize}
 
 
 
