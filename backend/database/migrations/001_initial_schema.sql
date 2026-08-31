@@ -166,6 +166,7 @@ CREATE INDEX idx_recommendations_score ON recommendations(score DESC);
 
 -- Comments
 COMMENT ON TABLE recommendations IS 'Department recommendations with scores and rankings';
+COMMENT ON COLUMN recommendations.department_id IS 'Department code (CS, SWE, IT, IS, ISC, STAT)';
 COMMENT ON COLUMN recommendations.rank IS '1 = best match, 6 = least match';
 
 -- ================================================================
@@ -444,3 +445,4 @@ BEGIN
     RAISE NOTICE '3. Create default admin user';
     RAISE NOTICE '4. Test with sample data';
     RAISE NOTICE '==================================================';
+END $$;

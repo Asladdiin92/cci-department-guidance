@@ -1,5 +1,16 @@
 # Database Migrations
 
+## ⚠️ IMPORTANT UPDATE (August 31, 2026)
+
+**Migration file has been FIXED!** Two issues resolved:
+1. ✅ Removed problematic `DATE(started_at)` index (IMMUTABLE error)
+2. ✅ Fixed `recommendations.department_id` to use VARCHAR codes instead of UUID
+
+**Action Required:** Use the updated `001_initial_schema.sql` file.  
+**Details:** See [FIX-NOTES.md](./FIX-NOTES.md) and [MIGRATION-CHECKLIST.md](./MIGRATION-CHECKLIST.md)
+
+---
+
 ## Overview
 
 This directory contains SQL migration scripts for the CCI Department Guidance System database.
