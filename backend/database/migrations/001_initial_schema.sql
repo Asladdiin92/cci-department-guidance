@@ -260,7 +260,7 @@ SELECT
     ROUND(AVG(r.match_percentage)::NUMERIC, 2) as avg_match_percentage,
     ROUND(AVG(r.score)::NUMERIC, 2) as avg_score
 FROM departments d
-LEFT JOIN recommendations r ON d.id = r.department_id
+LEFT JOIN recommendations r ON d.code = r.department_id
 GROUP BY d.id, d.code, d.name, d.color
 ORDER BY first_rank_count DESC, total_recommendations DESC;
 
