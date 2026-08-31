@@ -134,5 +134,10 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-// Start the server
-startServer();
+// Start the server (only if not in serverless environment)
+if (process.env.VERCEL !== '1') {
+  startServer();
+}
+
+// Export for Vercel serverless
+module.exports = app;
