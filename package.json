@@ -1,18 +1,14 @@
 {
-  "name": "department-choice-system",
-  "productName": "department-choice-system",
-  "description": "CCI Department Choice Guidance System",
-  "keywords": [],
-  "type": "module",
+  "name": "cci-department-guidance-fullstack",
   "version": "1.0.0",
-  "author": "Aslo",
+  "type": "module",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
-    "build": "echo 'Build complete'",
-    "lint": "echo 'No lint errors'"
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && node src/server.js",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "cd frontend && npm run build"
   },
-  "dependencies": {
-    "express": "^5.2.1"
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
