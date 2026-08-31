@@ -1,0 +1,265 @@
+###
+# CCI Department Guidance System - API Test Requests
+# Use with REST Client extension in VS Code
+# Instructions:
+#   1. Install "REST Client" extension by Huachao Mao
+#   2. Click "Send Request" above each request
+#   3. Update @assessmentId variable after starting assessment
+###
+
+### Variables
+@baseUrl = http://localhost:3000/api
+@assessmentId = REPLACE-WITH-YOUR-ASSESSMENT-ID
+
+### ============================================
+### HEALTH & STATUS
+### ============================================
+
+### 1. Health Check
+GET {{baseUrl}}/health
+
+### 2. API Info
+GET {{baseUrl}}
+
+### ============================================
+### DEPARTMENTS
+### ============================================
+
+### 3. Get All Departments
+GET {{baseUrl}}/departments
+
+### 4. Get Single Department - Computer Science
+GET {{baseUrl}}/departments/CS
+
+### 5. Get Single Department - Software Engineering
+GET {{baseUrl}}/departments/SWE
+
+### 6. Get Single Department - Information Technology
+GET {{baseUrl}}/departments/IT
+
+### 7. Get Department Curriculum - CS
+GET {{baseUrl}}/departments/CS/curriculum
+
+### 8. Get Department Curriculum - SWE
+GET {{baseUrl}}/departments/SWE/curriculum
+
+### 9. Search Departments - "software"
+GET {{baseUrl}}/departments/search?q=software
+
+### 10. Search Departments - "data"
+GET {{baseUrl}}/departments/search?q=data
+
+### 11. Search Departments - "network"
+GET {{baseUrl}}/departments/search?q=network
+
+### 12. Compare Departments - CS, SWE, IT
+POST {{baseUrl}}/departments/compare
+Content-Type: application/json
+
+{
+  "department_codes": ["CS", "SWE", "IT"]
+}
+
+### 13. Compare Departments - All Six
+POST {{baseUrl}}/departments/compare
+Content-Type: application/json
+
+{
+  "department_codes": ["CS", "SWE", "IT", "IS", "ISC", "STAT"]
+}
+
+### ============================================
+### ASSESSMENTS - Complete Flow
+### ============================================
+
+### 14. Start Assessment (Anonymous)
+POST {{baseUrl}}/assessments/start
+Content-Type: application/json
+
+{}
+
+### 15. Start Assessment (With Student Info)
+POST {{baseUrl}}/assessments/start
+Content-Type: application/json
+
+{
+  "student_name": "Asladin Abdukedir",
+  "student_email": "asladin@haramaya.edu"
+}
+
+### 16. Save Response (Replace IDs with actual values from start response)
+# @name saveResponse
+POST {{baseUrl}}/assessments/{{assessmentId}}/responses
+Content-Type: application/json
+
+{
+  "question_id": "REPLACE-WITH-QUESTION-UUID",
+  "option_id": "REPLACE-WITH-OPTION-UUID"
+}
+
+### 17. Get Assessment Progress
+GET {{baseUrl}}/assessments/{{assessmentId}}/progress
+
+### 18. Submit Assessment (After answering all 20 questions)
+# @name submitAssessment
+POST {{baseUrl}}/assessments/{{assessmentId}}/submit
+Content-Type: application/json
+
+### 19. Get Assessment Results
+GET {{baseUrl}}/assessments/{{assessmentId}}/results
+
+### ============================================
+### FEEDBACK
+### ============================================
+
+### 20. Submit Feedback - Excellent
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "assessment_id": "{{assessmentId}}",
+  "rating": 5,
+  "comment": "Excellent guidance system! Very helpful and accurate.",
+  "helpful": true,
+  "would_recommend": true
+}
+
+### 21. Submit Feedback - Good
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "assessment_id": "DIFFERENT-ASSESSMENT-ID",
+  "rating": 4,
+  "comment": "Good experience overall.",
+  "helpful": true
+}
+
+### 22. Submit Feedback - Minimum Required
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "assessment_id": "ANOTHER-ASSESSMENT-ID",
+  "rating": 3
+}
+
+### 23. Get Feedback Statistics
+GET {{baseUrl}}/feedback/stats
+
+### ============================================
+### ERROR TESTING (Should return appropriate errors)
+### ============================================
+
+### 24. Invalid Department Code (404)
+GET {{baseUrl}}/departments/INVALID
+
+### 25. Invalid Assessment ID (404)
+GET {{baseUrl}}/assessments/00000000-0000-0000-0000-000000000000/results
+
+### 26. Missing Required Field (400)
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "assessment_id": "{{assessmentId}}"
+  # Missing required "rating" field
+}
+
+### 27. Invalid Rating Value (400)
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "assessment_id": "{{assessmentId}}",
+  "rating": 10
+}
+
+### 28. Search Query Too Short (400)
+GET {{baseUrl}}/departments/search?q=a
+
+### 29. Compare Less Than 2 Departments (400)
+POST {{baseUrl}}/departments/compare
+Content-Type: application/json
+
+{
+  "department_codes": ["CS"]
+}
+
+### 30. Compare More Than 6 Departments (400)
+POST {{baseUrl}}/departments/compare
+Content-Type: application/json
+
+{
+  "department_codes": ["CS", "SWE", "IT", "IS", "ISC", "STAT", "EXTRA"]
+}
+
+### ============================================
+### SAMPLE COMPLETE ASSESSMENT WORKFLOW
+### ============================================
+
+###
+# STEP 1: Start new assessment
+# Copy the assessment_id from response
+###
+# @name startWorkflow
+POST {{baseUrl}}/assessments/start
+Content-Type: application/json
+
+{
+  "student_name": "Test Workflow",
+  "student_email": "workflow@test.com"
+}
+
+###
+# STEP 2: Get the questions from the response above
+# Then save 20 responses (one per question)
+# Use the question IDs and option IDs from the start response
+###
+
+###
+# STEP 3: Check progress
+###
+GET {{baseUrl}}/assessments/{{assessmentId}}/progress
+
+###
+# STEP 4: Submit after all 20 responses
+###
+POST {{baseUrl}}/assessments/{{assessmentId}}/submit
+
+###
+# STEP 5: View results
+###
+GET {{baseUrl}}/assessments/{{assessmentId}}/results
+
+###
+# STEP 6: Submit feedback
+###
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "assessment_id": "{{assessmentId}}",
+  "rating": 5,
+  "comment": "Workflow test completed successfully!",
+  "helpful": true
+}
+
+### ============================================
+### NOTES
+### ============================================
+#
+# Variable Usage:
+# - Update @assessmentId at the top after starting an assessment
+# - Or use {{startWorkflow.response.body.data.assessment_id}} syntax
+#
+# Response Variables:
+# - @name directive saves response for later use
+# - Access with {{requestName.response.body.path.to.value}}
+#
+# Tips:
+# - Click "Send Request" link above each ### block
+# - View response in right panel
+# - Status codes: 200 OK, 201 Created, 400 Bad Request, 404 Not Found, 500 Error
+#
+### ============================================
