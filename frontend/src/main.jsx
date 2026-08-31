@@ -1,18 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout.jsx';
 import App from './App.jsx';
-import Assessment from './pages/Assessment.jsx'; // <-- IMPORT HERE
+import Assessment from './pages/Assessment.jsx';
+import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<div>Login Page Logic Here</div>} />
-        <Route path="/assessment" element={<Assessment />} /> {/* <-- USE IT HERE */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/assessment" element={<Assessment />} />
+          <Route path="/departments" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Departments Page - Coming Soon</h1></div>} />
+          <Route path="/compare" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Compare Page - Coming Soon</h1></div>} />
+          <Route path="/exit-exam" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Exit Exam Prep - Coming Soon</h1></div>} />
+          <Route path="/admin" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Admin Panel - Coming Soon</h1></div>} />
+          <Route path="/feedback" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Feedback Page - Coming Soon</h1></div>} />
+          <Route path="/about" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>About Page - Coming Soon</h1></div>} />
+          <Route path="/privacy" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Privacy Policy - Coming Soon</h1></div>} />
+          <Route path="/terms" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Terms of Service - Coming Soon</h1></div>} />
+          <Route path="/accessibility" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Accessibility - Coming Soon</h1></div>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   </React.StrictMode>,
 )
