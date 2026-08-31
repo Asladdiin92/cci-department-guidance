@@ -1,7 +1,7 @@
 // Questions data structure
 // Each question has scoring weights for each department (CS, SWE, IT, IS, ISC, STAT)
 
-const questions = [
+export const questions = [
     {
         "id": 1,
         "text": "How do you most naturally approach a new difficult problem?",
@@ -1675,7 +1675,7 @@ const departments = {
                 "Information systems security concepts"
             ]
         },
-        careerPaths: [
+        export const departments = {
             {
                 title: "Network Engineer",
                 salary: "40,000 - 85,000 ETB/month",
