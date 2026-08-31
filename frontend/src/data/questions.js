@@ -1445,7 +1445,7 @@ export const questions = [
 ];
 
 // Department information for results display
-const departments = {
+export const departments = {
     CS: {
         name: "Computer Science",
         fullName: "Computer Science",
@@ -1668,14 +1668,14 @@ const departments = {
                 "Network protocol implementation and configuration",
                 "Comprehensive network management"
             ],
-            "Information Assurance and Security": [
+"Information Assurance and Security": [
                 "Threats, risks, and vulnerabilities in information systems",
                 "Data security policies and administration security",
                 "Secure systems design",
                 "Information systems security concepts"
             ]
         },
-        export const departments = {
+        careerPaths: [
             {
                 title: "Network Engineer",
                 salary: "40,000 - 85,000 ETB/month",
