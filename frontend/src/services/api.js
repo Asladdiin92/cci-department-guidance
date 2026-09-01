@@ -47,14 +47,10 @@ export async function startAssessment() {
   return response.data;
 }
 
-// 4. Submit assessment answers
-export async function submitAssessment(assessmentId, answers) {
-  const response = await apiCall('/assessments/submit', {
+// 4. Submit assessment (after responses saved)
+export async function submitAssessment(assessmentId) {
+  const response = await apiCall(`/assessments/${assessmentId}/submit`, {
     method: 'POST',
-    body: JSON.stringify({
-      assessment_id: assessmentId,
-      answers,
-    }),
   });
   return response.data;
 }

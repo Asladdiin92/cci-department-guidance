@@ -47,10 +47,10 @@ function Assessment() {
     }
   };
 
-  const handleAnswerChange = (questionId, value) => {
+  const handleAnswerChange = (questionId, optionId) => {
     setAnswers(prev => ({
       ...prev,
-      [questionId]: parseInt(value)
+      [questionId]: optionId
     }));
   };
 
@@ -77,7 +77,19 @@ function Assessment() {
     try {
       setSubmitting(true);
       setError(null);
-      const response = await submitAssessment(assessmentId, answers);
+      
+      // Save all responses first
+      for (const [questionId, optionId] of Object.entries(answers)) {
+        await fetch(`${import.meta.env.VITE_API_URL || 'https://cci-department-guidance-production.up.railway.app/api'}/assessments/${assessmentId}/responses`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question_id: questionId, option_id: optionId })
+        });
+      }
+      
+      // Then submit the assessment
+      const response = await submitAssessment(assessmentId);
+      
       // Navigate to results page with assessment ID
       navigate(`/results/${assessmentId}`, { state: { results: response } });
     } catch (err) {
@@ -153,42 +165,22 @@ function Assessment() {
       {currentQuestion && (
         <Paper elevation={3} sx={{ p: 4, mb: 3 }}>
           <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
-            {currentQuestion.question_text}
+            {currentQuestion.text}
           </Typography>
 
           <RadioGroup
-            value={answers[currentQuestion.id]?.toString() || ''}
+            value={answers[currentQuestion.id] || ''}
             onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
           >
-            <FormControlLabel
-              value="5"
-              control={<Radio />}
-              label="Strongly Agree"
-              sx={{ mb: 1 }}
-            />
-            <FormControlLabel
-              value="4"
-              control={<Radio />}
-              label="Agree"
-              sx={{ mb: 1 }}
-            />
-            <FormControlLabel
-              value="3"
-              control={<Radio />}
-              label="Neutral"
-              sx={{ mb: 1 }}
-            />
-            <FormControlLabel
-              value="2"
-              control={<Radio />}
-              label="Disagree"
-              sx={{ mb: 1 }}
-            />
-            <FormControlLabel
-              value="1"
-              control={<Radio />}
-              label="Strongly Disagree"
-            />
+            {currentQuestion.question_options?.map((option) => (
+              <FormControlLabel
+                key={option.id}
+                value={option.id}
+                control={<Radio />}
+                label={option.text}
+                sx={{ mb: 1, alignItems: 'flex-start' }}
+              />
+            ))}
           </RadioGroup>
 
           {isCurrentAnswered && (
