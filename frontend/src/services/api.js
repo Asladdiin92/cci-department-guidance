@@ -36,7 +36,7 @@ export async function getDepartments() {
 // 2. Fetch single department by code
 export async function getDepartment(code) {
   const response = await apiCall(`/departments/${code}`);
-  return response.data.department;
+  return response.data;
 }
 
 // 3. Start new assessment
