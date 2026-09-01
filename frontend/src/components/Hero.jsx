@@ -18,7 +18,7 @@ import {
   Speed,
   CompareArrows,
   EmojiObjects,
-  WorkOutline,
+  Work,
   CheckCircle,
   ArrowForward,
   Psychology,
@@ -51,7 +51,7 @@ const Hero = () => {
       color: '#ea580c'
     },
     {
-      icon: <WorkOutline sx={{ fontSize: 40 }} />,
+      icon: <Work sx={{ fontSize: 40 }} />,
       title: 'Career Insights',
       description: 'Explore Ethiopian job market data, salary expectations, top employers, and growth opportunities.',
       color: '#0d9488'
@@ -68,7 +68,7 @@ const Hero = () => {
     { code: 'CS', name: 'Computer Science', icon: <Science />, color: '#4f46e5', desc: 'Algorithms & Theory' },
     { code: 'SWE', name: 'Software Engineering', icon: <Code />, color: '#ea580c', desc: 'Build & Deploy' },
     { code: 'IT', name: 'Information Technology', icon: <Laptop />, color: '#0d9488', desc: 'Networks & Systems' },
-    { code: 'IS', name: 'Information Systems', icon: <WorkOutline />, color: '#db2777', desc: 'Business & Tech' },
+    { code: 'IS', name: 'Information Systems', icon: <Work />, color: '#db2777', desc: 'Business & Tech' },
     { code: 'ISC', name: 'Information Science', icon: <School />, color: '#7c3aed', desc: 'Data & Knowledge' },
     { code: 'STAT', name: 'Statistics', icon: <TrendingUp />, color: '#eab308', desc: 'Data Analysis' },
   ];
