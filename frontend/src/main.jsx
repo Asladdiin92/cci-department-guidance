@@ -10,6 +10,7 @@ import Results from './pages/Results.jsx';
 import Compare from './pages/Compare.jsx';
 import Departments from './pages/Departments.jsx';
 import DepartmentDetails from './pages/DepartmentDetails.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
 import './index.css';
 
 const theme = createTheme({
@@ -74,8 +75,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/compare" element={<Compare />} />
             <Route path="/departments" element={<Departments />} />
             <Route path="/departments/:code" element={<DepartmentDetails />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/exit-exam" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Exit Exam Prep - Coming Soon</h1></div>} />
-            <Route path="/admin" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Admin Panel - Coming Soon</h1></div>} />
             <Route path="/feedback" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Feedback Page - Coming Soon</h1></div>} />
             <Route path="/about" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>About Page - Coming Soon</h1></div>} />
             <Route path="/privacy" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Privacy Policy - Coming Soon</h1></div>} />
