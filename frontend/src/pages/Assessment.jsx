@@ -1,168 +1,254 @@
-import React, { useState } from 'react';
-import { questions, departments } from '../data/questions.js';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { startAssessment, submitAssessment } from '../services/api';
+import {
+  Container,
+  Typography,
+  Box,
+  Button,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  LinearProgress,
+  Paper,
+  Alert,
+  CircularProgress
+} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-export default function Assessment() {
-  const [selectedOptions, setSelectedOptions] = useState({});
-  const [results, setResults] = useState(null);
+function Assessment() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [assessmentId, setAssessmentId] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState({});
 
-  const handleSelectOption = (questionId, optionIndex) => {
-    setSelectedOptions((prev) => ({
+  useEffect(() => {
+    loadAssessment();
+  }, []);
+
+  const loadAssessment = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await startAssessment();
+      setAssessmentId(response.assessment_id);
+      setQuestions(response.questions);
+    } catch (err) {
+      console.error('Error loading assessment:', err);
+      setError('Failed to load assessment. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAnswerChange = (questionId, value) => {
+    setAnswers(prev => ({
       ...prev,
-      [questionId]: optionIndex
+      [questionId]: parseInt(value)
     }));
   };
 
-  const calculateResults = () => {
-    const scores = { CS: 0, SWE: 0, IT: 0, IS: 0, ISC: 0, STAT: 0 };
-
-    questions.forEach((q) => {
-      const selectedIndex = selectedOptions[q.id];
-      if (selectedIndex !== undefined && q.options[selectedIndex]) {
-        const optionScores = q.options[selectedIndex].scores;
-        for (const [dept, pts] of Object.entries(optionScores)) {
-          scores[dept] = (scores[dept] || 0) + pts;
-        }
-      }
-    });
-
-    const sortedDepts = Object.entries(scores)
-      .sort((a, b) => b[1] - a[1])
-      .map(([key, score]) => ({
-        key,
-        score,
-        details: departments[key] || {}
-      }));
-
-    setResults(sortedDepts);
+  const handleNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    }
   };
 
-  const isComplete = questions.every((q) => selectedOptions[q.id] !== undefined);
-  const answeredCount = Object.keys(selectedOptions).length;
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  };
 
-  if (results) {
-    const topDept = results[0];
+  const handleSubmit = async () => {
+    // Validate all questions answered
+    const unanswered = questions.filter(q => !(q.id in answers));
+    if (unanswered.length > 0) {
+      setError(`Please answer all questions. ${unanswered.length} question(s) remaining.`);
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError(null);
+      const response = await submitAssessment(assessmentId, answers);
+      // Navigate to results page with assessment ID
+      navigate(`/results/${assessmentId}`, { state: { results: response } });
+    } catch (err) {
+      console.error('Error submitting assessment:', err);
+      setError('Failed to submit assessment. Please try again.');
+      setSubmitting(false);
+    }
+  };
+
+  const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+  const currentQuestion = questions[currentQuestionIndex];
+  const answeredCount = Object.keys(answers).length;
+  const isCurrentAnswered = currentQuestion && (currentQuestion.id in answers);
+  const allAnswered = answeredCount === questions.length;
+
+  if (loading) {
     return (
-      <div style={{ maxWidth: '900px', margin: '30px auto', padding: '24px', fontFamily: 'system-ui, sans-serif' }}>
-        <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: '12px', padding: '24px', marginBottom: '24px' }}>
-          <span style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: '#15803d', fontWeight: 600 }}>Top Recommendation</span>
-          <h1 style={{ margin: '8px 0', color: '#14532d', fontSize: '28px' }}>{topDept.details.name} ({topDept.key})</h1>
-          <p style={{ color: '#374151', lineHeight: 1.6 }}>{topDept.details.description}</p>
-        </div>
+      <Container maxWidth="md" sx={{ mt: 8, textAlign: 'center' }}>
+        <CircularProgress size={60} />
+        <Typography variant="h6" sx={{ mt: 3 }}>
+          Loading Assessment...
+        </Typography>
+      </Container>
+    );
+  }
 
-        <h3 style={{ marginTop: '30px', marginBottom: '16px' }}>All Department Match Scores</h3>
-        <div style={{ display: 'grid', gap: '12px', marginBottom: '30px' }}>
-          {results.map((r, i) => (
-            <div key={r.key} style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <strong>{i + 1}. {r.details.name} ({r.key})</strong>
-                <div style={{ fontSize: '13px', color: '#6b7280', marginTop: '4px' }}>
-                  Strengths: {r.details.strengths ? r.details.strengths.slice(0, 3).join(', ') : ''}
-                </div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '20px', fontWeight: 'bold', color: r.details.color || '#2563eb' }}>{r.score} pts</span>
-                <div style={{ fontSize: '12px', color: '#6b7280' }}>Score match</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button
-            onClick={() => { setResults(null); setSelectedOptions({}); }}
-            style={{ padding: '10px 20px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600 }}
-          >
-            Retake Assessment
-          </button>
-          <Link to="/" style={{ padding: '10px 20px', background: '#f3f4f6', color: '#374151', borderRadius: '6px', textDecoration: 'none', fontWeight: 600 }}>
-            Back to Home
-          </Link>
-        </div>
-      </div>
+  if (error && !questions.length) {
+    return (
+      <Container maxWidth="md" sx={{ mt: 8 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+        <Button variant="contained" onClick={loadAssessment}>
+          Retry
+        </Button>
+      </Container>
     );
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '30px auto', padding: '24px', fontFamily: 'system-ui, sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-        <div>
-          <h1 style={{ margin: '0 0 8px 0', fontSize: '26px' }}>Department Recommendation Assessment</h1>
-          <p style={{ margin: 0, color: '#6b7280' }}>Answer all 20 questions to find your best fit in the College of Computing and Informatics.</p>
-        </div>
-        <div style={{ padding: '8px 16px', background: '#eff6ff', borderRadius: '20px', color: '#1d4ed8', fontWeight: 600, fontSize: '14px' }}>
-          {answeredCount} / {questions.length} Answered
-        </div>
-      </div>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      {/* Header */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" gutterBottom fontWeight="bold">
+          Department Recommendation Assessment
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Answer all questions to receive personalized department recommendations based on your interests and strengths.
+        </Typography>
+      </Box>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {questions.map((q, qIndex) => (
-          <div
-            key={q.id}
-            style={{
-              padding: '20px',
-              border: selectedOptions[q.id] !== undefined ? '1px solid #93c5fd' : '1px solid #e5e7eb',
-              background: selectedOptions[q.id] !== undefined ? '#f8fafc' : '#ffffff',
-              borderRadius: '10px'
-            }}
+      {/* Progress Bar */}
+      <Box sx={{ mb: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+          <Typography variant="body2" color="text.secondary">
+            Question {currentQuestionIndex + 1} of {questions.length}
+          </Typography>
+          <Typography variant="body2" color="primary" fontWeight="medium">
+            {answeredCount}/{questions.length} answered
+          </Typography>
+        </Box>
+        <LinearProgress variant="determinate" value={progress} sx={{ height: 8, borderRadius: 4 }} />
+      </Box>
+
+      {/* Error Alert */}
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
+
+      {/* Question Card */}
+      {currentQuestion && (
+        <Paper elevation={3} sx={{ p: 4, mb: 3 }}>
+          <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
+            {currentQuestion.question_text}
+          </Typography>
+
+          <RadioGroup
+            value={answers[currentQuestion.id]?.toString() || ''}
+            onChange={(e) => handleAnswerChange(currentQuestion.id, e.target.value)}
           >
-            <h3 style={{ margin: '0 0 16px 0', fontSize: '17px', color: '#1f2937' }}>
-              {qIndex + 1}. {q.text}
-            </h3>
+            <FormControlLabel
+              value="5"
+              control={<Radio />}
+              label="Strongly Agree"
+              sx={{ mb: 1 }}
+            />
+            <FormControlLabel
+              value="4"
+              control={<Radio />}
+              label="Agree"
+              sx={{ mb: 1 }}
+            />
+            <FormControlLabel
+              value="3"
+              control={<Radio />}
+              label="Neutral"
+              sx={{ mb: 1 }}
+            />
+            <FormControlLabel
+              value="2"
+              control={<Radio />}
+              label="Disagree"
+              sx={{ mb: 1 }}
+            />
+            <FormControlLabel
+              value="1"
+              control={<Radio />}
+              label="Strongly Disagree"
+            />
+          </RadioGroup>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {q.options.map((opt, optIndex) => {
-                const isSelected = selectedOptions[q.id] === optIndex;
-                return (
-                  <label
-                    key={optIndex}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      padding: '12px 16px',
-                      borderRadius: '8px',
-                      border: isSelected ? '1.5px solid #2563eb' : '1px solid #e5e7eb',
-                      background: isSelected ? '#eff6ff' : '#ffffff',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      name={`question_${q.id}`}
-                      checked={isSelected}
-                      onChange={() => handleSelectOption(q.id, optIndex)}
-                      style={{ marginTop: '3px', marginRight: '12px' }}
-                    />
-                    <span style={{ fontSize: '15px', color: isSelected ? '#1e40af' : '#374151', lineHeight: 1.5 }}>
-                      {opt.text}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
+          {isCurrentAnswered && (
+            <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', color: 'success.main' }}>
+              <CheckCircleIcon sx={{ mr: 1, fontSize: 20 }} />
+              <Typography variant="body2">
+                Answer saved
+              </Typography>
+            </Box>
+          )}
+        </Paper>
+      )}
 
-      <div style={{ marginTop: '32px', textAlign: 'center' }}>
-        <button
-          type="button"
-          onClick={calculateResults}
-          disabled={!isComplete}
-          style={{
-            padding: '14px 32px',
-            fontSize: '16px',
-            fontWeight: 600,
-            color: '#ffffff',
-            backgroundColor: isComplete ? '#2563eb' : '#9ca3af',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: isComplete ? 'pointer' : 'not-allowed'
-          }}
+      {/* Navigation Buttons */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={handlePrevious}
+          disabled={currentQuestionIndex === 0}
         >
-          {isComplete ? 'Submit & View Recommendations' : `Answer all questions to submit (${answeredCount}/${questions.length})`}
-        </button>
-      </div>
-    </div>
+          Previous
+        </Button>
+
+        {currentQuestionIndex < questions.length - 1 ? (
+          <Button
+            variant="contained"
+            endIcon={<ArrowForwardIcon />}
+            onClick={handleNext}
+          >
+            Next
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleSubmit}
+            disabled={!allAnswered || submitting}
+            sx={{ minWidth: 150 }}
+          >
+            {submitting ? (
+              <>
+                <CircularProgress size={20} sx={{ mr: 1 }} color="inherit" />
+                Submitting...
+              </>
+            ) : (
+              'Submit Assessment'
+            )}
+          </Button>
+        )}
+      </Box>
+
+      {/* Summary at bottom */}
+      <Box sx={{ mt: 4, p: 2, bgcolor: 'background.paper', borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+        <Typography variant="body2" color="text.secondary">
+          💡 Tip: You can navigate back to review and change your answers before submitting.
+        </Typography>
+      </Box>
+    </Container>
   );
 }
+
+export default Assessment;

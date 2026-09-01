@@ -59,7 +59,13 @@ export async function submitAssessment(assessmentId, answers) {
   return response.data;
 }
 
-// 5. Submit feedback
+// 5. Get assessment results
+export async function getAssessmentResults(assessmentId) {
+  const response = await apiCall(`/assessments/${assessmentId}/results`);
+  return response.data;
+}
+
+// 6. Submit feedback
 export async function submitFeedback(feedbackData) {
   const response = await apiCall('/feedback', {
     method: 'POST',
