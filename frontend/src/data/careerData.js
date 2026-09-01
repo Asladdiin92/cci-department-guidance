@@ -259,10 +259,10 @@ export const CAREER_PATHWAYS = {
 export const DEPARTMENT_FIT_CHECKLIST = {
   CS: [
     'You enjoy solving complex mathematical and logical problems',
-    'You're curious about how algorithms and systems work at a fundamental level',
+    'You are curious about how algorithms and systems work at a fundamental level',
     'You want to pursue graduate studies or research in computing',
-    'You're interested in artificial intelligence and machine learning',
-    'You don't mind heavy theoretical coursework and proofs',
+    'You are interested in artificial intelligence and machine learning',
+    'You do not mind heavy theoretical coursework and proofs',
     'You prefer understanding "why" things work, not just "how"'
   ],
   
@@ -271,43 +271,43 @@ export const DEPARTMENT_FIT_CHECKLIST = {
     'You enjoy working on team projects and collaboration',
     'You want to work in the software industry immediately after graduation',
     'You prefer practical, hands-on learning over theory',
-    'You're excited about modern frameworks and development tools',
+    'You are excited about modern frameworks and development tools',
     'You want to create apps and websites people actually use'
   ],
   
   IT: [
     'You enjoy troubleshooting and fixing technical problems',
-    'You're interested in networks, servers, and infrastructure',
+    'You are interested in networks, servers, and infrastructure',
     'You want a stable career with clear certification paths',
     'You prefer hands-on work with hardware and systems',
     'You like helping people solve technology issues',
-    'You're organized and detail-oriented'
+    'You are organized and detail-oriented'
   ],
   
   IS: [
-    'You're interested in both business and technology',
+    'You are interested in both business and technology',
     'You enjoy analyzing processes and finding improvements',
     'You like working with databases and data management',
     'You want to bridge the gap between IT and business teams',
-    'You're good at communication and stakeholder management',
+    'You are good at communication and stakeholder management',
     'You prefer working in structured, organizational environments'
   ],
   
   ISC: [
-    'You're passionate about organizing and curating information',
+    'You are passionate about organizing and curating information',
     'You enjoy research and information retrieval',
     'You care about user experience and accessibility',
     'You like working with digital libraries and archives',
-    'You're detail-oriented and enjoy metadata work',
+    'You are detail-oriented and enjoy metadata work',
     'You want to help people find and access information easily'
   ],
   
   STAT: [
     'You enjoy working with numbers and data',
-    'You're comfortable with mathematics and probability',
+    'You are comfortable with mathematics and probability',
     'You like discovering patterns and insights in data',
     'You want a versatile degree applicable to many fields',
-    'You're interested in research methodology',
+    'You are interested in research methodology',
     'You enjoy critical thinking and evidence-based reasoning'
   ]
 };
