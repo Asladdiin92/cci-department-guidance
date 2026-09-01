@@ -20,7 +20,30 @@ const PORT = process.env.PORT || 3000;
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    // List of allowed origins
+    const allowedOrigins = process.env.CORS_ORIGIN 
+      ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+      : [];
+    
+    // Check if origin matches allowed patterns
+    const isAllowed = allowedOrigins.some(allowed => {
+      // Exact match
+      if (allowed === origin) return true;
+      // Match Vercel preview URLs (*.vercel.app)
+      if (allowed.includes('vercel.app') && origin.includes('vercel.app')) return true;
+      return false;
+    });
+    
+    if (isAllowed || allowedOrigins.includes('*')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
 };
