@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getDepartment } from '../services/api';
 import { CAREER_PATHWAYS, DEPARTMENT_FIT_CHECKLIST, KEY_TRAITS } from '../data/careerData';
+import { CURRICULUM_DATA, COURSE_TYPE_CONFIG } from '../data/curriculumData';
 
 function DepartmentDetails() {
   const { code } = useParams();
@@ -358,6 +359,11 @@ function DepartmentDetails() {
           </div>
         </div>
 
+        {/* Full Curriculum Roadmap */}
+        {CURRICULUM_DATA[department.code]?.semesters?.length > 0 && (
+          <CurriculumRoadmap curriculum={CURRICULUM_DATA[department.code]} deptCode={department.code} gradient={gradient} />
+        )}
+
         {/* Why Choose This Department */}
         <div className="bg-surface rounded-xl p-8 mb-8">
           <div className="flex items-center mb-6">
@@ -517,6 +523,209 @@ function getWhyChoose(code) {
     ],
   };
   return reasons[code] || [];
+}
+
+// Curriculum Roadmap Component
+function CurriculumRoadmap({ curriculum, deptCode, gradient }) {
+  const [expandedYear, setExpandedYear] = useState(1);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  const years = [1, 2, 3, 4];
+
+  return (
+    <div className="bg-surface rounded-xl p-8 mb-8">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <span className="text-3xl mr-3">📅</span>
+          <div>
+            <h2 className="text-2xl font-bold">Full Curriculum Roadmap</h2>
+            <p className="text-sm text-text-secondary">{curriculum.programName}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="text-2xl font-bold text-primary">{curriculum.totalCredits}</div>
+          <div className="text-xs text-text-secondary">Total Credits</div>
+        </div>
+      </div>
+
+      {/* Course Type Legend */}
+      <div className="flex flex-wrap gap-3 mb-6 p-4 bg-background rounded-lg">
+        {Object.entries(COURSE_TYPE_CONFIG).map(([type, config]) => (
+          <div key={type} className="flex items-center">
+            <span className="text-xl mr-2">{config.icon}</span>
+            <span className={`text-sm font-medium ${config.textColor}`}>{type}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Year Tabs */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {years.map(year => {
+          const semesters = curriculum.semesters.filter(s => s.year === year);
+          const yearCredits = semesters.reduce((sum, sem) => sum + sem.totalCredits, 0);
+          
+          return (
+            <button
+              key={year}
+              onClick={() => setExpandedYear(year)}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
+                expandedYear === year
+                  ? `bg-gradient-to-r ${gradient} text-white shadow-lg`
+                  : 'bg-background hover:bg-gray-100 text-text-secondary'
+              }`}
+            >
+              Year {year}
+              <span className="block text-xs mt-1">{yearCredits} credits</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Semesters for Selected Year */}
+      <div className="space-y-6">
+        {curriculum.semesters
+          .filter(sem => sem.year === expandedYear)
+          .map((semester, semIndex) => (
+            <div key={semIndex} className="border border-gray-200 rounded-lg overflow-hidden">
+              {/* Semester Header */}
+              <div className={`bg-gradient-to-r ${gradient} p-4 text-white`}>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="text-lg font-bold">
+                      Semester {semester.semester}: {semester.title}
+                    </h3>
+                    <p className="text-sm opacity-90">Year {semester.year}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold">{semester.totalCredits}</div>
+                    <div className="text-xs opacity-90">Credits</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Courses */}
+              <div className="p-4 bg-white">
+                <div className="space-y-3">
+                  {semester.courses.map((course, courseIndex) => (
+                    <CourseCard
+                      key={courseIndex}
+                      course={course}
+                      onClick={() => setSelectedCourse(course)}
+                      isSelected={selectedCourse?.code === course.code}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+
+      {/* Course Detail Modal/Panel */}
+      {selectedCourse && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedCourse(null)}>
+          <div className="bg-white rounded-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-2xl font-bold mb-1">{selectedCourse.name}</h3>
+                <p className="text-sm text-text-secondary">{selectedCourse.code}</p>
+              </div>
+              <button
+                onClick={() => setSelectedCourse(null)}
+                className="text-text-secondary hover:text-primary text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="text-xs text-text-secondary mb-1">Credits</div>
+                <div className="text-xl font-bold text-primary">{selectedCourse.credits}</div>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="text-xs text-text-secondary mb-1">Type</div>
+                <div className="flex items-center">
+                  <span className="mr-2">{COURSE_TYPE_CONFIG[selectedCourse.type].icon}</span>
+                  <span className={`font-semibold ${COURSE_TYPE_CONFIG[selectedCourse.type].textColor}`}>
+                    {selectedCourse.type}
+                  </span>
+                </div>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="text-xs text-text-secondary mb-1">Lecture Hours</div>
+                <div className="text-xl font-bold">{selectedCourse.lecture}h/week</div>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="text-xs text-text-secondary mb-1">Lab Hours</div>
+                <div className="text-xl font-bold">{selectedCourse.lab}h/week</div>
+              </div>
+            </div>
+
+            {selectedCourse.prerequisites.length > 0 && (
+              <div className="mb-4">
+                <h4 className="font-semibold mb-2">Prerequisites</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedCourse.prerequisites.map((prereq, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                      {prereq}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="p-4 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-800">
+                <strong>💡 Tip:</strong> This course requires {selectedCourse.lecture + selectedCourse.lab} contact hours per week. 
+                Plan additional {selectedCourse.credits * 2} hours for self-study and assignments.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Course Card Component
+function CourseCard({ course, onClick, isSelected }) {
+  const config = COURSE_TYPE_CONFIG[course.type];
+  
+  return (
+    <div
+      onClick={onClick}
+      className={`p-4 border ${config.borderColor} ${config.bgColor} rounded-lg cursor-pointer hover:shadow-md transition-all ${
+        isSelected ? 'ring-2 ring-primary' : ''
+      }`}
+    >
+      <div className="flex justify-between items-start">
+        <div className="flex-1">
+          <div className="flex items-center mb-2">
+            <span className="mr-2">{config.icon}</span>
+            <span className={`text-xs px-2 py-1 ${config.bgColor} ${config.textColor} rounded-full font-medium`}>
+              {course.type}
+            </span>
+            <span className="ml-2 text-xs text-text-secondary">{course.code}</span>
+          </div>
+          <h4 className="font-semibold mb-1">{course.name}</h4>
+          <div className="flex flex-wrap gap-3 text-xs text-text-secondary">
+            <span>📚 {course.credits} credits</span>
+            <span>👨‍🏫 {course.lecture}h lecture</span>
+            <span>🔬 {course.lab}h lab</span>
+          </div>
+          {course.prerequisites.length > 0 && (
+            <div className="mt-2 text-xs text-yellow-700">
+              ⚠️ Requires: {course.prerequisites.join(', ')}
+            </div>
+          )}
+        </div>
+        <div className="text-right">
+          <div className="text-2xl font-bold text-primary">{course.credits}</div>
+          <div className="text-xs text-text-secondary">CR</div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default DepartmentDetails;
