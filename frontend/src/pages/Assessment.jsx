@@ -94,8 +94,8 @@ function Assessment() {
               'Accept': 'application/json'
             },
             body: JSON.stringify({ 
-              question_id: parseInt(questionId), 
-              option_id: parseInt(optionId) 
+              question_id: questionId, 
+              option_id: optionId 
             })
           });
           
