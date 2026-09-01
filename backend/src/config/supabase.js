@@ -6,6 +6,11 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
+// WebSocket polyfill for Node.js < 22
+if (typeof WebSocket === 'undefined') {
+  global.WebSocket = require('ws');
+}
+
 // Validate required environment variables
 const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'];
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
