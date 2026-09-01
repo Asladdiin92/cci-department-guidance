@@ -1,5 +1,5 @@
 // Base API URL from environment variable
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://cci-department-guidance-production.up.railway.app/api';
 
 // Helper function for API calls
 async function apiCall(endpoint, options = {}) {
