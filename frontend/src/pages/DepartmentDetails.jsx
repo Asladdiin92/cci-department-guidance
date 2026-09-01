@@ -67,8 +67,8 @@ function DepartmentDetails() {
   const gradient = colorMap[department.code] || 'from-primary to-secondary';
 
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 max-w-5xl">
+    <div className="min-h-screen py-20" style={{ position: 'relative', zIndex: 1, backgroundColor: '#ffffff' }}>
+      <div className="container mx-auto px-4 max-w-5xl" style={{ position: 'relative', zIndex: 2 }}>
         {/* Back Button */}
         <button
           onClick={() => navigate('/departments')}
