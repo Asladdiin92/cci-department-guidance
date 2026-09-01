@@ -9,6 +9,7 @@ const { supabase } = require('../config/supabase');
 const { successResponse, createdResponse } = require('../utils/response');
 const { validate, schemas, validateUUID } = require('../middleware/validator');
 const { asyncHandler, AppError } = require('../middleware/errorHandler');
+const { authenticateAdmin } = require('../middleware/auth');
 
 /**
  * @route   POST /api/feedback
@@ -107,6 +108,44 @@ router.get(
       helpful_percentage: totalCount > 0 
         ? Math.round((helpfulCount / totalCount) * 100) 
         : 0
+    });
+  })
+);
+
+/**
+ * @route   GET /api/feedback/recent
+ * @desc    Get recent feedback (admin only)
+ * @access  Private (Admin)
+ */
+router.get(
+  '/recent',
+  authenticateAdmin,
+  asyncHandler(async (req, res, next) => {
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = parseInt(req.query.offset) || 0;
+
+    const { data: feedback, error, count } = await supabase
+      .from('feedback')
+      .select(`
+        *,
+        assessments (
+          student_name,
+          student_email,
+          completed_at
+        )
+      `, { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (error) {
+      throw new AppError('Failed to fetch feedback', 500);
+    }
+
+    return successResponse(res, {
+      feedback: feedback || [],
+      total: count || 0,
+      limit,
+      offset
     });
   })
 );

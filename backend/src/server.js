@@ -74,11 +74,15 @@ app.get('/api', (req, res) => {
 const departmentsRoutes = require('./routes/departments');
 const assessmentsRoutes = require('./routes/assessments');
 const feedbackRoutes = require('./routes/feedback');
+const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 
 // Mount routes
 app.use('/api/departments', departmentsRoutes);
 app.use('/api/assessments', assessmentsRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ================================================================
 // ERROR HANDLING
