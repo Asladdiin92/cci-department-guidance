@@ -1,41 +1,69 @@
-import { supabase } from '../lib/supabase';
+// Base API URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+// Helper function for API calls
+async function apiCall(endpoint, options = {}) {
+  const url = `${API_URL}${endpoint}`;
+  
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || `API Error: ${response.status}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error(`API call failed for ${endpoint}:`, error);
+    throw error;
+  }
+}
 
 // 1. Fetch all 6 departments
 export async function getDepartments() {
-  const { data, error } = await supabase
-    .from('departments')
-    .select('*')
-    .order('code', { ascending: true });
-
-  if (error) {
-    console.error('Error fetching departments:', error);
-    throw error;
-  }
-  return data;
+  const response = await apiCall('/departments');
+  return response.data.departments;
 }
 
-// 2. Fetch all 20 questions with their scoring options
-export async function getQuestionsWithOptions() {
-  const { data, error } = await supabase
-    .from('questions')
-    .select(`
-      id,
-      text,
-      category,
-      difficulty,
-      order_index,
-      question_options (
-        id,
-        text,
-        scores_json,
-        order_index
-      )
-    `)
-    .order('order_index', { ascending: true });
+// 2. Fetch single department by code
+export async function getDepartment(code) {
+  const response = await apiCall(`/departments/${code}`);
+  return response.data.department;
+}
 
-  if (error) {
-    console.error('Error fetching questions:', error);
-    throw error;
-  }
-  return data;
+// 3. Start new assessment
+export async function startAssessment() {
+  const response = await apiCall('/assessments/start', {
+    method: 'POST',
+  });
+  return response.data;
+}
+
+// 4. Submit assessment answers
+export async function submitAssessment(assessmentId, answers) {
+  const response = await apiCall('/assessments/submit', {
+    method: 'POST',
+    body: JSON.stringify({
+      assessment_id: assessmentId,
+      answers,
+    }),
+  });
+  return response.data;
+}
+
+// 5. Submit feedback
+export async function submitFeedback(feedbackData) {
+  const response = await apiCall('/feedback', {
+    method: 'POST',
+    body: JSON.stringify(feedbackData),
+  });
+  return response.data;
 }
