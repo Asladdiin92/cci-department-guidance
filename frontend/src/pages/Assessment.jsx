@@ -78,23 +78,55 @@ function Assessment() {
       setSubmitting(true);
       setError(null);
       
-      // Save all responses first
+      console.log('Submitting assessment:', assessmentId);
+      console.log('Answers:', answers);
+      
+      // Save all responses in batch
+      const API_BASE = import.meta.env.VITE_API_URL || 'https://cci-department-guidance-production.up.railway.app/api';
+      
+      // Save each response
       for (const [questionId, optionId] of Object.entries(answers)) {
-        await fetch(`${import.meta.env.VITE_API_URL || 'https://cci-department-guidance-production.up.railway.app/api'}/assessments/${assessmentId}/responses`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question_id: questionId, option_id: optionId })
-        });
+        try {
+          const response = await fetch(`${API_BASE}/assessments/${assessmentId}/responses`, {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({ 
+              question_id: parseInt(questionId), 
+              option_id: parseInt(optionId) 
+            })
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Response save failed:', errorData);
+          }
+        } catch (err) {
+          console.error('Error saving response:', err);
+          // Continue even if one response fails
+        }
       }
       
-      // Then submit the assessment
-      const response = await submitAssessment(assessmentId);
+      // Small delay to ensure all responses are saved
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Navigate to results page with assessment ID
-      navigate(`/results/${assessmentId}`, { state: { results: response } });
+      // Submit the assessment
+      const results = await submitAssessment(assessmentId);
+      console.log('Assessment submitted successfully:', results);
+      
+      // Navigate to results page
+      navigate(`/results/${assessmentId}`, { 
+        state: { results },
+        replace: true 
+      });
+      
     } catch (err) {
       console.error('Error submitting assessment:', err);
-      setError('Failed to submit assessment. Please try again.');
+      setError(
+        err.message || 'Failed to submit assessment. Please try again or contact support if the issue persists.'
+      );
       setSubmitting(false);
     }
   };
