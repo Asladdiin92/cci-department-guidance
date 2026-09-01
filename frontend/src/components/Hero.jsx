@@ -227,26 +227,19 @@ const Hero = () => {
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
-                  position: 'relative',
-                  height: { xs: 300, md: 400 },
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  height: '100%'
                 }}
               >
                 <Card
-                  elevation={8}
+                  elevation={4}
                   sx={{
                     width: '100%',
-                    maxWidth: 400,
+                    maxWidth: 450,
                     borderRadius: 3,
-                    overflow: 'visible',
-                    position: 'relative',
-                    animation: 'float 3s ease-in-out infinite',
-                    '@keyframes float': {
-                      '0%, 100%': { transform: 'translateY(0px)' },
-                      '50%': { transform: 'translateY(-20px)' }
-                    }
+                    border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`
                   }}
                 >
                   <CardContent sx={{ p: 3 }}>
@@ -315,38 +308,6 @@ const Hero = () => {
                     />
                   </CardContent>
                 </Card>
-
-                {/* Floating badges */}
-                {[
-                  { icon: <EmojiObjects />, text: 'AI Powered', top: '10%', left: '-10%' },
-                  { icon: <Speed />, text: 'Fast Results', bottom: '20%', right: '-10%' },
-                  { icon: <Psychology />, text: 'Smart Analysis', top: '50%', left: '-15%' }
-                ].map((badge, idx) => (
-                  <Card
-                    key={idx}
-                    elevation={4}
-                    sx={{
-                      position: 'absolute',
-                      ...Object.fromEntries(Object.entries(badge).filter(([k]) => ['top', 'bottom', 'left', 'right'].includes(k))),
-                      display: { xs: 'none', md: 'flex' },
-                      alignItems: 'center',
-                      gap: 1,
-                      py: 1,
-                      px: 2,
-                      borderRadius: 2,
-                      animation: `pulse${idx} 2s ease-in-out infinite`,
-                      [`@keyframes pulse${idx}`]: {
-                        '0%, 100%': { transform: 'scale(1)' },
-                        '50%': { transform: 'scale(1.05)' }
-                      }
-                    }}
-                  >
-                    <Box sx={{ color: 'primary.main' }}>{badge.icon}</Box>
-                    <Typography variant="caption" fontWeight={600}>
-                      {badge.text}
-                    </Typography>
-                  </Card>
-                ))}
               </Box>
             </Grid>
           </Grid>
