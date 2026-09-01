@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getDepartment } from '../services/api';
+import { CAREER_PATHWAYS, DEPARTMENT_FIT_CHECKLIST, KEY_TRAITS } from '../data/careerData';
 
 function DepartmentDetails() {
   const { code } = useParams();
@@ -196,6 +197,164 @@ function DepartmentDetails() {
                 {skill}
               </span>
             ))}
+          </div>
+        </div>
+
+        {/* Is This Department For You? */}
+        <div className="bg-surface rounded-xl p-8 mb-8 border-2 border-primary/20">
+          <div className="flex items-center mb-6">
+            <span className="text-3xl mr-3">✅</span>
+            <h2 className="text-2xl font-bold">Is This Department For You?</h2>
+          </div>
+          
+          {/* Key Traits */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div>
+              <h3 className="font-semibold mb-3 text-primary">Strengths Needed</h3>
+              <ul className="space-y-2">
+                {KEY_TRAITS[department.code]?.strengths.map((trait, index) => (
+                  <li key={index} className="text-sm text-text-secondary flex items-start">
+                    <span className="text-primary mr-2">💪</span>
+                    {trait}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3 text-primary">Common Interests</h3>
+              <ul className="space-y-2">
+                {KEY_TRAITS[department.code]?.interests.map((interest, index) => (
+                  <li key={index} className="text-sm text-text-secondary flex items-start">
+                    <span className="text-primary mr-2">🎯</span>
+                    {interest}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3 text-primary">Personality Traits</h3>
+              <ul className="space-y-2">
+                {KEY_TRAITS[department.code]?.personality.map((trait, index) => (
+                  <li key={index} className="text-sm text-text-secondary flex items-start">
+                    <span className="text-primary mr-2">⭐</span>
+                    {trait}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Self-Check Indicators */}
+          <div className="pt-6 border-t border-gray-200">
+            <h3 className="font-semibold mb-4">Self-Check: You might be a great fit if...</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {DEPARTMENT_FIT_CHECKLIST[department.code]?.map((indicator, index) => (
+                <label key={index} className="flex items-start cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    className="mt-1 mr-3 w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
+                  />
+                  <span className="text-sm text-text-secondary group-hover:text-text transition-colors">
+                    {indicator}
+                  </span>
+                </label>
+              ))}
+            </div>
+            <p className="mt-4 text-sm text-primary font-medium">
+              ✨ Check 4 or more? This department is likely a strong match for you!
+            </p>
+          </div>
+        </div>
+
+        {/* Career Pathway Matrix */}
+        <div className="bg-surface rounded-xl p-8 mb-8">
+          <div className="flex items-center mb-6">
+            <span className="text-3xl mr-3">💼</span>
+            <h2 className="text-2xl font-bold">Career Pathway Matrix</h2>
+          </div>
+          <p className="text-text-secondary mb-6">
+            Explore job roles, salary ranges (in Ethiopian Birr), and career progression opportunities.
+          </p>
+          
+          {/* Career Cards */}
+          <div className="space-y-4">
+            {CAREER_PATHWAYS[department.code]?.careers.map((career, index) => (
+              <div
+                key={index}
+                className="bg-background rounded-lg p-6 hover:shadow-md transition-shadow border border-gray-100"
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                  <div className="mb-4 md:mb-0">
+                    <h3 className="text-lg font-bold mb-1">{career.title}</h3>
+                    <p className="text-sm text-text-secondary">{career.description}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center mr-3">
+                      <span className="text-2xl">🎓</span>
+                    </div>
+                    <div>
+                      <div className="text-xs text-text-secondary">Entry Level (0-2 years)</div>
+                      <div className="font-semibold text-green-600">ETB {career.entryLevel}/month</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center mr-3">
+                      <span className="text-2xl">👔</span>
+                    </div>
+                    <div>
+                      <div className="text-xs text-text-secondary">Senior Level (5+ years)</div>
+                      <div className="font-semibold text-purple-600">ETB {career.seniorLevel}/month</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Salary Growth Note */}
+          <div className="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+            <p className="text-sm text-yellow-800">
+              <strong>💡 Note:</strong> Salary ranges reflect current Ethiopian market rates (2026) and vary based on company size, 
+              location (Addis Ababa vs. regions), experience, and specific technical skills.
+            </p>
+          </div>
+        </div>
+
+        {/* Top Employers in Ethiopia */}
+        <div className="bg-surface rounded-xl p-8 mb-8">
+          <div className="flex items-center mb-6">
+            <span className="text-3xl mr-3">🏢</span>
+            <h2 className="text-2xl font-bold">Top Employers in Ethiopia</h2>
+          </div>
+          <p className="text-text-secondary mb-6">
+            Major organizations actively hiring {department.code} graduates
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {CAREER_PATHWAYS[department.code]?.employers.map((employer, index) => (
+              <div
+                key={index}
+                className="bg-background rounded-lg p-4 hover:shadow-md transition-shadow border border-gray-100 text-center"
+              >
+                <div className="text-4xl mb-2">{employer.logo}</div>
+                <h3 className="font-semibold mb-1">{employer.name}</h3>
+                <span className="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">
+                  {employer.type}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-sm text-blue-800">
+              <strong>🎯 Job Market Insight:</strong> The Ethiopian tech industry is rapidly growing, 
+              with increasing demand for skilled {department.code} professionals. International companies 
+              are also establishing presence in Ethiopia, creating new opportunities.
+            </p>
           </div>
         </div>
 
