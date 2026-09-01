@@ -131,13 +131,16 @@ const Hero = () => {
                   fontWeight: 800,
                   lineHeight: 1.1,
                   mb: 3,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
+                  color: 'text.primary',
+                  '& .gradient-text': {
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text'
+                  }
                 }}
               >
-                Find Your Perfect Department
+                Find Your <Box component="span" className="gradient-text">Perfect Department</Box>
               </Typography>
 
               <Typography 
