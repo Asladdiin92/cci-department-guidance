@@ -1,10 +1,53 @@
 /**
  * Request Validation Middleware
- * Validates request data using Joi schemas
+ * Validates request data using Joi schemas with XSS protection
  */
 
 const Joi = require('joi');
+const validator = require('validator');
+const xss = require('xss');
 const { AppError } = require('./errorHandler');
+
+/**
+ * Sanitize string input to prevent XSS attacks
+ */
+const sanitizeString = (str) => {
+  if (typeof str !== 'string') return str;
+  
+  // Remove any HTML tags and escape special characters
+  let sanitized = xss(str, {
+    whiteList: {}, // No HTML tags allowed
+    stripIgnoreTag: true,
+    stripIgnoreTagBody: ['script', 'style']
+  });
+  
+  // Trim whitespace
+  sanitized = validator.trim(sanitized);
+  
+  // Escape special characters
+  sanitized = validator.escape(sanitized);
+  
+  return sanitized;
+};
+
+/**
+ * Recursively sanitize object values
+ */
+const sanitizeObject = (obj) => {
+  if (typeof obj !== 'object' || obj === null) {
+    return typeof obj === 'string' ? sanitizeString(obj) : obj;
+  }
+  
+  if (Array.isArray(obj)) {
+    return obj.map(item => sanitizeObject(item));
+  }
+  
+  const sanitized = {};
+  for (const key in obj) {
+    sanitized[key] = sanitizeObject(obj[key]);
+  }
+  return sanitized;
+};
 
 /**
  * Validate request against Joi schema
@@ -32,8 +75,8 @@ const validate = (schema) => {
       }));
     }
 
-    // Replace req.body with validated and sanitized value
-    req.body = value;
+    // Sanitize validated data to prevent XSS
+    req.body = sanitizeObject(value);
     next();
   };
 };
@@ -44,8 +87,28 @@ const validate = (schema) => {
 const schemas = {
   // Assessment schemas
   startAssessment: Joi.object({
-    student_name: Joi.string().max(100).optional().allow('', null),
-    student_email: Joi.string().email().max(255).optional().allow('', null)
+    student_name: Joi.string()
+      .trim()
+      .min(2)
+      .max(100)
+      .pattern(/^[a-zA-Z\s\-'.]+$/)
+      .optional()
+      .allow('', null)
+      .messages({
+        'string.pattern.base': 'Student name must contain only letters, spaces, hyphens, apostrophes, and periods',
+        'string.min': 'Student name must be at least 2 characters',
+        'string.max': 'Student name must not exceed 100 characters'
+      }),
+    student_email: Joi.string()
+      .trim()
+      .email({ tlds: { allow: false } })
+      .max(255)
+      .optional()
+      .allow('', null)
+      .messages({
+        'string.email': 'Please provide a valid email address',
+        'string.max': 'Email must not exceed 255 characters'
+      })
   }),
 
   saveResponse: Joi.object({
@@ -61,21 +124,55 @@ const schemas = {
   submitFeedback: Joi.object({
     assessment_id: Joi.string().uuid().required(),
     rating: Joi.number().integer().min(1).max(5).required(),
-    comment: Joi.string().max(1000).optional().allow('', null),
+    comment: Joi.string()
+      .trim()
+      .max(1000)
+      .optional()
+      .allow('', null)
+      .messages({
+        'string.max': 'Comment must not exceed 1000 characters'
+      }),
     helpful: Joi.boolean().optional(),
     would_recommend: Joi.boolean().optional()
   }),
 
   // Admin schemas
   adminLogin: Joi.object({
-    username: Joi.string().alphanum().min(3).max(50).required(),
-    password: Joi.string().min(6).required()
+    username: Joi.string()
+      .trim()
+      .alphanum()
+      .min(3)
+      .max(50)
+      .required()
+      .messages({
+        'string.alphanum': 'Username must contain only alphanumeric characters',
+        'string.min': 'Username must be at least 3 characters',
+        'string.max': 'Username must not exceed 50 characters'
+      }),
+    password: Joi.string()
+      .min(6)
+      .required()
+      .messages({
+        'string.min': 'Password must be at least 6 characters'
+      })
   }),
 
   updateQuestion: Joi.object({
-    text: Joi.string().min(10).max(500).optional(),
-    category: Joi.string().valid('interests', 'skills', 'learning_style', 'career_goals', 'problem_solving').optional(),
-    difficulty: Joi.string().valid('EASY', 'MEDIUM', 'HARD').optional(),
+    text: Joi.string()
+      .trim()
+      .min(10)
+      .max(500)
+      .optional()
+      .messages({
+        'string.min': 'Question text must be at least 10 characters',
+        'string.max': 'Question text must not exceed 500 characters'
+      }),
+    category: Joi.string()
+      .valid('interests', 'skills', 'learning_style', 'career_goals', 'problem_solving')
+      .optional(),
+    difficulty: Joi.string()
+      .valid('EASY', 'MEDIUM', 'HARD')
+      .optional(),
     is_active: Joi.boolean().optional()
   })
 };
@@ -101,5 +198,7 @@ const validateUUID = (paramName = 'id') => {
 module.exports = {
   validate,
   schemas,
-  validateUUID
+  validateUUID,
+  sanitizeString,
+  sanitizeObject
 };
