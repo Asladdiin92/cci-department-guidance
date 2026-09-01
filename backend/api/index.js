@@ -94,54 +94,5 @@ app.use(notFound);
 // Global error handler
 app.use(errorHandler);
 
-// ================================================================
-// SERVER START
-// ================================================================
-
-const startServer = async () => {
-  try {
-    // Test database connection
-    console.log('🔍 Testing database connection...');
-    const dbConnected = await testConnection();
-    
-    if (!dbConnected) {
-      console.warn('⚠️  Server starting without database connection');
-    }
-    
-    // Start server
-    app.listen(PORT, () => {
-      console.log('');
-      console.log('='.repeat(50));
-      console.log('🚀 CCI Department Guidance System - Backend');
-      console.log('='.repeat(50));
-      console.log(`📍 Server: http://localhost:${PORT}`);
-      console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`💾 Database: ${dbConnected ? '✅ Connected' : '❌ Disconnected'}`);
-      console.log('='.repeat(50));
-      console.log('');
-    });
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
-  }
-};
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Promise Rejection:', err);
-  process.exit(1);
-});
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  process.exit(1);
-});
-
-// Start the server (only if not in serverless environment)
-if (process.env.VERCEL !== '1') {
-  startServer();
-}
-
-// Export for Vercel serverless
+// Export for Vercel serverless (no server startup needed)
 module.exports = app;
