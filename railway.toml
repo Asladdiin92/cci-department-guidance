@@ -5,3 +5,9 @@ builder = "NIXPACKS"
 startCommand = "npm start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
+
+[nixpacks]
+nixpkgsArchive = "55ad876d48ebc99e3a77bd47e58c9cb96c00c4be"
+
+[phases.setup]
+nixPkgs = ["nodejs_22"]
