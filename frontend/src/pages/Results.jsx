@@ -31,49 +31,49 @@ import {
 } from '@mui/icons-material';
 import { getAssessmentResults } from '../services/api';
 
-// Persona profiles based on top match
+// Persona profiles based on top match - Haramaya University themed
 const PERSONA_PROFILES = {
   CS: {
     title: 'The Computational Scientist',
     icon: '🧪',
     description: 'You thrive on theoretical challenges and love understanding how things work at a fundamental level.',
     traits: ['Analytical Thinker', 'Problem Solver', 'Research-Oriented', 'Mathematically Strong'],
-    color: '#4f46e5'
+    color: '#2e7d32' // Haramaya green
   },
   SWE: {
     title: 'The Software Architect',
     icon: '🏗️',
     description: 'You enjoy building robust systems and bringing ideas to life through code.',
     traits: ['Practical Builder', 'Team Player', 'Product-Focused', 'Quality-Driven'],
-    color: '#ea580c'
+    color: '#f57c00' // Haramaya gold
   },
   IT: {
     title: 'The Systems Engineer',
     icon: '⚙️',
     description: 'You excel at managing infrastructure and keeping systems running smoothly.',
     traits: ['Technical Expert', 'Problem Fixer', 'Infrastructure-Minded', 'Hands-On'],
-    color: '#0d9488'
+    color: '#1976d2' // Haramaya blue
   },
   IS: {
     title: 'The Enterprise Strategist',
     icon: '📊',
     description: 'You bridge the gap between business needs and technology solutions.',
     traits: ['Business-Savvy', 'Strategic Thinker', 'Process Optimizer', 'Communicator'],
-    color: '#db2777'
+    color: '#c62828' // Haramaya red
   },
   ISC: {
     title: 'The Information Curator',
     icon: '📚',
     description: 'You organize and structure information to make it accessible and useful.',
     traits: ['Detail-Oriented', 'User-Focused', 'Knowledge Manager', 'Systematic'],
-    color: '#7c3aed'
+    color: '#6a1b9a' // Purple
   },
   STAT: {
     title: 'The Data Scientist',
     icon: '📈',
     description: 'You find patterns in data and use statistics to drive insights.',
     traits: ['Analytical', 'Data-Driven', 'Research-Minded', 'Quantitative Thinker'],
-    color: '#eab308'
+    color: '#f57c00' // Haramaya gold
   }
 };
 
@@ -191,19 +191,50 @@ function Results() {
   const fitReasons = FIT_REASONS[topMatch?.department_code] || FIT_REASONS.CS;
 
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: { xs: 4, md: 8 } }}>
-      <Container maxWidth="lg">
-        {/* Hero Section */}
+    <Box sx={{ 
+      bgcolor: 'background.default', 
+      minHeight: '100vh', 
+      py: { xs: 4, md: 8 },
+      position: 'relative',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `radial-gradient(circle at 20% 30%, ${alpha('#2e7d32', 0.05)} 0%, transparent 50%), radial-gradient(circle at 80% 70%, ${alpha('#f57c00', 0.05)} 0%, transparent 50%)`,
+        pointerEvents: 'none'
+      }
+    }}>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+        {/* Hero Section - Glassmorphism */}
         <Paper
           elevation={0}
           sx={{
-            background: `linear-gradient(135deg, ${alpha(persona.color, 0.1)} 0%, ${alpha(theme.palette.secondary.main, 0.1)} 100%)`,
-            borderRadius: 3,
+            background: `linear-gradient(135deg, ${alpha(persona.color, 0.08)} 0%, ${alpha('#2e7d32', 0.06)} 100%)`,
+            backdropFilter: 'blur(20px)',
+            borderRadius: 4,
             p: { xs: 3, md: 6 },
             mb: 4,
             textAlign: 'center',
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            border: `1px solid ${alpha(persona.color, 0.1)}`,
+            boxShadow: `0 8px 32px ${alpha(persona.color, 0.15)}`,
+            '&::before': {
+              content: '"HU"',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              fontSize: { xs: '120px', md: '200px' },
+              fontWeight: 900,
+              color: alpha(persona.color, 0.03),
+              zIndex: 0,
+              userSelect: 'none',
+              pointerEvents: 'none'
+            }
           }}
         >
           <Box sx={{ position: 'relative', zIndex: 1 }}>
@@ -211,14 +242,23 @@ function Results() {
               icon={<CheckCircle />}
               label="Assessment Complete"
               color="success"
-              sx={{ mb: 2, fontWeight: 600 }}
+              sx={{ 
+                mb: 2, 
+                fontWeight: 700,
+                bgcolor: alpha('#2e7d32', 0.9),
+                color: 'white',
+                boxShadow: `0 4px 12px ${alpha('#2e7d32', 0.3)}`
+              }}
             />
             <Typography
               variant="h2"
               sx={{
                 fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
                 fontWeight: 800,
-                mb: 2
+                mb: 2,
+                background: `linear-gradient(135deg, ${persona.color} 0%, #2e7d32 100%)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
               }}
             >
               Your Match Results
@@ -229,13 +269,21 @@ function Results() {
           </Box>
         </Paper>
 
-        {/* Persona Profile Badge */}
+        {/* Persona Profile Badge - Glassmorphism */}
         <Card
           sx={{
             mb: 4,
-            borderRadius: 3,
-            border: `2px solid ${alpha(persona.color, 0.3)}`,
-            background: `linear-gradient(135deg, ${alpha(persona.color, 0.05)} 0%, transparent 100%)`
+            borderRadius: 4,
+            border: `2px solid ${alpha(persona.color, 0.2)}`,
+            background: `linear-gradient(135deg, ${alpha(persona.color, 0.05)} 0%, ${alpha('#2e7d32', 0.03)} 100%)`,
+            backdropFilter: 'blur(10px)',
+            boxShadow: `0 8px 32px ${alpha(persona.color, 0.12)}`,
+            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: `0 12px 48px ${alpha(persona.color, 0.2)}`,
+              border: `2px solid ${alpha(persona.color, 0.4)}`
+            }
           }}
         >
           <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -292,17 +340,24 @@ function Results() {
           {recommendations.slice(0, 3).map((rec, index) => (
             <Grid item xs={12} key={rec.department_code}>
               <Card
-                elevation={index === 0 ? 8 : 2}
+                elevation={0}
                 sx={{
-                  borderRadius: 3,
-                  border: index === 0 ? `2px solid ${persona.color}` : '1px solid',
-                  borderColor: index === 0 ? persona.color : 'divider',
+                  borderRadius: 4,
+                  border: index === 0 ? `2px solid ${persona.color}` : `1px solid ${alpha('#2e7d32', 0.15)}`,
                   position: 'relative',
                   overflow: 'visible',
-                  transition: 'all 0.3s ease',
+                  background: index === 0 
+                    ? `linear-gradient(135deg, ${alpha(persona.color, 0.05)} 0%, ${alpha('#2e7d32', 0.03)} 100%)`
+                    : 'background.paper',
+                  backdropFilter: 'blur(10px)',
+                  boxShadow: index === 0 
+                    ? `0 8px 32px ${alpha(persona.color, 0.15)}`
+                    : `0 4px 16px ${alpha('#000', 0.05)}`,
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: theme.shadows[12]
+                    transform: 'translateY(-8px) scale(1.01)',
+                    boxShadow: `0 20px 60px ${alpha(persona.color, index === 0 ? 0.25 : 0.15)}`,
+                    border: `2px solid ${persona.color}`
                   }
                 }}
               >
@@ -310,14 +365,15 @@ function Results() {
                   <Chip
                     icon={<EmojiEvents />}
                     label="Best Match"
-                    color="primary"
                     sx={{
                       position: 'absolute',
                       top: -12,
                       right: 20,
                       fontWeight: 700,
-                      bgcolor: persona.color,
-                      zIndex: 1
+                      bgcolor: '#2e7d32',
+                      color: 'white',
+                      zIndex: 1,
+                      boxShadow: `0 4px 16px ${alpha('#2e7d32', 0.4)}`
                     }}
                   />
                 )}
@@ -420,8 +476,15 @@ function Results() {
           ))}
         </Grid>
 
-        {/* Why This Fits You Section */}
-        <Card sx={{ mb: 4, borderRadius: 3, bgcolor: alpha(persona.color, 0.03) }}>
+        {/* Why This Fits You Section - Glassmorphism */}
+        <Card sx={{ 
+          mb: 4, 
+          borderRadius: 4, 
+          background: `linear-gradient(135deg, ${alpha(persona.color, 0.04)} 0%, ${alpha('#2e7d32', 0.02)} 100%)`,
+          backdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha(persona.color, 0.15)}`,
+          boxShadow: `0 8px 32px ${alpha(persona.color, 0.1)}`
+        }}>
           <CardContent sx={{ p: { xs: 3, md: 4 } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
               <Lightbulb sx={{ fontSize: 40, mr: 2, color: persona.color }} />
@@ -452,8 +515,14 @@ function Results() {
           </CardContent>
         </Card>
 
-        {/* All Departments Overview */}
-        <Card sx={{ mb: 4, borderRadius: 3 }}>
+        {/* All Departments Overview - Glassmorphism */}
+        <Card sx={{ 
+          mb: 4, 
+          borderRadius: 4,
+          backdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+          boxShadow: `0 8px 32px ${alpha('#000', 0.08)}`
+        }}>
           <CardContent sx={{ p: { xs: 3, md: 4 } }}>
             <Typography variant="h5" fontWeight={700} gutterBottom sx={{ mb: 3 }}>
               <TrendingUp sx={{ mr: 1, verticalAlign: 'middle' }} />
@@ -490,8 +559,16 @@ function Results() {
           </CardContent>
         </Card>
 
-        {/* Action Buttons */}
-        <Paper elevation={0} sx={{ p: 4, borderRadius: 3, textAlign: 'center', bgcolor: alpha(persona.color, 0.05) }}>
+        {/* Action Buttons - Glassmorphism */}
+        <Paper elevation={0} sx={{ 
+          p: 4, 
+          borderRadius: 4, 
+          textAlign: 'center', 
+          background: `linear-gradient(135deg, ${alpha('#2e7d32', 0.05)} 0%, ${alpha('#f57c00', 0.05)} 100%)`,
+          backdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+          boxShadow: `0 8px 32px ${alpha('#2e7d32', 0.12)}`
+        }}>
           <Typography variant="h5" fontWeight={700} gutterBottom>
             Ready for the Next Step?
           </Typography>
@@ -508,8 +585,18 @@ function Results() {
                 navigate(`/compare?departments=${topThree.join(',')}`);
               }}
               sx={{
-                bgcolor: persona.color,
-                '&:hover': { bgcolor: alpha(persona.color, 0.8) }
+                bgcolor: '#2e7d32',
+                color: 'white',
+                fontWeight: 700,
+                px: 4,
+                py: 1.5,
+                boxShadow: `0 4px 16px ${alpha('#2e7d32', 0.3)}`,
+                '&:hover': { 
+                  bgcolor: '#1b5e20',
+                  boxShadow: `0 6px 24px ${alpha('#2e7d32', 0.4)}`,
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease'
               }}
             >
               Compare Top 3
@@ -520,7 +607,21 @@ function Results() {
               variant="outlined"
               size="large"
               startIcon={<School />}
-              sx={{ borderColor: persona.color, color: persona.color }}
+              sx={{ 
+                borderColor: '#2e7d32', 
+                color: '#2e7d32',
+                fontWeight: 700,
+                px: 4,
+                py: 1.5,
+                borderWidth: 2,
+                '&:hover': {
+                  borderColor: '#1b5e20',
+                  bgcolor: alpha('#2e7d32', 0.08),
+                  borderWidth: 2,
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease'
+              }}
             >
               Explore All Departments
             </Button>

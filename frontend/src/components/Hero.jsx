@@ -113,13 +113,15 @@ const Hero = () => {
             <Grid item xs={12} md={6}>
               <Box sx={{ mb: 3 }}>
                 <Chip 
-                  icon={<EmojiObjects />}
-                  label="Smart Career Guidance System"
+                  icon={<School />}
+                  label="Haramaya University - College of Computing & Informatics"
                   sx={{ 
-                    bgcolor: alpha(theme.palette.primary.main, 0.1),
-                    color: 'primary.main',
+                    bgcolor: alpha('#2e7d32', 0.1),
+                    color: '#2e7d32',
                     fontWeight: 600,
-                    px: 1
+                    px: 1,
+                    border: '1px solid',
+                    borderColor: alpha('#2e7d32', 0.3)
                   }}
                 />
               </Box>
@@ -133,7 +135,7 @@ const Hero = () => {
                   mb: 3,
                   color: 'text.primary',
                   '& .gradient-text': {
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text'
@@ -169,11 +171,12 @@ const Hero = () => {
                     fontWeight: 600,
                     borderRadius: 2,
                     textTransform: 'none',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+                    boxShadow: '0 4px 14px rgba(46, 125, 50, 0.4)',
                     '&:hover': {
-                      background: 'linear-gradient(135deg, #5568d3 0%, #63408a 100%)',
+                      background: 'linear-gradient(135deg, #1b5e20 0%, #0d4717 100%)',
                       transform: 'translateY(-2px)',
-                      boxShadow: theme.shadows[8]
+                      boxShadow: '0 6px 20px rgba(46, 125, 50, 0.5)'
                     },
                     transition: 'all 0.3s ease'
                   }}
@@ -314,8 +317,8 @@ const Hero = () => {
         </Container>
       </Box>
 
-      {/* Animated Stats Section */}
-      <Box sx={{ py: 6, bgcolor: 'background.paper' }}>
+      {/* Animated Stats Section - Haramaya University Branded */}
+      <Box sx={{ py: 6, bgcolor: alpha('#f5f5f5', 0.5) }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {stats.map((stat, idx) => (
@@ -325,21 +328,51 @@ const Hero = () => {
                   sx={{
                     textAlign: 'center',
                     p: 3,
-                    bgcolor: alpha(stat.color, 0.05),
-                    border: `2px solid ${alpha(stat.color, 0.1)}`,
-                    borderRadius: 3,
-                    transition: 'all 0.3s ease',
+                    bgcolor: 'white',
+                    border: `3px solid transparent`,
+                    borderRadius: 4,
+                    background: `linear-gradient(white, white) padding-box,
+                                linear-gradient(135deg, ${stat.color} 0%, ${alpha(stat.color, 0.6)} 100%) border-box`,
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '4px',
+                      background: `linear-gradient(90deg, ${stat.color}, ${alpha(stat.color, 0.5)})`,
+                    },
                     '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.shadows[8],
-                      borderColor: stat.color
+                      transform: 'translateY(-12px) scale(1.02)',
+                      boxShadow: `0 20px 40px ${alpha(stat.color, 0.2)}`,
+                      '& .stat-icon': {
+                        transform: 'scale(1.2) rotate(10deg)',
+                      }
                     }
                   }}
                 >
-                  <Box sx={{ color: stat.color, mb: 1 }}>
+                  <Box 
+                    className="stat-icon"
+                    sx={{ 
+                      color: stat.color, 
+                      mb: 2,
+                      transition: 'transform 0.4s ease',
+                      display: 'inline-flex',
+                      padding: 2,
+                      borderRadius: '50%',
+                      bgcolor: alpha(stat.color, 0.1)
+                    }}
+                  >
                     {stat.icon}
                   </Box>
-                  <Typography variant="h3" fontWeight={800} sx={{ color: stat.color, mb: 1 }}>
+                  <Typography variant="h3" fontWeight={900} sx={{ 
+                    color: stat.color, 
+                    mb: 1,
+                    textShadow: `0 2px 10px ${alpha(stat.color, 0.2)}`
+                  }}>
                     {stat.value}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" fontWeight={600}>
@@ -352,23 +385,45 @@ const Hero = () => {
         </Container>
       </Box>
 
-      {/* Features Section */}
-      <Box sx={{ py: 10 }}>
-        <Container maxWidth="lg">
+      {/* Features Section - Modern Glassmorphism Style */}
+      <Box sx={{ py: 10, position: 'relative', overflow: 'hidden' }}>
+        {/* Haramaya University Watermark Background */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontSize: '15rem',
+            fontWeight: 900,
+            color: alpha('#2e7d32', 0.02),
+            pointerEvents: 'none',
+            userSelect: 'none',
+            zIndex: 0
+          }}
+        >
+          HU
+        </Box>
+        
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center', mb: 8 }}>
             <Chip 
-              label="Why Choose Us"
+              label="🎓 Why Choose Haramaya CCI"
               sx={{ 
                 mb: 2,
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
-                color: 'primary.main',
-                fontWeight: 600
+                bgcolor: alpha('#2e7d32', 0.1),
+                color: '#2e7d32',
+                fontWeight: 700,
+                px: 2,
+                py: 2.5,
+                fontSize: '0.95rem',
+                border: `2px solid ${alpha('#2e7d32', 0.2)}`
               }}
             />
-            <Typography variant="h2" fontWeight={800} gutterBottom>
+            <Typography variant="h2" fontWeight={900} gutterBottom>
               Smart Features for{' '}
               <Box component="span" sx={{ 
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
@@ -388,35 +443,57 @@ const Hero = () => {
                   elevation={0}
                   sx={{
                     height: '100%',
-                    p: 3,
-                    borderRadius: 3,
-                    border: `2px solid ${alpha(feature.color, 0.1)}`,
-                    transition: 'all 0.3s ease',
+                    p: 4,
+                    borderRadius: 4,
+                    bgcolor: alpha('#ffffff', 0.8),
+                    backdropFilter: 'blur(10px)',
+                    border: `3px solid ${alpha(feature.color, 0.15)}`,
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '6px',
+                      background: `linear-gradient(90deg, ${feature.color}, ${alpha(feature.color, 0.5)})`,
+                    },
                     '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.shadows[12],
+                      transform: 'translateY(-12px) scale(1.03)',
+                      boxShadow: `0 25px 50px ${alpha(feature.color, 0.25)}`,
                       borderColor: feature.color,
-                      '& .feature-icon': {
-                        transform: 'scale(1.1) rotate(5deg)',
-                        color: feature.color
+                      bgcolor: 'white',
+                      '& .feature-icon-box': {
+                        transform: 'scale(1.15) rotate(-5deg)',
+                        bgcolor: feature.color,
+                        color: 'white',
                       }
                     }
                   }}
                 >
                   <Box
-                    className="feature-icon"
+                    className="feature-icon-box"
                     sx={{
+                      width: 70,
+                      height: 70,
+                      borderRadius: 3,
+                      bgcolor: alpha(feature.color, 0.1),
                       color: feature.color,
-                      mb: 2,
-                      transition: 'all 0.3s ease'
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mb: 3,
+                      transition: 'all 0.4s ease',
                     }}
                   >
                     {feature.icon}
                   </Box>
-                  <Typography variant="h6" fontWeight={700} gutterBottom>
+                  <Typography variant="h6" fontWeight={800} gutterBottom sx={{ color: 'text.primary' }}>
                     {feature.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.8 }}>
                     {feature.description}
                   </Typography>
                 </Card>
@@ -426,23 +503,32 @@ const Hero = () => {
         </Container>
       </Box>
 
-      {/* Departments Grid */}
-      <Box sx={{ py: 10, bgcolor: 'background.paper' }}>
+      {/* Departments Grid - Haramaya Branded */}
+      <Box sx={{ 
+        py: 10, 
+        background: `linear-gradient(180deg, 
+          ${alpha('#f5f5f5', 0.3)} 0%, 
+          ${alpha('#e8f5e9', 0.3)} 100%)`
+      }}>
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center', mb: 8 }}>
             <Chip 
-              label="Explore Your Options"
+              label="🎯 Explore Your Future"
               sx={{ 
                 mb: 2,
-                bgcolor: alpha(theme.palette.secondary.main, 0.1),
-                color: 'secondary.main',
-                fontWeight: 600
+                bgcolor: alpha('#f57c00', 0.15),
+                color: '#f57c00',
+                fontWeight: 700,
+                px: 2,
+                py: 2.5,
+                fontSize: '0.95rem',
+                border: `2px solid ${alpha('#f57c00', 0.3)}`
               }}
             />
-            <Typography variant="h2" fontWeight={800} gutterBottom>
+            <Typography variant="h2" fontWeight={900} gutterBottom>
               Six Computing{' '}
               <Box component="span" sx={{ 
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
@@ -461,70 +547,187 @@ const Hero = () => {
                 <Card
                   component={Link}
                   to={`/departments/${dept.code}`}
-                  elevation={2}
+                  elevation={0}
                   sx={{
-                    p: 3,
-                    borderRadius: 3,
+                    p: 4,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRadius: 4,
                     textDecoration: 'none',
-                    border: `2px solid ${alpha(dept.color, 0.2)}`,
-                    transition: 'all 0.3s ease',
+                    bgcolor: 'white',
+                    border: `3px solid ${alpha(dept.color, 0.15)}`,
+                    transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                     position: 'relative',
                     overflow: 'hidden',
+                    boxShadow: `0 4px 20px ${alpha(dept.color, 0.08)}`,
                     '&::before': {
                       content: '""',
                       position: 'absolute',
                       top: 0,
                       left: 0,
                       width: '100%',
-                      height: '4px',
+                      height: '5px',
                       bgcolor: dept.color,
                       transform: 'scaleX(0)',
                       transformOrigin: 'left',
-                      transition: 'transform 0.3s ease'
+                      transition: 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+                    },
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      inset: 0,
+                      background: `radial-gradient(circle at top right, ${alpha(dept.color, 0.03)}, transparent 70%)`,
+                      opacity: 0,
+                      transition: 'opacity 0.5s ease'
                     },
                     '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.shadows[12],
+                      transform: 'translateY(-16px) scale(1.02)',
+                      boxShadow: `0 32px 64px ${alpha(dept.color, 0.25)}`,
                       borderColor: dept.color,
                       '&::before': {
                         transform: 'scaleX(1)'
+                      },
+                      '&::after': {
+                        opacity: 1
+                      },
+                      '& .dept-icon-container .MuiBox-root:first-of-type': {
+                        transform: 'scale(1.2)',
+                        bgcolor: alpha(dept.color, 0.2)
+                      },
+                      '& .dept-icon-container .MuiBox-root:last-of-type': {
+                        transform: 'scale(1.1) rotate(10deg)',
+                        borderColor: dept.color,
+                        bgcolor: alpha(dept.color, 0.05),
+                        boxShadow: `0 12px 32px ${alpha(dept.color, 0.3)}`
+                      },
+                      '& .MuiChip-root': {
+                        bgcolor: dept.color,
+                        color: 'white',
+                        transform: 'scale(1.05)'
+                      },
+                      '& .MuiTypography-h5': {
+                        color: dept.color
+                      },
+                      '& .MuiBox-root:last-child': {
+                        borderColor: dept.color,
+                        '& .MuiSvgIcon-root': {
+                          transform: 'translateX(8px)'
+                        }
                       }
                     }
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                  {/* Icon and Badge Section */}
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'flex-start', 
+                    justifyContent: 'space-between',
+                    mb: 3 
+                  }}>
                     <Box
+                      className="dept-icon-container"
                       sx={{
-                        bgcolor: alpha(dept.color, 0.1),
-                        color: dept.color,
-                        p: 1.5,
-                        borderRadius: 2,
-                        display: 'flex'
+                        position: 'relative',
+                        width: 80,
+                        height: 80
                       }}
                     >
-                      {dept.icon}
+                      {/* Animated Background Circle */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          inset: 0,
+                          borderRadius: '50%',
+                          bgcolor: alpha(dept.color, 0.1),
+                          transition: 'all 0.4s ease'
+                        }}
+                      />
+                      {/* Icon */}
+                      <Box
+                        sx={{
+                          position: 'relative',
+                          width: '100%',
+                          height: '100%',
+                          bgcolor: 'white',
+                          borderRadius: '50%',
+                          border: `4px solid ${alpha(dept.color, 0.2)}`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: dept.color,
+                          fontSize: '2.5rem',
+                          transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                          boxShadow: `0 8px 24px ${alpha(dept.color, 0.2)}`
+                        }}
+                      >
+                        {dept.icon}
+                      </Box>
                     </Box>
+                    
                     <Chip 
                       label={dept.code}
-                      size="small"
                       sx={{ 
-                        bgcolor: dept.color,
-                        color: 'white',
-                        fontWeight: 700
+                        bgcolor: alpha(dept.color, 0.15),
+                        color: dept.color,
+                        fontWeight: 900,
+                        fontSize: '0.85rem',
+                        px: 1.5,
+                        border: `2px solid ${alpha(dept.color, 0.3)}`,
+                        transition: 'all 0.3s ease'
                       }}
                     />
                   </Box>
-                  <Typography variant="h6" fontWeight={700} gutterBottom color="text.primary">
+                  
+                  {/* Text Content */}
+                  <Typography 
+                    variant="h5" 
+                    fontWeight={900} 
+                    gutterBottom 
+                    color="text.primary"
+                    sx={{
+                      mb: 1.5,
+                      lineHeight: 1.3,
+                      transition: 'color 0.3s ease'
+                    }}
+                  >
                     {dept.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                  
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary" 
+                    sx={{ 
+                      mb: 3,
+                      lineHeight: 1.7,
+                      fontWeight: 500
+                    }}
+                  >
                     {dept.desc}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2, color: dept.color }}>
-                    <Typography variant="body2" fontWeight={600}>
-                      Learn More
-                    </Typography>
-                    <ArrowForward fontSize="small" />
+                  
+                  {/* Action Footer */}
+                  <Box 
+                    sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 1.5,
+                      pt: 2,
+                      mt: 'auto',
+                      borderTop: `2px solid ${alpha(dept.color, 0.1)}`,
+                      color: dept.color,
+                      fontWeight: 700,
+                      fontSize: '0.95rem',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    <span>Explore Program</span>
+                    <ArrowForward 
+                      fontSize="small" 
+                      sx={{ 
+                        transition: 'transform 0.3s ease'
+                      }} 
+                    />
                   </Box>
                 </Card>
               </Grid>

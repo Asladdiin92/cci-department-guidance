@@ -27,6 +27,15 @@ const errorHandler = (err, req, res, next) => {
     stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 
+  // JSON Parsing errors from express.json()
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid JSON payload',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  }
+
   // Supabase errors
   if (err.code === 'PGRST') {
     error.message = 'Database query error';

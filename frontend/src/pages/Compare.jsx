@@ -1,16 +1,64 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { getDepartment } from '../services/api';
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  Chip,
+  LinearProgress,
+  Paper,
+  Alert,
+  Checkbox,
+  FormControlLabel,
+  alpha,
+  useTheme,
+  CircularProgress
+} from '@mui/material';
+import {
+  CompareArrows,
+  CheckCircle,
+  ArrowForward,
+  Science,
+  Code,
+  Laptop,
+  Work,
+  School,
+  TrendingUp,
+  EmojiObjects,
+  Psychology
+} from '@mui/icons-material';
 import { 
   INTENSITY_METRICS, 
   KEY_DIFFERENTIATORS, 
-  COMPARISON_CATEGORIES,
-  QUICK_COMPARISONS,
   DEPARTMENT_OPTIONS 
 } from '../data/comparisonData';
 import { CAREER_PATHWAYS } from '../data/careerData';
 
+const departmentIcons = {
+  CS: <Science />,
+  SWE: <Code />,
+  IT: <Laptop />,
+  IS: <Work />,
+  ISC: <School />,
+  STAT: <TrendingUp />
+};
+
+const departmentColors = {
+  CS: '#4f46e5',
+  SWE: '#ea580c',
+  IT: '#0d9488',
+  IS: '#db2777',
+  ISC: '#7c3aed',
+  STAT: '#eab308'
+};
+
 function Compare() {
+  const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -91,391 +139,453 @@ function Compare() {
   // Department Selector View
   if (showSelector || departments.length === 0) {
     return (
-      <div className="min-h-screen py-20 bg-gradient-to-br from-blue-50 to-purple-50">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-center mb-8">
-            <div className="text-6xl mb-4">⚖️</div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Compare <span className="text-gradient">Departments</span>
-            </h1>
-            <p className="text-text-secondary text-lg">
+      <Box sx={{ 
+        minHeight: '100vh', 
+        py: 12,
+        background: `linear-gradient(180deg, ${alpha('#e8f5e9', 0.3)} 0%, ${alpha('#f5f5f5', 0.3)} 100%)`
+      }}>
+        <Container maxWidth="lg">
+          {/* Header */}
+          <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Box sx={{ 
+              width: 100, 
+              height: 100, 
+              borderRadius: '50%',
+              bgcolor: alpha('#2e7d32', 0.1),
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mx: 'auto',
+              mb: 3,
+              border: `4px solid ${alpha('#2e7d32', 0.2)}`
+            }}>
+              <CompareArrows sx={{ fontSize: 50, color: '#2e7d32' }} />
+            </Box>
+            
+            <Typography variant="h2" fontWeight={900} gutterBottom>
+              Compare <Box component="span" sx={{ 
+                background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>Departments</Box>
+            </Typography>
+            <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
               Select 2 or 3 departments to see side-by-side comparison
-            </p>
-          </div>
+            </Typography>
+            <Chip 
+              label="🎓 Haramaya University - CCI"
+              sx={{ 
+                bgcolor: alpha('#2e7d32', 0.1),
+                color: '#2e7d32',
+                fontWeight: 700,
+                px: 2
+              }}
+            />
+          </Box>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-red-800">
-              ⚠️ {error}
-            </div>
+            <Alert severity="error" sx={{ mb: 4, borderRadius: 3 }}>
+              {error}
+            </Alert>
           )}
 
           {/* Selection Progress */}
-          <div className="bg-white rounded-xl p-6 mb-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-text-secondary">Selected Departments</span>
-              <span className="text-2xl font-bold text-primary">{selectedDepts.length}/3</span>
-            </div>
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
-                style={{ width: `${(selectedDepts.length / 3) * 100}%` }}
-              ></div>
-            </div>
-          </div>
+          <Card sx={{ mb: 6, borderRadius: 4, border: `3px solid ${alpha('#2e7d32', 0.2)}` }}>
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                <Typography variant="h6" fontWeight={700}>
+                  Selected Departments
+                </Typography>
+                <Chip
+                  label={`${selectedDepts.length}/3`}
+                  sx={{ 
+                    bgcolor: alpha('#2e7d32', 0.15),
+                    color: '#2e7d32',
+                    fontWeight: 900,
+                    fontSize: '1.2rem',
+                    height: 40,
+                    px: 2
+                  }}
+                />
+              </Box>
+              <LinearProgress 
+                variant="determinate" 
+                value={(selectedDepts.length / 3) * 100}
+                sx={{
+                  height: 12,
+                  borderRadius: 2,
+                  bgcolor: alpha('#2e7d32', 0.1),
+                  '& .MuiLinearProgress-bar': {
+                    bgcolor: '#2e7d32',
+                    borderRadius: 2
+                  }
+                }}
+              />
+            </CardContent>
+          </Card>
 
           {/* Department Selection Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <Grid container spacing={3} sx={{ mb: 6 }}>
             {DEPARTMENT_OPTIONS.map((dept) => {
               const isSelected = selectedDepts.includes(dept.code);
               const isDisabled = !isSelected && selectedDepts.length >= 3;
+              const color = departmentColors[dept.code];
               
               return (
-                <button
-                  key={dept.code}
-                  onClick={() => !isDisabled && handleDepartmentToggle(dept.code)}
-                  disabled={isDisabled}
-                  className={`p-6 rounded-xl border-2 transition-all text-left ${
-                    isSelected
-                      ? 'border-primary bg-primary text-white shadow-lg scale-105'
-                      : isDisabled
-                      ? 'border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed'
-                      : 'border-gray-200 bg-white hover:border-primary hover:shadow-md'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-2xl font-bold">{dept.code}</span>
-                    {isSelected && <span className="text-2xl">✓</span>}
-                  </div>
-                  <div className={`text-sm ${isSelected ? 'text-white' : 'text-text-secondary'}`}>
-                    {dept.name}
-                  </div>
-                </button>
+                <Grid item xs={12} sm={6} md={4} key={dept.code}>
+                  <Card
+                    onClick={() => !isDisabled && handleDepartmentToggle(dept.code)}
+                    sx={{
+                      height: '100%',
+                      p: 3,
+                      borderRadius: 4,
+                      cursor: isDisabled ? 'not-allowed' : 'pointer',
+                      border: `3px solid ${isSelected ? color : alpha(color, 0.2)}`,
+                      bgcolor: isSelected ? alpha(color, 0.05) : 'white',
+                      opacity: isDisabled ? 0.5 : 1,
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '6px',
+                        bgcolor: color,
+                        transform: isSelected ? 'scaleX(1)' : 'scaleX(0)',
+                        transformOrigin: 'left',
+                        transition: 'transform 0.3s ease'
+                      },
+                      '&:hover': !isDisabled ? {
+                        transform: 'translateY(-8px)',
+                        boxShadow: `0 20px 40px ${alpha(color, 0.3)}`,
+                        borderColor: color
+                      } : {}
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                      <Box
+                        sx={{
+                          width: 60,
+                          height: 60,
+                          borderRadius: '50%',
+                          bgcolor: alpha(color, 0.1),
+                          color: color,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.8rem',
+                          border: `3px solid ${alpha(color, 0.2)}`
+                        }}
+                      >
+                        {departmentIcons[dept.code]}
+                      </Box>
+                      {isSelected && (
+                        <CheckCircle sx={{ fontSize: 32, color: color }} />
+                      )}
+                    </Box>
+                    
+                    <Chip
+                      label={dept.code}
+                      size="small"
+                      sx={{
+                        bgcolor: isSelected ? color : alpha(color, 0.1),
+                        color: isSelected ? 'white' : color,
+                        fontWeight: 900,
+                        mb: 2
+                      }}
+                    />
+                    
+                    <Typography variant="h6" fontWeight={800} sx={{ color: isSelected ? color : 'text.primary' }}>
+                      {dept.name}
+                    </Typography>
+                  </Card>
+                </Grid>
               );
             })}
-          </div>
-
-          {/* Quick Comparison Hints */}
-          {selectedDepts.length === 2 && (
-            <div className="bg-blue-50 rounded-xl p-4 mb-6 border border-blue-200">
-              <p className="text-sm text-blue-800">
-                <strong>💡 Quick comparison:</strong>{' '}
-                {QUICK_COMPARISONS[selectedDepts.sort().join('-')] || 'Compare these two departments'}
-              </p>
-            </div>
-          )}
+          </Grid>
 
           {/* Compare Button */}
-          <div className="text-center">
-            <button
+          <Box sx={{ textAlign: 'center' }}>
+            <Button
               onClick={handleCompare}
               disabled={selectedDepts.length < 2}
-              className={`px-8 py-4 rounded-lg font-bold text-lg transition-all ${
-                selectedDepts.length >= 2
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:shadow-xl hover:scale-105'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
+              size="large"
+              endIcon={<ArrowForward />}
+              sx={{
+                py: 2,
+                px: 6,
+                fontSize: '1.2rem',
+                fontWeight: 700,
+                borderRadius: 3,
+                textTransform: 'none',
+                background: selectedDepts.length >= 2
+                  ? 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)'
+                  : alpha('#gray', 0.3),
+                color: 'white',
+                boxShadow: selectedDepts.length >= 2 ? `0 8px 24px ${alpha('#2e7d32', 0.4)}` : 'none',
+                '&:hover': selectedDepts.length >= 2 ? {
+                  background: 'linear-gradient(135deg, #1b5e20 0%, #0d4717 100%)',
+                  transform: 'translateY(-4px)',
+                  boxShadow: `0 12px 32px ${alpha('#2e7d32', 0.5)}`
+                } : {},
+                '&:disabled': {
+                  bgcolor: alpha('#000', 0.12),
+                  color: alpha('#000', 0.26)
+                },
+                transition: 'all 0.3s ease'
+              }}
             >
               {selectedDepts.length < 2
                 ? `Select ${2 - selectedDepts.length} more department${2 - selectedDepts.length > 1 ? 's' : ''}`
-                : `Compare ${selectedDepts.length} Departments →`
+                : `Compare ${selectedDepts.length} Departments`
               }
-            </button>
-          </div>
-        </div>
-      </div>
+            </Button>
+          </Box>
+        </Container>
+      </Box>
     );
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-text-secondary">Loading comparison...</p>
-        </div>
-      </div>
+      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <CircularProgress size={60} sx={{ color: '#2e7d32', mb: 2 }} />
+          <Typography variant="h6" color="text.secondary">Loading comparison...</Typography>
+        </Box>
+      </Box>
     );
   }
 
-  // Get key differentiator if comparing 2 specific departments
-  const comparisonKey = departments.length === 2 
-    ? `${departments[0].code}_vs_${departments[1].code}`
-    : null;
-  const differentiator = comparisonKey ? KEY_DIFFERENTIATORS[comparisonKey] : null;
-
   return (
-    <div className="min-h-screen py-20">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <Box sx={{ minHeight: '100vh', py: 12, bgcolor: alpha('#f5f5f5', 0.3) }}>
+      <Container maxWidth="xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Side-by-Side <span className="text-gradient">Comparison</span>
-          </h1>
-          <p className="text-text-secondary text-lg mb-4">
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
+          <Typography variant="h2" fontWeight={900} gutterBottom>
+            Side-by-Side <Box component="span" sx={{ 
+              background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>Comparison</Box>
+          </Typography>
+          <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
             {departments.map(d => d.name).join(' vs. ')}
-          </p>
-          <button
+          </Typography>
+          <Button
             onClick={handleChangeSelection}
-            className="text-primary hover:text-primary-dark font-medium"
+            startIcon={<CompareArrows />}
+            sx={{
+              color: '#2e7d32',
+              fontWeight: 600,
+              '&:hover': {
+                bgcolor: alpha('#2e7d32', 0.1)
+              }
+            }}
           >
-            ← Change Selection
-          </button>
-        </div>
+            Change Selection
+          </Button>
+        </Box>
 
-        {/* Key Differentiator Card (for 2-dept comparisons) */}
-        {differentiator && (
-          <KeyDifferentiatorCard differentiator={differentiator} departments={departments} />
-        )}
+        {/* Intensity Comparison */}
+        <Card sx={{ mb: 6, borderRadius: 4, overflow: 'hidden' }}>
+          <Box sx={{ 
+            bgcolor: alpha('#2e7d32', 0.05),
+            p: 4,
+            borderBottom: `3px solid ${alpha('#2e7d32', 0.2)}`
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Psychology sx={{ fontSize: 40, color: '#2e7d32', mr: 2 }} />
+              <Box>
+                <Typography variant="h4" fontWeight={900}>
+                  Intensity Comparison
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Visual comparison of key program characteristics (0-100 scale)
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          
+          <CardContent sx={{ p: 4 }}>
+            <Grid container spacing={4}>
+              {['math', 'coding', 'business', 'hardware'].map(metric => {
+                const labels = {
+                  math: { label: 'Math Intensity', icon: '📐' },
+                  coding: { label: 'Coding Level', icon: '💻' },
+                  business: { label: 'Business Focus', icon: '📊' },
+                  hardware: { label: 'Hardware/Infrastructure', icon: '🖥️' }
+                };
+                
+                return (
+                  <Grid item xs={12} key={metric}>
+                    <Paper elevation={0} sx={{ p: 3, bgcolor: alpha('#f5f5f5', 0.5), borderRadius: 3 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                        <Typography sx={{ fontSize: '2rem', mr: 2 }}>{labels[metric].icon}</Typography>
+                        <Typography variant="h6" fontWeight={700}>{labels[metric].label}</Typography>
+                      </Box>
+                      
+                      {departments.map((dept, idx) => {
+                        const value = INTENSITY_METRICS[dept.code]?.[metric] || 0;
+                        const color = departmentColors[dept.code];
+                        
+                        return (
+                          <Box key={dept.code} sx={{ mb: 2 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Chip
+                                  label={dept.code}
+                                  size="small"
+                                  sx={{ 
+                                    bgcolor: color,
+                                    color: 'white',
+                                    fontWeight: 900,
+                                    minWidth: 60
+                                  }}
+                                />
+                                <Typography variant="body2" fontWeight={600}>
+                                  {dept.name}
+                                </Typography>
+                              </Box>
+                              <Typography variant="h6" fontWeight={900} sx={{ color }}>
+                                {value}%
+                              </Typography>
+                            </Box>
+                            <LinearProgress
+                              variant="determinate"
+                              value={value}
+                              sx={{
+                                height: 16,
+                                borderRadius: 2,
+                                bgcolor: alpha(color, 0.1),
+                                '& .MuiLinearProgress-bar': {
+                                  bgcolor: color,
+                                  borderRadius: 2
+                                }
+                              }}
+                            />
+                          </Box>
+                        );
+                      })}
+                    </Paper>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </CardContent>
+        </Card>
 
-        {/* Intensity Sliders */}
-        <IntensityComparison departments={departments} />
-
-        {/* Detailed Comparison Sections */}
-        <DetailedComparison departments={departments} />
+        {/* Career Opportunities */}
+        <Card sx={{ mb: 6, borderRadius: 4, overflow: 'hidden' }}>
+          <Box sx={{ 
+            bgcolor: alpha('#f57c00', 0.05),
+            p: 4,
+            borderBottom: `3px solid ${alpha('#f57c00', 0.2)}`
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Work sx={{ fontSize: 40, color: '#f57c00', mr: 2 }} />
+              <Box>
+                <Typography variant="h4" fontWeight={900}>
+                  Career Opportunities
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Top 5 career paths for each department
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          
+          <CardContent sx={{ p: 4 }}>
+            <Grid container spacing={3}>
+              {departments.map(dept => (
+                <Grid item xs={12} md={departments.length === 2 ? 6 : 4} key={dept.code}>
+                  <Paper elevation={0} sx={{ 
+                    p: 3, 
+                    bgcolor: alpha(departmentColors[dept.code], 0.03),
+                    borderRadius: 3,
+                    border: `2px solid ${alpha(departmentColors[dept.code], 0.2)}`,
+                    height: '100%'
+                  }}>
+                    <Chip
+                      label={dept.code}
+                      sx={{
+                        bgcolor: departmentColors[dept.code],
+                        color: 'white',
+                        fontWeight: 900,
+                        mb: 2
+                      }}
+                    />
+                    <Typography variant="h6" fontWeight={700} gutterBottom>
+                      {dept.name}
+                    </Typography>
+                    <Box sx={{ mt: 2, space: 2 }}>
+                      {CAREER_PATHWAYS[dept.code]?.careers.slice(0, 5).map((career, idx) => (
+                        <Paper
+                          key={idx}
+                          elevation={0}
+                          sx={{
+                            p: 2,
+                            mb: 2,
+                            bgcolor: 'white',
+                            borderRadius: 2,
+                            border: `1px solid ${alpha(departmentColors[dept.code], 0.2)}`
+                          }}
+                        >
+                          <Typography variant="body2" fontWeight={700} gutterBottom>
+                            {career.title}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            Entry Level: ETB {career.entryLevel}
+                          </Typography>
+                        </Paper>
+                      ))}
+                    </Box>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </CardContent>
+        </Card>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mt-8">
-          {departments.map((dept) => (
-            <button
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 3 }}>
+          {departments.map(dept => (
+            <Button
               key={dept.code}
               onClick={() => navigate(`/departments/${dept.code}`)}
-              className="px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded-lg font-medium transition-all"
+              variant="outlined"
+              size="large"
+              endIcon={<ArrowForward />}
+              sx={{
+                py: 1.5,
+                px: 4,
+                borderRadius: 3,
+                borderWidth: 3,
+                borderColor: departmentColors[dept.code],
+                color: departmentColors[dept.code],
+                fontWeight: 700,
+                textTransform: 'none',
+                '&:hover': {
+                  borderWidth: 3,
+                  bgcolor: departmentColors[dept.code],
+                  color: 'white',
+                  transform: 'translateY(-4px)',
+                  boxShadow: `0 12px 32px ${alpha(departmentColors[dept.code], 0.4)}`
+                },
+                transition: 'all 0.3s ease'
+              }}
             >
-              View {dept.code} Full Details
-            </button>
+              View {dept.code} Details
+            </Button>
           ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Key Differentiator Card Component
-function KeyDifferentiatorCard({ differentiator, departments }) {
-  const dept1 = departments[0];
-  const dept2 = departments[1];
-  const data1 = differentiator[dept1.code.toLowerCase()];
-  const data2 = differentiator[dept2.code.toLowerCase()];
-
-  return (
-    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 mb-8 border-2 border-primary/20">
-      <h2 className="text-2xl font-bold text-center mb-6">{differentiator.title}</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Department 1 */}
-        <div className="bg-white rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-blue-600">{dept1.name}</h3>
-            <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-bold">
-              {dept1.code}
-            </span>
-          </div>
-          <div className="mb-4">
-            <span className="text-sm text-text-secondary">Primary Focus</span>
-            <p className="text-lg font-semibold text-primary">{data1.focus}</p>
-          </div>
-          <div className="mb-4">
-            <span className="text-sm text-text-secondary font-medium">Key Strengths</span>
-            <ul className="mt-2 space-y-2">
-              {data1.strengths.map((strength, idx) => (
-                <li key={idx} className="flex items-start text-sm">
-                  <span className="text-blue-500 mr-2">✓</span>
-                  <span>{strength}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="p-3 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-800">
-              <strong>Best for:</strong> {data1.bestFor}
-            </p>
-          </div>
-        </div>
-
-        {/* Department 2 */}
-        <div className="bg-white rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-purple-600">{dept2.name}</h3>
-            <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-bold">
-              {dept2.code}
-            </span>
-          </div>
-          <div className="mb-4">
-            <span className="text-sm text-text-secondary">Primary Focus</span>
-            <p className="text-lg font-semibold text-primary">{data2.focus}</p>
-          </div>
-          <div className="mb-4">
-            <span className="text-sm text-text-secondary font-medium">Key Strengths</span>
-            <ul className="mt-2 space-y-2">
-              {data2.strengths.map((strength, idx) => (
-                <li key={idx} className="flex items-start text-sm">
-                  <span className="text-purple-500 mr-2">✓</span>
-                  <span>{strength}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="p-3 bg-purple-50 rounded-lg">
-            <p className="text-sm text-purple-800">
-              <strong>Best for:</strong> {data2.bestFor}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Intensity Comparison Component with Sliders
-function IntensityComparison({ departments }) {
-  const metrics = ['math', 'coding', 'business', 'hardware'];
-  const metricLabels = {
-    math: { label: 'Math Intensity', icon: '📐', color: 'blue' },
-    coding: { label: 'Coding Level', icon: '💻', color: 'green' },
-    business: { label: 'Business Focus', icon: '📊', color: 'yellow' },
-    hardware: { label: 'Hardware/Infrastructure', icon: '🖥️', color: 'orange' }
-  };
-
-  const getBarColor = (value, color) => {
-    if (value >= 80) return `bg-${color}-600`;
-    if (value >= 60) return `bg-${color}-500`;
-    if (value >= 40) return `bg-${color}-400`;
-    return `bg-${color}-300`;
-  };
-
-  return (
-    <div className="bg-surface rounded-xl p-8 mb-8">
-      <div className="flex items-center mb-6">
-        <span className="text-3xl mr-3">📊</span>
-        <h2 className="text-2xl font-bold">Intensity Comparison</h2>
-      </div>
-      <p className="text-text-secondary mb-6">Visual comparison of key program characteristics (0-100 scale)</p>
-
-      <div className="space-y-6">
-        {metrics.map(metric => {
-          const config = metricLabels[metric];
-          
-          return (
-            <div key={metric} className="bg-white rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <span className="text-2xl mr-2">{config.icon}</span>
-                <h3 className="font-semibold text-lg">{config.label}</h3>
-              </div>
-
-              <div className="space-y-4">
-                {departments.map((dept, idx) => {
-                  const value = INTENSITY_METRICS[dept.code]?.[metric] || 0;
-                  const colors = ['blue', 'purple', 'green'];
-                  const color = colors[idx];
-                  
-                  return (
-                    <div key={dept.code}>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-sm">{dept.code}</span>
-                        <span className="text-sm font-bold text-primary">{value}%</span>
-                      </div>
-                      <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full bg-${color}-500 transition-all duration-500 flex items-center justify-end pr-2`}
-                          style={{ width: `${value}%` }}
-                        >
-                          {value > 15 && (
-                            <span className="text-xs text-white font-bold">{value}%</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// Detailed Comparison Component
-function DetailedComparison({ departments }) {
-  return (
-    <div className="space-y-6">
-      {/* Career Paths Comparison */}
-      <div className="bg-surface rounded-xl p-8">
-        <div className="flex items-center mb-6">
-          <span className="text-3xl mr-3">💼</span>
-          <h2 className="text-2xl font-bold">Career Opportunities</h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6" style={{ gridTemplateColumns: `repeat(${departments.length}, 1fr)` }}>
-          {departments.map((dept, idx) => (
-            <div key={dept.code} className="bg-white rounded-lg p-6">
-              <h3 className="font-bold text-lg mb-4 text-primary">{dept.name}</h3>
-              <div className="space-y-2">
-                {CAREER_PATHWAYS[dept.code]?.careers.slice(0, 5).map((career, careerIdx) => (
-                  <div key={careerIdx} className="p-3 bg-gray-50 rounded-lg">
-                    <div className="font-medium text-sm">{career.title}</div>
-                    <div className="text-xs text-text-secondary mt-1">
-                      Entry: ETB {career.entryLevel}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Sample Courses Comparison */}
-      <div className="bg-surface rounded-xl p-8">
-        <div className="flex items-center mb-6">
-          <span className="text-3xl mr-3">📚</span>
-          <h2 className="text-2xl font-bold">Sample Courses</h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6" style={{ gridTemplateColumns: `repeat(${departments.length}, 1fr)` }}>
-          {departments.map((dept) => (
-            <div key={dept.code} className="bg-white rounded-lg p-6">
-              <h3 className="font-bold text-lg mb-4 text-primary">{dept.name}</h3>
-              <ul className="space-y-2">
-                {dept.core_courses?.slice(0, 6).map((course, idx) => (
-                  <li key={idx} className="flex items-start text-sm">
-                    <span className="text-primary mr-2">→</span>
-                    <span>{course}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Skills Comparison */}
-      <div className="bg-surface rounded-xl p-8">
-        <div className="flex items-center mb-6">
-          <span className="text-3xl mr-3">⚡</span>
-          <h2 className="text-2xl font-bold">Required Skills</h2>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6" style={{ gridTemplateColumns: `repeat(${departments.length}, 1fr)` }}>
-          {departments.map((dept) => (
-            <div key={dept.code} className="bg-white rounded-lg p-6">
-              <h3 className="font-bold text-lg mb-4 text-primary">{dept.name}</h3>
-              <div className="flex flex-wrap gap-2">
-                {dept.required_skills?.slice(0, 8).map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Container>
+    </Box>
   );
 }
 

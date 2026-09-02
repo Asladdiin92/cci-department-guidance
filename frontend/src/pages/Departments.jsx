@@ -32,7 +32,7 @@ import {
 } from '@mui/icons-material';
 import { getDepartments } from '../services/api';
 
-// Department metadata for filtering and badges
+// Department metadata for filtering and badges - Haramaya University themed
 const DEPARTMENT_METADATA = {
   CS: {
     mathIntensity: 'High',
@@ -41,7 +41,7 @@ const DEPARTMENT_METADATA = {
     tags: ['Algorithm Design', 'Theoretical Computing', 'Research-Focused', 'Math Heavy'],
     focus: 'Theory & Algorithms',
     icon: <Psychology />,
-    color: '#4f46e5'
+    color: '#2e7d32' // Haramaya green
   },
   SWE: {
     mathIntensity: 'Medium',
@@ -50,7 +50,7 @@ const DEPARTMENT_METADATA = {
     tags: ['High Programming', 'Software Development', 'Project-Based', 'Practical'],
     focus: 'Building Software',
     icon: <Code />,
-    color: '#ea580c'
+    color: '#f57c00' // Haramaya gold
   },
   IT: {
     mathIntensity: 'Low',
@@ -59,7 +59,7 @@ const DEPARTMENT_METADATA = {
     tags: ['Infrastructure', 'Networks', 'Cloud Computing', 'Hands-On'],
     focus: 'Systems & Networks',
     icon: <Computer />,
-    color: '#0d9488'
+    color: '#1976d2' // Haramaya blue
   },
   IS: {
     mathIntensity: 'Low',
@@ -68,7 +68,7 @@ const DEPARTMENT_METADATA = {
     tags: ['Business & Systems', 'Database Management', 'ERP', 'Analysis'],
     focus: 'Business Technology',
     icon: <Business />,
-    color: '#db2777'
+    color: '#c62828' // Haramaya red
   },
   ISC: {
     mathIntensity: 'Low',
@@ -77,7 +77,7 @@ const DEPARTMENT_METADATA = {
     tags: ['Information Organization', 'Digital Libraries', 'Knowledge Management', 'Research'],
     focus: 'Information Management',
     icon: <Storage />,
-    color: '#7c3aed'
+    color: '#6a1b9a' // Purple
   },
   STAT: {
     mathIntensity: 'Very High',
@@ -86,7 +86,7 @@ const DEPARTMENT_METADATA = {
     tags: ['Data & AI', 'Statistical Modeling', 'Research', 'Math Heavy'],
     focus: 'Data Science',
     icon: <TrendingUp />,
-    color: '#eab308'
+    color: '#f57c00' // Haramaya gold
   }
 };
 
@@ -184,51 +184,102 @@ function Departments() {
   }
 
   return (
-    <Box sx={{ py: { xs: 4, md: 8 }, bgcolor: 'background.default', minHeight: '80vh' }}>
-      <Container maxWidth="lg">
-        {/* Header */}
-        <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
-          <Typography 
-            variant="h2" 
-            sx={{ 
-              fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-              fontWeight: 800,
-              mb: 2
-            }}
-          >
-            Department{' '}
-            <Box component="span" sx={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              Explorer
-            </Box>
-          </Typography>
-          <Typography 
-            variant="h6" 
-            color="text.secondary"
-            sx={{ 
-              maxWidth: 700,
-              mx: 'auto',
-              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
-            }}
-          >
-            Discover your perfect fit among 6 specialized departments. Filter by skills, interests, and career goals.
-          </Typography>
-        </Box>
+    <Box sx={{ 
+      py: { xs: 4, md: 8 }, 
+      bgcolor: 'background.default', 
+      minHeight: '80vh',
+      position: 'relative',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `radial-gradient(circle at 20% 30%, ${alpha('#2e7d32', 0.05)} 0%, transparent 50%), radial-gradient(circle at 80% 70%, ${alpha('#f57c00', 0.05)} 0%, transparent 50%)`,
+        pointerEvents: 'none'
+      }
+    }}>
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+        {/* Header - Glassmorphism */}
+        <Paper elevation={0} sx={{
+          textAlign: 'center',
+          mb: { xs: 4, md: 6 },
+          p: { xs: 3, md: 5 },
+          borderRadius: 4,
+          background: `linear-gradient(135deg, ${alpha('#2e7d32', 0.08)} 0%, ${alpha('#f57c00', 0.06)} 100%)`,
+          backdropFilter: 'blur(20px)',
+          border: `1px solid ${alpha('#2e7d32', 0.1)}`,
+          boxShadow: `0 8px 32px ${alpha('#2e7d32', 0.15)}`,
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '"HU"',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontSize: { xs: '120px', md: '180px' },
+            fontWeight: 900,
+            color: alpha('#2e7d32', 0.03),
+            zIndex: 0,
+            userSelect: 'none',
+            pointerEvents: 'none'
+          }
+        }}>
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
+            <Typography 
+              variant="h2" 
+              sx={{ 
+                fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                fontWeight: 800,
+                mb: 2,
+                background: 'linear-gradient(135deg, #2e7d32 0%, #f57c00 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}
+            >
+              Department Explorer
+            </Typography>
+            <Typography 
+              variant="h6" 
+              color="text.secondary"
+              sx={{ 
+                maxWidth: 700,
+                mx: 'auto',
+                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
+              }}
+            >
+              Discover your perfect fit among 6 specialized departments. Filter by skills, interests, and career goals.
+            </Typography>
+          </Box>
+        </Paper>
 
-        {/* Search Bar */}
-        <Box sx={{ maxWidth: 700, mx: 'auto', mb: 4 }}>
+        {/* Search Bar - Glassmorphism */}
+        <Paper elevation={0} sx={{ 
+          maxWidth: 700, 
+          mx: 'auto', 
+          mb: 4,
+          borderRadius: 4,
+          background: alpha('#fff', 0.8),
+          backdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+          boxShadow: `0 4px 16px ${alpha('#000', 0.05)}`,
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            boxShadow: `0 8px 24px ${alpha('#2e7d32', 0.15)}`,
+            border: `1px solid ${alpha('#2e7d32', 0.3)}`
+          }
+        }}>
           <TextField
             fullWidth
-            placeholder="Search departments..."
+            placeholder="Search departments, skills, or career paths..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon sx={{ color: '#2e7d32' }} />
                 </InputAdornment>
               ),
               endAdornment: searchQuery && (
@@ -241,26 +292,37 @@ function Departments() {
             }}
             sx={{
               '& .MuiOutlinedInput-root': {
-                borderRadius: 3,
-                bgcolor: 'background.paper'
+                border: 'none',
+                '& fieldset': {
+                  border: 'none'
+                }
               }
             }}
           />
-        </Box>
+        </Paper>
 
-        {/* Filter Pills */}
+        {/* Filter Pills - Haramaya colors */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1.5, mb: 4 }}>
           {FILTER_OPTIONS.map((filter) => (
             <Chip
               key={filter.id}
               label={filter.label}
               onClick={() => setActiveFilter(filter.id)}
-              color={activeFilter === filter.id ? 'primary' : 'default'}
               variant={activeFilter === filter.id ? 'filled' : 'outlined'}
               sx={{
                 fontWeight: activeFilter === filter.id ? 700 : 500,
                 fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                px: { xs: 1, sm: 2 }
+                px: { xs: 1, sm: 2 },
+                bgcolor: activeFilter === filter.id ? '#2e7d32' : 'transparent',
+                color: activeFilter === filter.id ? 'white' : '#2e7d32',
+                borderColor: '#2e7d32',
+                borderWidth: 2,
+                boxShadow: activeFilter === filter.id ? `0 4px 12px ${alpha('#2e7d32', 0.3)}` : 'none',
+                '&:hover': {
+                  bgcolor: activeFilter === filter.id ? '#1b5e20' : alpha('#2e7d32', 0.08),
+                  borderColor: '#2e7d32',
+                  borderWidth: 2
+                }
               }}
             />
           ))}
@@ -275,7 +337,7 @@ function Departments() {
             fontSize: { xs: '0.875rem', sm: '1rem' }
           }}
         >
-          Showing <Box component="span" sx={{ fontWeight: 700, color: 'primary.main' }}>{filteredDepartments.length}</Box> of {departments.length} departments
+          Showing <Box component="span" sx={{ fontWeight: 700, color: '#2e7d32' }}>{filteredDepartments.length}</Box> of {departments.length} departments
         </Typography>
 
         {/* Departments Grid */}
@@ -302,37 +364,67 @@ function Departments() {
           </Box>
         )}
 
-        {/* CTA Section */}
-        <Box 
+        {/* CTA Section - Glassmorphism */}
+        <Paper elevation={0}
           sx={{ 
             mt: { xs: 6, md: 10 },
             p: { xs: 3, sm: 4, md: 6 },
             textAlign: 'center',
-            borderRadius: 3,
-            background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.secondary.main, 0.1)} 100%)`
+            borderRadius: 4,
+            background: `linear-gradient(135deg, ${alpha('#2e7d32', 0.08)} 0%, ${alpha('#f57c00', 0.06)} 100%)`,
+            backdropFilter: 'blur(20px)',
+            border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+            boxShadow: `0 8px 32px ${alpha('#2e7d32', 0.15)}`,
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '"HU"',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              fontSize: { xs: '100px', md: '150px' },
+              fontWeight: 900,
+              color: alpha('#2e7d32', 0.02),
+              zIndex: 0,
+              userSelect: 'none',
+              pointerEvents: 'none'
+            }
           }}
         >
-          <Typography variant="h5" fontWeight={700} gutterBottom sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
-            Still unsure which department is right for you?
-          </Typography>
-          <Typography color="text.secondary" sx={{ mb: 3, fontSize: { xs: '0.875rem', sm: '1rem' } }}>
-            Take our personalized assessment to discover your perfect fit in under 10 minutes!
-          </Typography>
-          <Button
-            component={Link}
-            to="/assessment"
-            variant="contained"
-            size="large"
-            endIcon={<ArrowForward />}
-            sx={{
-              px: 4,
-              py: 1.5,
-              fontSize: { xs: '0.875rem', sm: '1rem' }
-            }}
-          >
-            Take Assessment
-          </Button>
-        </Box>
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
+            <Typography variant="h5" fontWeight={700} gutterBottom sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }}>
+              Still unsure which department is right for you?
+            </Typography>
+            <Typography color="text.secondary" sx={{ mb: 3, fontSize: { xs: '0.875rem', sm: '1rem' } }}>
+              Take our personalized assessment to discover your perfect fit in under 10 minutes!
+            </Typography>
+            <Button
+              component={Link}
+              to="/assessment"
+              variant="contained"
+              size="large"
+              endIcon={<ArrowForward />}
+              sx={{
+                px: 5,
+                py: 1.5,
+                fontSize: { xs: '0.875rem', sm: '1rem' },
+                fontWeight: 700,
+                bgcolor: '#2e7d32',
+                color: 'white',
+                boxShadow: `0 4px 16px ${alpha('#2e7d32', 0.3)}`,
+                '&:hover': {
+                  bgcolor: '#1b5e20',
+                  boxShadow: `0 6px 24px ${alpha('#2e7d32', 0.4)}`,
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.3s ease'
+              }}
+            >
+              Take Assessment
+            </Button>
+          </Box>
+        </Paper>
       </Container>
     </Box>
   );
@@ -342,23 +434,26 @@ function Departments() {
 function DepartmentCard({ department }) {
   const theme = useTheme();
   const { code, name, description, metadata } = department;
-  const color = metadata.color || theme.palette.primary.main;
+  const color = metadata.color || '#2e7d32';
 
   return (
     <Card
       component={Link}
       to={`/departments/${code}`}
-      elevation={2}
+      elevation={0}
       sx={{
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         textDecoration: 'none',
-        borderRadius: 3,
-        border: `2px solid ${alpha(color, 0.1)}`,
-        transition: 'all 0.3s ease',
+        borderRadius: 4,
+        border: `2px solid ${alpha(color, 0.15)}`,
+        background: `linear-gradient(135deg, ${alpha(color, 0.04)} 0%, ${alpha('#fff', 0.8)} 100%)`,
+        backdropFilter: 'blur(10px)',
+        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
         overflow: 'hidden',
+        boxShadow: `0 4px 16px ${alpha(color, 0.08)}`,
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -369,11 +464,11 @@ function DepartmentCard({ department }) {
           bgcolor: color,
           transform: 'scaleX(0)',
           transformOrigin: 'left',
-          transition: 'transform 0.3s ease'
+          transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
         },
         '&:hover': {
-          transform: 'translateY(-8px)',
-          boxShadow: theme.shadows[12],
+          transform: 'translateY(-12px)',
+          boxShadow: `0 20px 60px ${alpha(color, 0.25)}`,
           borderColor: color,
           '&::before': {
             transform: 'scaleX(1)'

@@ -103,7 +103,7 @@ const Navbar = () => {
       >
         <Container maxWidth="lg">
           <Toolbar disableGutters sx={{ minHeight: { xs: 64, md: 70 } }}>
-            {/* Logo */}
+            {/* University Logo & Branding */}
             <Box
               component={Link}
               to="/"
@@ -115,39 +115,56 @@ const Navbar = () => {
                 mr: { md: 4 }
               }}
             >
+              {/* University Logo */}
               <Box
                 sx={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 2,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  width: 50,
+                  height: 50,
+                  borderRadius: '50%',
+                  border: '3px solid',
+                  borderColor: '#2e7d32',
+                  background: 'white',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  mr: 1.5
+                  mr: 1.5,
+                  flexShrink: 0
                 }}
               >
-                <School sx={{ color: 'white', fontSize: 24 }} />
+                <Typography
+                  sx={{
+                    fontWeight: 900,
+                    fontSize: '1.2rem',
+                    background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  HU
+                </Typography>
               </Box>
               <Box>
                 <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 800,
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
-                    lineHeight: 1.2
+                    lineHeight: 1.2,
+                    fontSize: { xs: '1rem', sm: '1.25rem' }
                   }}
                 >
-                  CCI Guidance
+                  CCI Department Guidance
                 </Typography>
                 <Typography
                   variant="caption"
                   sx={{
-                    color: 'text.secondary',
-                    fontSize: '0.65rem',
+                    color: '#f57c00',
+                    fontSize: '0.7rem',
+                    fontWeight: 600,
                     display: { xs: 'none', sm: 'block' }
                   }}
                 >
@@ -200,7 +217,7 @@ const Navbar = () => {
               </Box>
             )}
 
-            {/* CTA Button */}
+            {/* CTA Button - Haramaya Green */}
             {!isMobile && (
               <Button
                 component={Link}
@@ -213,11 +230,12 @@ const Navbar = () => {
                   borderRadius: 2,
                   textTransform: 'none',
                   fontWeight: 700,
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  boxShadow: 'none',
+                  background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+                  color: 'white',
+                  boxShadow: '0 4px 12px rgba(46, 125, 50, 0.3)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #5568d3 0%, #63408a 100%)',
-                    boxShadow: theme.shadows[4],
+                    background: 'linear-gradient(135deg, #1b5e20 0%, #0d4717 100%)',
+                    boxShadow: '0 6px 20px rgba(46, 125, 50, 0.4)',
                     transform: 'translateY(-2px)'
                   },
                   transition: 'all 0.3s ease'

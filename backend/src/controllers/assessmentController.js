@@ -80,6 +80,16 @@ const saveResponse = async (req, res, next) => {
     const { id: assessmentId } = req.params;
     const { question_id, option_id } = req.body;
 
+    console.log('=== Save Response Request ===');
+    console.log('Assessment ID:', assessmentId);
+    console.log('Question ID:', question_id);
+    console.log('Option ID:', option_id);
+    console.log('Types:', {
+      assessmentId: typeof assessmentId,
+      question_id: typeof question_id,
+      option_id: typeof option_id
+    });
+
     // Verify assessment exists and is not completed
     const { data: assessment, error: assessmentError } = await supabase
       .from('assessments')
@@ -87,7 +97,12 @@ const saveResponse = async (req, res, next) => {
       .eq('id', assessmentId)
       .single();
 
-    if (assessmentError || !assessment) {
+    if (assessmentError) {
+      console.error('Assessment lookup error:', assessmentError);
+      throw new AppError('Assessment not found', 404, { dbError: assessmentError.message });
+    }
+
+    if (!assessment) {
       throw new AppError('Assessment not found', 404);
     }
 
@@ -96,17 +111,22 @@ const saveResponse = async (req, res, next) => {
     }
 
     // Check if response already exists for this question
-    const { data: existingResponse } = await supabase
+    const { data: existingResponse, error: existingError } = await supabase
       .from('assessment_responses')
       .select('id')
       .eq('assessment_id', assessmentId)
       .eq('question_id', question_id)
       .single();
 
+    if (existingError && existingError.code !== 'PGRST116') {
+      console.error('Existing response check error:', existingError);
+    }
+
     let response;
 
     if (existingResponse) {
       // Update existing response
+      console.log('Updating existing response:', existingResponse.id);
       const { data, error } = await supabase
         .from('assessment_responses')
         .update({
@@ -118,26 +138,35 @@ const saveResponse = async (req, res, next) => {
         .single();
 
       if (error) {
-        throw new AppError('Failed to update response', 500, { dbError: error.message });
+        console.error('Update error:', error);
+        throw new AppError('Failed to update response', 500, { dbError: error.message, details: error });
       }
       response = data;
+      console.log('Response updated successfully');
     } else {
       // Insert new response
+      console.log('Inserting new response');
+      const insertData = {
+        assessment_id: assessmentId,
+        question_id,
+        option_id,
+        responded_at: new Date().toISOString()
+      };
+      console.log('Insert data:', insertData);
+
       const { data, error } = await supabase
         .from('assessment_responses')
-        .insert({
-          assessment_id: assessmentId,
-          question_id,
-          option_id,
-          responded_at: new Date().toISOString()
-        })
+        .insert(insertData)
         .select()
         .single();
 
       if (error) {
-        throw new AppError('Failed to save response', 500, { dbError: error.message });
+        console.error('Insert error:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        throw new AppError('Failed to save response', 500, { dbError: error.message, details: error });
       }
       response = data;
+      console.log('Response inserted successfully:', response.id);
     }
 
     // Get current response count
@@ -146,6 +175,8 @@ const saveResponse = async (req, res, next) => {
       .select('*', { count: 'exact', head: true })
       .eq('assessment_id', assessmentId);
 
+    console.log('Total responses for assessment:', count);
+
     return successResponse(res, {
       response_id: response.id,
       responses_completed: count,
@@ -153,6 +184,7 @@ const saveResponse = async (req, res, next) => {
     });
 
   } catch (error) {
+    console.error('Save response error:', error);
     next(error);
   }
 };

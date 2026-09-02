@@ -354,25 +354,70 @@ function AdminDashboard() {
   }
 
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 4 }}>
-      <Container maxWidth="xl">
-        {/* Header */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-          <Box>
-            <Typography variant="h3" fontWeight={800} gutterBottom>
-              <DashboardIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+    <Box sx={{ 
+      bgcolor: 'background.default', 
+      minHeight: '100vh', 
+      py: 4,
+      position: 'relative',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `radial-gradient(circle at 20% 30%, ${alpha('#2e7d32', 0.04)} 0%, transparent 50%), radial-gradient(circle at 80% 70%, ${alpha('#f57c00', 0.04)} 0%, transparent 50%)`,
+        pointerEvents: 'none'
+      }
+    }}>
+      <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
+        {/* Header - Glassmorphism */}
+        <Paper elevation={0} sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 4,
+          p: 3,
+          borderRadius: 4,
+          background: `linear-gradient(135deg, ${alpha('#2e7d32', 0.08)} 0%, ${alpha('#f57c00', 0.06)} 100%)`,
+          backdropFilter: 'blur(20px)',
+          border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+          boxShadow: `0 8px 32px ${alpha('#2e7d32', 0.15)}`,
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 2
+        }}>
+          <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+            <Typography variant="h3" fontWeight={800} gutterBottom sx={{
+              background: 'linear-gradient(135deg, #2e7d32 0%, #f57c00 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1
+            }}>
+              <DashboardIcon sx={{ color: '#2e7d32' }} />
               Admin Dashboard
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" fontWeight={600}>
               Real-time insights and analytics
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
             <Button
               startIcon={<Refresh />}
               onClick={handleRefresh}
               disabled={loading}
               variant="outlined"
+              sx={{
+                borderColor: '#2e7d32',
+                color: '#2e7d32',
+                borderWidth: 2,
+                fontWeight: 700,
+                '&:hover': {
+                  borderWidth: 2,
+                  bgcolor: alpha('#2e7d32', 0.08)
+                }
+              }}
             >
               Refresh
             </Button>
@@ -380,6 +425,16 @@ function AdminDashboard() {
               startIcon={<Download />}
               onClick={handleExportToExcel}
               variant="outlined"
+              sx={{
+                borderColor: '#f57c00',
+                color: '#f57c00',
+                borderWidth: 2,
+                fontWeight: 700,
+                '&:hover': {
+                  borderWidth: 2,
+                  bgcolor: alpha('#f57c00', 0.08)
+                }
+              }}
             >
               Export Excel
             </Button>
@@ -387,6 +442,16 @@ function AdminDashboard() {
               startIcon={<Download />}
               onClick={handleExportToCSV}
               variant="outlined"
+              sx={{
+                borderColor: '#f57c00',
+                color: '#f57c00',
+                borderWidth: 2,
+                fontWeight: 700,
+                '&:hover': {
+                  borderWidth: 2,
+                  bgcolor: alpha('#f57c00', 0.08)
+                }
+              }}
             >
               Export CSV
             </Button>
@@ -395,30 +460,49 @@ function AdminDashboard() {
               onClick={handleLogout}
               variant="outlined"
               color="error"
+              sx={{
+                borderWidth: 2,
+                fontWeight: 700,
+                '&:hover': {
+                  borderWidth: 2
+                }
+              }}
             >
               Logout
             </Button>
           </Box>
-        </Box>
+        </Paper>
 
         {loading && <LinearProgress sx={{ mb: 2 }} />}
 
-        {/* KPI Cards */}
+        {/* KPI Cards - Glassmorphism */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
           <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ height: '100%', borderRadius: 3 }}>
+            <Card sx={{ 
+              height: '100%', 
+              borderRadius: 4,
+              background: `linear-gradient(135deg, ${alpha('#2e7d32', 0.05)} 0%, ${alpha('#2e7d32', 0.02)} 100%)`,
+              backdropFilter: 'blur(10px)',
+              border: `2px solid ${alpha('#2e7d32', 0.15)}`,
+              boxShadow: `0 4px 16px ${alpha('#2e7d32', 0.1)}`,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: `0 12px 32px ${alpha('#2e7d32', 0.2)}`
+              }
+            }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <Box>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                    <Typography variant="body2" color="text.secondary" gutterBottom fontWeight={600}>
                       Total Assessments
                     </Typography>
-                    <Typography variant="h3" fontWeight={800} color="primary.main">
+                    <Typography variant="h3" fontWeight={800} sx={{ color: '#2e7d32' }}>
                       {stats.total_assessments || 0}
                     </Typography>
                   </Box>
-                  <Box sx={{ bgcolor: alpha(theme.palette.primary.main, 0.1), p: 1.5, borderRadius: 2 }}>
-                    <AssessmentIcon sx={{ color: 'primary.main', fontSize: 32 }} />
+                  <Box sx={{ bgcolor: alpha('#2e7d32', 0.15), p: 1.5, borderRadius: 2 }}>
+                    <AssessmentIcon sx={{ color: '#2e7d32', fontSize: 32 }} />
                   </Box>
                 </Box>
               </CardContent>
@@ -426,19 +510,31 @@ function AdminDashboard() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ height: '100%', borderRadius: 3 }}>
+            <Card sx={{ 
+              height: '100%', 
+              borderRadius: 4,
+              background: `linear-gradient(135deg, ${alpha('#4caf50', 0.05)} 0%, ${alpha('#4caf50', 0.02)} 100%)`,
+              backdropFilter: 'blur(10px)',
+              border: `2px solid ${alpha('#4caf50', 0.15)}`,
+              boxShadow: `0 4px 16px ${alpha('#4caf50', 0.1)}`,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: `0 12px 32px ${alpha('#4caf50', 0.2)}`
+              }
+            }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <Box>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                    <Typography variant="body2" color="text.secondary" gutterBottom fontWeight={600}>
                       Completed
                     </Typography>
-                    <Typography variant="h3" fontWeight={800} color="success.main">
+                    <Typography variant="h3" fontWeight={800} sx={{ color: '#4caf50' }}>
                       {stats.completed_assessments || 0}
                     </Typography>
                   </Box>
-                  <Box sx={{ bgcolor: alpha(theme.palette.success.main, 0.1), p: 1.5, borderRadius: 2 }}>
-                    <People sx={{ color: 'success.main', fontSize: 32 }} />
+                  <Box sx={{ bgcolor: alpha('#4caf50', 0.15), p: 1.5, borderRadius: 2 }}>
+                    <People sx={{ color: '#4caf50', fontSize: 32 }} />
                   </Box>
                 </Box>
               </CardContent>
@@ -446,19 +542,31 @@ function AdminDashboard() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ height: '100%', borderRadius: 3 }}>
+            <Card sx={{ 
+              height: '100%', 
+              borderRadius: 4,
+              background: `linear-gradient(135deg, ${alpha('#2196f3', 0.05)} 0%, ${alpha('#2196f3', 0.02)} 100%)`,
+              backdropFilter: 'blur(10px)',
+              border: `2px solid ${alpha('#2196f3', 0.15)}`,
+              boxShadow: `0 4px 16px ${alpha('#2196f3', 0.1)}`,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: `0 12px 32px ${alpha('#2196f3', 0.2)}`
+              }
+            }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <Box>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                    <Typography variant="body2" color="text.secondary" gutterBottom fontWeight={600}>
                       Completion Rate
                     </Typography>
-                    <Typography variant="h3" fontWeight={800} color="info.main">
+                    <Typography variant="h3" fontWeight={800} sx={{ color: '#2196f3' }}>
                       {stats.completion_rate || 0}%
                     </Typography>
                   </Box>
-                  <Box sx={{ bgcolor: alpha(theme.palette.info.main, 0.1), p: 1.5, borderRadius: 2 }}>
-                    <TrendingUp sx={{ color: 'info.main', fontSize: 32 }} />
+                  <Box sx={{ bgcolor: alpha('#2196f3', 0.15), p: 1.5, borderRadius: 2 }}>
+                    <TrendingUp sx={{ color: '#2196f3', fontSize: 32 }} />
                   </Box>
                 </Box>
               </CardContent>
@@ -466,19 +574,31 @@ function AdminDashboard() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ height: '100%', borderRadius: 3 }}>
+            <Card sx={{ 
+              height: '100%', 
+              borderRadius: 4,
+              background: `linear-gradient(135deg, ${alpha('#f57c00', 0.05)} 0%, ${alpha('#f57c00', 0.02)} 100%)`,
+              backdropFilter: 'blur(10px)',
+              border: `2px solid ${alpha('#f57c00', 0.15)}`,
+              boxShadow: `0 4px 16px ${alpha('#f57c00', 0.1)}`,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: `0 12px 32px ${alpha('#f57c00', 0.2)}`
+              }
+            }}>
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <Box>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                    <Typography variant="body2" color="text.secondary" gutterBottom fontWeight={600}>
                       Avg. Rating
                     </Typography>
-                    <Typography variant="h3" fontWeight={800} color="warning.main">
+                    <Typography variant="h3" fontWeight={800} sx={{ color: '#f57c00' }}>
                       {stats.average_rating || 0}
                     </Typography>
                   </Box>
-                  <Box sx={{ bgcolor: alpha(theme.palette.warning.main, 0.1), p: 1.5, borderRadius: 2 }}>
-                    <Timeline sx={{ color: 'warning.main', fontSize: 32 }} />
+                  <Box sx={{ bgcolor: alpha('#f57c00', 0.15), p: 1.5, borderRadius: 2 }}>
+                    <Timeline sx={{ color: '#f57c00', fontSize: 32 }} />
                   </Box>
                 </Box>
               </CardContent>
@@ -486,9 +606,31 @@ function AdminDashboard() {
           </Grid>
         </Grid>
 
-        {/* Tabs */}
-        <Paper sx={{ mb: 3, borderRadius: 3 }}>
-          <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
+        {/* Tabs - Glassmorphism */}
+        <Paper elevation={0} sx={{ 
+          mb: 3, 
+          borderRadius: 4,
+          background: alpha('#fff', 0.8),
+          backdropFilter: 'blur(10px)',
+          border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+          boxShadow: `0 4px 16px ${alpha('#000', 0.05)}`
+        }}>
+          <Tabs 
+            value={activeTab} 
+            onChange={(e, newValue) => setActiveTab(newValue)}
+            sx={{
+              '& .MuiTab-root': {
+                fontWeight: 700,
+                '&.Mui-selected': {
+                  color: '#2e7d32'
+                }
+              },
+              '& .MuiTabs-indicator': {
+                bgcolor: '#2e7d32',
+                height: 3
+              }
+            }}
+          >
             <Tab icon={<PieChart />} label="Department Distribution" iconPosition="start" />
             <Tab icon={<BarChart />} label="Question Affinity" iconPosition="start" />
             <Tab icon={<Timeline />} label="Completion Trends" iconPosition="start" />
@@ -496,9 +638,15 @@ function AdminDashboard() {
           </Tabs>
         </Paper>
 
-        {/* Department Distribution Chart */}
+        {/* Department Distribution Chart - Glassmorphism */}
         {activeTab === 0 && (
-          <Card sx={{ borderRadius: 3 }}>
+          <Card sx={{ 
+            borderRadius: 4,
+            background: alpha('#fff', 0.8),
+            backdropFilter: 'blur(10px)',
+            border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+            boxShadow: `0 8px 32px ${alpha('#000', 0.08)}`
+          }}>
             <CardContent sx={{ p: 4 }}>
               <Typography variant="h5" fontWeight={700} gutterBottom sx={{ mb: 3 }}>
                 Department Preference Distribution
@@ -536,9 +684,15 @@ function AdminDashboard() {
           </Card>
         )}
 
-        {/* Question Affinity Chart */}
+        {/* Question Affinity Chart - Glassmorphism */}
         {activeTab === 1 && (
-          <Card sx={{ borderRadius: 3 }}>
+          <Card sx={{ 
+            borderRadius: 4,
+            background: alpha('#fff', 0.8),
+            backdropFilter: 'blur(10px)',
+            border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+            boxShadow: `0 8px 32px ${alpha('#000', 0.08)}`
+          }}>
             <CardContent sx={{ p: 4 }}>
               <Typography variant="h5" fontWeight={700} gutterBottom sx={{ mb: 3 }}>
                 Question Response Affinity
@@ -565,9 +719,15 @@ function AdminDashboard() {
           </Card>
         )}
 
-        {/* Completion Trends */}
+        {/* Completion Trends - Glassmorphism */}
         {activeTab === 2 && (
-          <Card sx={{ borderRadius: 3 }}>
+          <Card sx={{ 
+            borderRadius: 4,
+            background: alpha('#fff', 0.8),
+            backdropFilter: 'blur(10px)',
+            border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+            boxShadow: `0 8px 32px ${alpha('#000', 0.08)}`
+          }}>
             <CardContent sx={{ p: 4 }}>
               <Typography variant="h5" fontWeight={700} gutterBottom sx={{ mb: 3 }}>
                 Assessment Completion Trends (Last 30 Days)
@@ -594,9 +754,15 @@ function AdminDashboard() {
           </Card>
         )}
 
-        {/* Student Submissions Table */}
+        {/* Student Submissions Table - Glassmorphism */}
         {activeTab === 3 && (
-          <Card sx={{ borderRadius: 3 }}>
+          <Card sx={{ 
+            borderRadius: 4,
+            background: alpha('#fff', 0.8),
+            backdropFilter: 'blur(10px)',
+            border: `1px solid ${alpha('#2e7d32', 0.15)}`,
+            boxShadow: `0 8px 32px ${alpha('#000', 0.08)}`
+          }}>
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                 <Box>
