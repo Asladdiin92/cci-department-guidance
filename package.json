@@ -6,7 +6,8 @@
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && node src/server.js",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "build": "cd frontend && npm install && npm run build"
+    "build": "cd frontend && npm install && npm run build",
+    "test": "npm run test --prefix backend && npm run test --prefix frontend"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
