@@ -317,6 +317,7 @@ const assessmentsRoutes = require('./routes/assessments');
 const feedbackRoutes = require('./routes/feedback');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const databaseRoutes = require('./routes/databaseRoutes');
 
 // Mount routes with versioning support
 app.use('/api/departments', departmentsRoutes);
@@ -324,6 +325,7 @@ app.use('/api/assessments', assessmentsRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin/database', databaseRoutes);
 
 // API version aliases (future-proofing)
 if (API_VERSION !== 'v1') {
@@ -332,6 +334,7 @@ if (API_VERSION !== 'v1') {
   app.use(`/api/${API_VERSION}/feedback`, feedbackRoutes);
   app.use(`/api/${API_VERSION}/auth`, authRoutes);
   app.use(`/api/${API_VERSION}/admin`, adminRoutes);
+  app.use(`/api/${API_VERSION}/admin/database`, databaseRoutes);
 }
 
 console.log('✅ All routes mounted successfully');

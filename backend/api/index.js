@@ -287,12 +287,14 @@ const assessmentsRoutes = require('../src/routes/assessments');
 const feedbackRoutes = require('../src/routes/feedback');
 const authRoutes = require('../src/routes/auth');
 const adminRoutes = require('../src/routes/admin');
+const databaseRoutes = require('../src/routes/databaseRoutes');
 
 app.use('/api/departments', departmentsRoutes);
 app.use('/api/assessments', assessmentsRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin/database', databaseRoutes);
 
 console.log('✅ All routes mounted successfully');
 

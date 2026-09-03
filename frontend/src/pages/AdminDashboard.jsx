@@ -41,7 +41,8 @@ import {
   BarChart,
   PieChart,
   Search,
-  TableChart
+  TableChart,
+  Storage
 } from '@mui/icons-material';
 import {
   PieChart as RechartsPie,
@@ -57,6 +58,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import * as XLSX from 'xlsx';
+import DatabaseManager from '../components/DatabaseManager';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -560,6 +562,7 @@ function AdminDashboard() {
             <Tab icon={<BarChart />} label="Question Affinity" iconPosition="start" />
             <Tab icon={<Timeline />} label="Completion Trends" iconPosition="start" />
             <Tab icon={<TableChart />} label="Student Submissions" iconPosition="start" />
+            <Tab icon={<Storage />} label="Database Manager" iconPosition="start" />
           </Tabs>
         </Paper>
 
@@ -737,6 +740,11 @@ function AdminDashboard() {
               />
             </CardContent>
           </Card>
+        )}
+
+        {/* Database Manager Tab */}
+        {activeTab === 4 && (
+          <DatabaseManager />
         )}
 
         {/* Footer */}
