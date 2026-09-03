@@ -13,26 +13,37 @@ import {
   Paper,
   Alert,
   CircularProgress,
-  alpha
+  alpha,
+  TextField,
+  Card,
+  CardContent
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
 
 function Assessment() {
   const navigate = useNavigate();
   const questionRef = useRef(null); // For auto-scrolling on mobile
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [assessmentId, setAssessmentId] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-
-  useEffect(() => {
-    loadAssessment();
-  }, []);
+  
+  // Student information state
+  const [showStudentForm, setShowStudentForm] = useState(true);
+  const [studentInfo, setStudentInfo] = useState({
+    student_id: '',
+    student_name: '',
+    student_email: ''
+  });
+  const [studentInfoError, setStudentInfoError] = useState({});
 
   // Auto-scroll to top of question when index changes (great for mobile)
   useEffect(() => {
@@ -41,19 +52,72 @@ function Assessment() {
     }
   }, [currentQuestionIndex]);
 
-  const loadAssessment = async () => {
+  const validateStudentInfo = () => {
+    const errors = {};
+    
+    // Validate Student ID (required, alphanumeric)
+    if (!studentInfo.student_id.trim()) {
+      errors.student_id = 'Student ID is required';
+    } else if (!/^[A-Za-z0-9\/\-]+$/.test(studentInfo.student_id)) {
+      errors.student_id = 'Invalid Student ID format';
+    }
+    
+    // Validate Name (required)
+    if (!studentInfo.student_name.trim()) {
+      errors.student_name = 'Name is required';
+    } else if (studentInfo.student_name.trim().length < 3) {
+      errors.student_name = 'Name must be at least 3 characters';
+    }
+    
+    // Validate Email (required, valid format)
+    if (!studentInfo.student_email.trim()) {
+      errors.student_email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(studentInfo.student_email)) {
+      errors.student_email = 'Invalid email format';
+    }
+    
+    setStudentInfoError(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleStudentInfoChange = (field, value) => {
+    setStudentInfo(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    // Clear error when user types
+    if (studentInfoError[field]) {
+      setStudentInfoError(prev => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
+  };
+
+  const handleStartAssessment = async () => {
+    if (!validateStudentInfo()) {
+      setError('Please fill in all required fields correctly');
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
-      const response = await startAssessment();
+      const response = await startAssessment(studentInfo);
       setAssessmentId(response.assessment_id);
       setQuestions(response.questions);
+      setShowStudentForm(false);
     } catch (err) {
       console.error('Error loading assessment:', err);
-      setError('Failed to load assessment. Please check your connection and try again.');
+      setError('Failed to start assessment. Please check your information and try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadAssessment = async () => {
+    // This function is now replaced by handleStartAssessment
+    // Keeping it for compatibility but it won't be called automatically
   };
 
   const handleAnswerChange = (questionId, optionId) => {
@@ -133,6 +197,140 @@ function Assessment() {
   const answeredCount = Object.keys(answers).length;
   const isCurrentAnswered = currentQuestion && (currentQuestion.id in answers);
   const allAnswered = answeredCount === questions.length;
+
+  // Show student information form first
+  if (showStudentForm) {
+    return (
+      <Box sx={{ 
+        bgcolor: 'background.default', 
+        minHeight: '100vh',
+        py: 4,
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: `radial-gradient(circle at 20% 30%, ${alpha('#2e7d32', 0.05)} 0%, transparent 50%), radial-gradient(circle at 80% 70%, ${alpha('#f57c00', 0.05)} 0%, transparent 50%)`,
+          pointerEvents: 'none'
+        }
+      }}>
+        <Container maxWidth="sm" sx={{ position: 'relative', zIndex: 1 }}>
+          {/* Header */}
+          <Paper elevation={0} sx={{ 
+            mb: 4, p: { xs: 3, md: 4 }, borderRadius: 4,
+            background: `linear-gradient(135deg, ${alpha('#2e7d32', 0.08)} 0%, ${alpha('#f57c00', 0.06)} 100%)`,
+            backdropFilter: 'blur(20px)', border: `1px solid ${alpha('#2e7d32', 0.1)}`,
+            boxShadow: `0 8px 32px ${alpha('#2e7d32', 0.15)}`, textAlign: 'center'
+          }}>
+            <Typography variant="h4" gutterBottom fontWeight={800} sx={{
+              background: 'linear-gradient(135deg, #2e7d32 0%, #f57c00 100%)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+            }}>
+              Student Information
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Please provide your information to start the assessment
+            </Typography>
+          </Paper>
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+              {error}
+            </Alert>
+          )}
+
+          {/* Student Information Form */}
+          <Card sx={{ 
+            borderRadius: 4,
+            background: alpha('#fff', 0.8),
+            backdropFilter: 'blur(10px)',
+            border: `1px solid ${alpha('#2e7d32', 0.1)}`,
+            boxShadow: `0 8px 32px ${alpha('#000', 0.08)}`
+          }}>
+            <CardContent sx={{ p: 4 }}>
+              <Box component="form" onSubmit={(e) => { e.preventDefault(); handleStartAssessment(); }}>
+                {/* Student ID */}
+                <TextField
+                  fullWidth
+                  label="Student ID"
+                  placeholder="e.g., HU/CS/2024/001"
+                  value={studentInfo.student_id}
+                  onChange={(e) => handleStudentInfoChange('student_id', e.target.value)}
+                  error={!!studentInfoError.student_id}
+                  helperText={studentInfoError.student_id || 'Enter your university student ID'}
+                  required
+                  InputProps={{
+                    startAdornment: <BadgeIcon sx={{ color: '#2e7d32', mr: 1 }} />
+                  }}
+                  sx={{ mb: 3 }}
+                />
+
+                {/* Student Name */}
+                <TextField
+                  fullWidth
+                  label="Full Name"
+                  placeholder="e.g., Asladin Abdukedir"
+                  value={studentInfo.student_name}
+                  onChange={(e) => handleStudentInfoChange('student_name', e.target.value)}
+                  error={!!studentInfoError.student_name}
+                  helperText={studentInfoError.student_name || 'Enter your full name'}
+                  required
+                  InputProps={{
+                    startAdornment: <PersonIcon sx={{ color: '#2e7d32', mr: 1 }} />
+                  }}
+                  sx={{ mb: 3 }}
+                />
+
+                {/* Student Email */}
+                <TextField
+                  fullWidth
+                  type="email"
+                  label="Email Address"
+                  placeholder="e.g., yourname@haramaya.edu.et"
+                  value={studentInfo.student_email}
+                  onChange={(e) => handleStudentInfoChange('student_email', e.target.value)}
+                  error={!!studentInfoError.student_email}
+                  helperText={studentInfoError.student_email || 'Enter your university email'}
+                  required
+                  InputProps={{
+                    startAdornment: <EmailIcon sx={{ color: '#2e7d32', mr: 1 }} />
+                  }}
+                  sx={{ mb: 4 }}
+                />
+
+                {/* Start Button */}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  disabled={loading}
+                  sx={{
+                    py: 1.5,
+                    background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+                    fontWeight: 700,
+                    fontSize: '1.1rem',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: `0 8px 24px ${alpha('#2e7d32', 0.4)}`
+                    }
+                  }}
+                >
+                  {loading ? <CircularProgress size={24} sx={{ color: '#fff' }} /> : 'Start Assessment'}
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+
+          {/* Info Box */}
+          <Alert severity="info" sx={{ mt: 3 }}>
+            Your information will be used for analysis purposes and to send you your results.
+          </Alert>
+        </Container>
+      </Box>
+    );
+  }
 
   if (loading) {
     return (

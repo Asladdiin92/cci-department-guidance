@@ -40,9 +40,10 @@ export async function getDepartment(code) {
 }
 
 // 3. Start new assessment
-export async function startAssessment() {
+export async function startAssessment(studentInfo = {}) {
   const response = await apiCall('/assessments/start', {
     method: 'POST',
+    body: JSON.stringify(studentInfo)
   });
   return response.data;
 }
