@@ -63,14 +63,23 @@ const corsOptions = {
     // Allow requests with no origin (mobile apps, Postman, curl)
     if (!origin) return callback(null, true);
     
-    // Get allowed origins from environment
-    const allowedOrigins = process.env.CORS_ORIGIN 
+    // Production origins (from environment variable)
+    const productionOrigins = process.env.CORS_ORIGIN 
       ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
-      : ['http://localhost:3000', 'http://localhost:5173'];
+      : [];
     
-    // Development: allow localhost origins
-    if (NODE_ENV === 'development' && origin.includes('localhost')) {
-      return callback(null, true);
+    // Development origins (only allowed in development mode)
+    const devOrigins = NODE_ENV === 'development' 
+      ? ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']
+      : [];
+    
+    // Combine allowed origins
+    const allowedOrigins = [...productionOrigins, ...devOrigins];
+    
+    // Fallback if no origins configured
+    if (allowedOrigins.length === 0) {
+      console.warn('⚠️  No CORS origins configured! Using default localhost');
+      allowedOrigins.push('http://localhost:5173');
     }
     
     // Check if origin matches allowed patterns
@@ -290,14 +299,16 @@ app.get('/api', (req, res) => {
         submit: { method: 'POST', path: '/api/feedback', description: 'Submit user feedback' },
         list: { method: 'GET', path: '/api/feedback', description: 'List feedback (admin)' }
       },
-      auth: {
-        login: { method: 'POST', path: '/api/auth/login', description: 'Admin login' },
-        verify: { method: 'GET', path: '/api/auth/verify', description: 'Verify token' }
-      },
       admin: {
         stats: { method: 'GET', path: '/api/admin/stats', description: 'Get dashboard stats' },
         analytics: { method: 'GET', path: '/api/admin/analytics', description: 'Get analytics data' },
         submissions: { method: 'GET', path: '/api/admin/submissions', description: 'Get submissions' }
+      },
+      database: {
+        list: { method: 'GET', path: '/api/admin/database/:table', description: 'List table rows' },
+        create: { method: 'POST', path: '/api/admin/database/:table', description: 'Create row' },
+        update: { method: 'PUT', path: '/api/admin/database/:table/:id', description: 'Update row' },
+        delete: { method: 'DELETE', path: '/api/admin/database/:table/:id', description: 'Delete row' }
       }
     },
     support: {
@@ -315,7 +326,6 @@ app.get('/api', (req, res) => {
 const departmentsRoutes = require('./routes/departments');
 const assessmentsRoutes = require('./routes/assessments');
 const feedbackRoutes = require('./routes/feedback');
-const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const databaseRoutes = require('./routes/databaseRoutes');
 
@@ -323,7 +333,6 @@ const databaseRoutes = require('./routes/databaseRoutes');
 app.use('/api/departments', departmentsRoutes);
 app.use('/api/assessments', assessmentsRoutes);
 app.use('/api/feedback', feedbackRoutes);
-app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/database', databaseRoutes);
 
@@ -332,7 +341,6 @@ if (API_VERSION !== 'v1') {
   app.use(`/api/${API_VERSION}/departments`, departmentsRoutes);
   app.use(`/api/${API_VERSION}/assessments`, assessmentsRoutes);
   app.use(`/api/${API_VERSION}/feedback`, feedbackRoutes);
-  app.use(`/api/${API_VERSION}/auth`, authRoutes);
   app.use(`/api/${API_VERSION}/admin`, adminRoutes);
   app.use(`/api/${API_VERSION}/admin/database`, databaseRoutes);
 }

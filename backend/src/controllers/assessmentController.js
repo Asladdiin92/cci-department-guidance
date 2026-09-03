@@ -15,7 +15,7 @@ const crypto = require('crypto');
  */
 const startAssessment = async (req, res, next) => {
   try {
-    const { student_name, student_email } = req.body;
+    const { student_id, student_name, student_email } = req.body;
 
     // Generate unique session token
     const sessionToken = crypto.randomBytes(32).toString('hex');
@@ -24,6 +24,7 @@ const startAssessment = async (req, res, next) => {
     const { data: assessment, error } = await supabase
       .from('assessments')
       .insert({
+        student_id: student_id || null,
         student_name: student_name || null,
         student_email: student_email || null,
         session_token: sessionToken,

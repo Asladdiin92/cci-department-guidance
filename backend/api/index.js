@@ -53,12 +53,31 @@ app.use(helmet({
 }));
 
 /**
- * CORS Configuration - FIXED
- * Critical fix: Never use '*' with credentials: true
+ * CORS Configuration - Production Ready
+ * Critical: Only production URLs in CORS_ORIGIN env var, localhost added automatically in dev
  */
-const allowedOrigins = process.env.CORS_ORIGIN 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// Production origins from environment variable
+const productionOrigins = process.env.CORS_ORIGIN 
   ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
-  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000']; // ✅ Explicit fallback
+  : [];
+
+// Development origins (only added in dev mode)
+const devOrigins = NODE_ENV === 'development' 
+  ? ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']
+  : [];
+
+// Combine origins
+const allowedOrigins = [...productionOrigins, ...devOrigins];
+
+// Fallback if no origins configured
+if (allowedOrigins.length === 0) {
+  console.warn('⚠️  No CORS origins configured! Using default localhost');
+  allowedOrigins.push('http://localhost:5173');
+}
+
+console.log(`🔐 CORS allowed origins (${NODE_ENV}):`, allowedOrigins);
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -283,16 +302,15 @@ app.get('/api', (req, res) => {
 // ================================================================
 
 const departmentsRoutes = require('../src/routes/departments');
+const departmentsRoutes = require('../src/routes/departments');
 const assessmentsRoutes = require('../src/routes/assessments');
 const feedbackRoutes = require('../src/routes/feedback');
-const authRoutes = require('../src/routes/auth');
 const adminRoutes = require('../src/routes/admin');
 const databaseRoutes = require('../src/routes/databaseRoutes');
 
 app.use('/api/departments', departmentsRoutes);
 app.use('/api/assessments', assessmentsRoutes);
 app.use('/api/feedback', feedbackRoutes);
-app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admin/database', databaseRoutes);
 
