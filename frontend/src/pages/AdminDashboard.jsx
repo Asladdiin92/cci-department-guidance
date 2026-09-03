@@ -395,21 +395,6 @@ function AdminDashboard() {
             >
               Export CSV
             </Button>
-            <Button
-              startIcon={<Logout />}
-              onClick={handleLogout}
-              variant="outlined"
-              color="error"
-              sx={{
-                borderWidth: 2,
-                fontWeight: 700,
-                '&:hover': {
-                  borderWidth: 2
-                }
-              }}
-            >
-              Logout
-            </Button>
           </Box>
         </Paper>
 
