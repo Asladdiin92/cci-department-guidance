@@ -58,7 +58,7 @@ app.use(helmet({
  */
 const allowedOrigins = process.env.CORS_ORIGIN 
   ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
-  : ['http://localhost:5173', 'http://localhost:3000']; // ✅ Explicit fallback
+  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000']; // ✅ Explicit fallback
 
 const corsOptions = {
   origin: function (origin, callback) {
