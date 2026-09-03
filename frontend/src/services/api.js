@@ -49,9 +49,10 @@ export async function startAssessment(studentInfo = {}) {
 }
 
 // 4. Submit assessment (after responses saved)
-export async function submitAssessment(assessmentId) {
+export async function submitAssessment(assessmentId, sessionToken) {
   const response = await apiCall(`/assessments/${assessmentId}/submit`, {
     method: 'POST',
+    body: JSON.stringify({ session_token: sessionToken })
   });
   return response.data;
 }

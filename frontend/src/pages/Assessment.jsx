@@ -32,6 +32,7 @@ function Assessment() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [assessmentId, setAssessmentId] = useState(null);
+  const [sessionToken, setSessionToken] = useState(null); // NEW: Store session token
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -105,6 +106,7 @@ function Assessment() {
       setError(null);
       const response = await startAssessment(studentInfo);
       setAssessmentId(response.assessment_id);
+      setSessionToken(response.session_token); // Store session token
       setQuestions(response.questions);
       setShowStudentForm(false);
     } catch (err) {
@@ -163,7 +165,11 @@ function Assessment() {
         const response = await fetch(`${API_BASE}/assessments/${assessmentId}/responses`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question_id: questionId, option_id: optionId })
+          body: JSON.stringify({ 
+            question_id: questionId, 
+            option_id: optionId,
+            session_token: sessionToken // Include session token
+          })
         });
         
         if (!response.ok) {
@@ -177,9 +183,7 @@ function Assessment() {
       await Promise.all(responsePromises);
       
       // 2. Submit the assessment to calculate results
-      // (Note: The ultimate fix is to update your backend to accept 'answers' 
-      // directly in this submit call, eliminating the loop above entirely).
-      const results = await submitAssessment(assessmentId);
+      const results = await submitAssessment(assessmentId, sessionToken);
       
       // 3. Navigate to results
       navigate(`/results/${assessmentId}`, { state: { results }, replace: true });
