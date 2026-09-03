@@ -23,9 +23,9 @@ docs/**/build/
 **/*.fdb_latexmk
 **/*.fls
 
-# Environment
-.env
-.env.local
+# Environment (commented out - committing .env files for deployment)
+# .env
+# .env.local
 
 # IDE
 .vscode/
