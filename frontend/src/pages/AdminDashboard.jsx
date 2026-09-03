@@ -63,10 +63,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 function AdminDashboard() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showLoginDialog, setShowLoginDialog] = useState(true);
-  const [loginError, setLoginError] = useState('');
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [activeTab, setActiveTab] = useState(0);
   const [loading, setLoading] = useState(false);
   
@@ -90,89 +86,35 @@ function AdminDashboard() {
   const [sortModel, setSortModel] = useState([{ field: 'completed_at', sort: 'desc' }]);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      setIsAuthenticated(true);
-      setShowLoginDialog(false);
-      loadDashboardData();
-    }
+    loadDashboardData();
   }, []);
 
   // Load submissions when switching to submissions tab
   useEffect(() => {
-    if (isAuthenticated && activeTab === 3) {
+    if (activeTab === 3) {
       loadSubmissions();
     }
-  }, [isAuthenticated, activeTab]);
+  }, [activeTab]);
 
   // Debounce search to avoid hammering the backend
   useEffect(() => {
     // Debounce search to avoid hammering the backend
     const timer = setTimeout(() => {
-      if (isAuthenticated && activeTab === 3) {
+      if (activeTab === 3) {
         loadSubmissions();
       }
-    }, 500); // Wait 500ms after user stops typing
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [searchQuery, paginationModel, sortModel]);
 
-  const handleLogin = async () => {
-    setLoginError('');
-    setLoading(true);
-    
-    try {
-      // Real API authentication
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      if (data.success && data.data?.token) {
-        localStorage.setItem('adminToken', data.data.token);
-        setIsAuthenticated(true);
-        setShowLoginDialog(false);
-        loadDashboardData();
-      } else {
-        setLoginError(data.error || 'Invalid credentials');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      setLoginError('Login failed. Please check your credentials and try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    setIsAuthenticated(false);
-    setShowLoginDialog(true);
-    navigate('/');
-  };
-
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('adminToken');
-      
-      // Load stats
-      const statsResponse = await fetch(`${API_BASE_URL}/admin/stats`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      // Load stats (no token needed)
+      const statsResponse = await fetch(`${API_BASE_URL}/admin/stats`);
 
       if (!statsResponse.ok) {
-        if (statsResponse.status === 401) {
-          handleLogout(); // Token expired or invalid
-          return;
-        }
         throw new Error(`HTTP error! status: ${statsResponse.status}`);
       }
 
@@ -180,15 +122,9 @@ function AdminDashboard() {
       setStats(statsData.data || {});
 
       // Load analytics
-      const analyticsResponse = await fetch(`${API_BASE_URL}/admin/analytics`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const analyticsResponse = await fetch(`${API_BASE_URL}/admin/analytics`);
 
       if (!analyticsResponse.ok) {
-        if (analyticsResponse.status === 401) {
-          handleLogout();
-          return;
-        }
         throw new Error(`HTTP error! status: ${analyticsResponse.status}`);
       }
 
@@ -209,20 +145,14 @@ function AdminDashboard() {
   const loadSubmissions = async () => {
     setSubmissionsLoading(true);
     try {
-      const token = localStorage.getItem('adminToken');
       const sortBy = sortModel[0]?.field || 'completed_at';
       const sortOrder = sortModel[0]?.sort || 'desc';
       
       const response = await fetch(
-        `${API_BASE_URL}/admin/submissions?page=${paginationModel.page + 1}&limit=${paginationModel.pageSize}&search=${searchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
-        { headers: { 'Authorization': `Bearer ${token}` } }
+        `${API_BASE_URL}/admin/submissions?page=${paginationModel.page + 1}&limit=${paginationModel.pageSize}&search=${searchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`
       );
 
       if (!response.ok) {
-        if (response.status === 401) {
-          handleLogout();
-          return;
-        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
@@ -362,54 +292,6 @@ function AdminDashboard() {
       )
     }
   ];
-
-  if (!isAuthenticated) {
-    return (
-      <Dialog open={showLoginDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Lock sx={{ mr: 1 }} />
-            Admin Dashboard Login
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <Alert severity="info" sx={{ mb: 3 }}>
-            <strong>Demo Credentials:</strong><br />
-            Username: admin<br />
-            Password: admin123
-          </Alert>
-          <TextField
-            fullWidth
-            label="Username"
-            value={credentials.username}
-            onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-            sx={{ mb: 2 }}
-            autoComplete="username"
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            value={credentials.password}
-            onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-            onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-            autoComplete="current-password"
-          />
-          {loginError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {loginError}
-            </Alert>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => navigate('/')}>Cancel</Button>
-          <Button onClick={handleLogin} variant="contained">
-            Login
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
 
   return (
     <Box sx={{ 
