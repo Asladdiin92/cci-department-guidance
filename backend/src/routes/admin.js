@@ -120,7 +120,6 @@ router.put(
  */
 router.post(
   '/questions',
-  requireRole('super_admin'),
   asyncHandler(async (req, res, next) => {
     const { text, category, difficulty, order_index, is_active } = req.body;
 
@@ -151,7 +150,6 @@ router.post(
  */
 router.delete(
   '/questions/:id',
-  requireRole('super_admin'),
   validateUUID('id'),
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
