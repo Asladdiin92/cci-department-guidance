@@ -3,7 +3,7 @@
  * Handles assessment lifecycle: start, save responses, submit, get results
  */
 
-const { supabase } = require('../config/supabase');
+const { supabase, getClient } = require('../config/supabase');
 const { successResponse, createdResponse, errorResponse } = require('../utils/response');
 const { calculateDepartmentScores, generateInsights, validateScoringData } = require('../utils/scoring');
 const { AppError } = require('../middleware/errorHandler');
@@ -131,7 +131,7 @@ const saveResponse = async (req, res, next) => {
         .from('assessment_responses')
         .update({
           option_id,
-          responded_at: new Date().toISOString()
+          answered_at: new Date().toISOString()
         })
         .eq('id', existingResponse.id)
         .select()
@@ -150,7 +150,7 @@ const saveResponse = async (req, res, next) => {
         assessment_id: assessmentId,
         question_id,
         option_id,
-        responded_at: new Date().toISOString()
+        answered_at: new Date().toISOString()
       };
       console.log('Insert data:', insertData);
 
@@ -196,6 +196,11 @@ const saveResponse = async (req, res, next) => {
 const submitAssessment = async (req, res, next) => {
   try {
     const { id: assessmentId } = req.params;
+
+    // Use admin client for system operations (writing recommendations)
+    const adminClient = getClient(true);
+    
+    console.log('🔑 Using admin client:', adminClient === supabase ? 'NO (falling back to anon)' : 'YES (service role)');
 
     // Verify assessment exists
     const { data: assessment, error: assessmentError } = await supabase
@@ -275,7 +280,7 @@ const submitAssessment = async (req, res, next) => {
       };
     });
 
-    // Save recommendations to database
+    // Save recommendations to database using ADMIN CLIENT
     const recommendationsToInsert = enrichedRecommendations.map(rec => ({
       assessment_id: assessmentId,
       department_id: rec.department_code,
@@ -284,16 +289,19 @@ const submitAssessment = async (req, res, next) => {
       match_percentage: rec.match_percentage
     }));
 
-    const { error: recError } = await supabase
+    console.log('Inserting recommendations:', JSON.stringify(recommendationsToInsert, null, 2));
+
+    const { error: recError } = await adminClient
       .from('recommendations')
       .insert(recommendationsToInsert);
 
     if (recError) {
-      throw new AppError('Failed to save recommendations', 500, { dbError: recError.message });
+      console.error('Recommendations insert error:', JSON.stringify(recError, null, 2));
+      throw new AppError('Failed to save recommendations', 500, { dbError: recError.message, details: recError });
     }
 
-    // Update assessment as completed
-    const { error: updateError } = await supabase
+    // Update assessment as completed using ADMIN CLIENT
+    const { error: updateError } = await adminClient
       .from('assessments')
       .update({ completed_at: new Date().toISOString() })
       .eq('id', assessmentId);
