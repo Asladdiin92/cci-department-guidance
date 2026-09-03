@@ -58,7 +58,7 @@ import {
 } from 'recharts';
 import * as XLSX from 'xlsx';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://cci-department-guidance-production.up.railway.app/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 function AdminDashboard() {
   const theme = useTheme();
@@ -98,24 +98,56 @@ function AdminDashboard() {
     }
   }, []);
 
+  // Load submissions when switching to submissions tab
   useEffect(() => {
     if (isAuthenticated && activeTab === 3) {
       loadSubmissions();
     }
-  }, [isAuthenticated, activeTab, paginationModel, searchQuery, sortModel]);
+  }, [isAuthenticated, activeTab]);
+
+  // Debounce search to avoid hammering the backend
+  useEffect(() => {
+    // Debounce search to avoid hammering the backend
+    const timer = setTimeout(() => {
+      if (isAuthenticated && activeTab === 3) {
+        loadSubmissions();
+      }
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, paginationModel, sortModel]);
 
   const handleLogin = async () => {
     setLoginError('');
+    setLoading(true);
     
-    // Simple authentication - Replace with real API call in production
-    if (credentials.username === 'admin' && credentials.password === 'admin123') {
-      const token = 'mock-token-' + Date.now();
-      localStorage.setItem('adminToken', token);
-      setIsAuthenticated(true);
-      setShowLoginDialog(false);
-      loadDashboardData();
-    } else {
-      setLoginError('Invalid credentials. Use admin/admin123 for demo.');
+    try {
+      // Real API authentication
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.success && data.data?.token) {
+        localStorage.setItem('adminToken', data.data.token);
+        setIsAuthenticated(true);
+        setShowLoginDialog(false);
+        loadDashboardData();
+      } else {
+        setLoginError(data.error || 'Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginError('Login failed. Please check your credentials and try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,6 +167,15 @@ function AdminDashboard() {
       const statsResponse = await fetch(`${API_BASE_URL}/admin/stats`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+
+      if (!statsResponse.ok) {
+        if (statsResponse.status === 401) {
+          handleLogout(); // Token expired or invalid
+          return;
+        }
+        throw new Error(`HTTP error! status: ${statsResponse.status}`);
+      }
+
       const statsData = await statsResponse.json();
       setStats(statsData.data || {});
 
@@ -142,6 +183,15 @@ function AdminDashboard() {
       const analyticsResponse = await fetch(`${API_BASE_URL}/admin/analytics`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+
+      if (!analyticsResponse.ok) {
+        if (analyticsResponse.status === 401) {
+          handleLogout();
+          return;
+        }
+        throw new Error(`HTTP error! status: ${analyticsResponse.status}`);
+      }
+
       const analyticsData = await analyticsResponse.json();
       setAnalytics(analyticsData.data || {
         department_distribution: [],
@@ -167,6 +217,14 @@ function AdminDashboard() {
         `${API_BASE_URL}/admin/submissions?page=${paginationModel.page + 1}&limit=${paginationModel.pageSize}&search=${searchQuery}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          handleLogout();
+          return;
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       const data = await response.json();
       setSubmissions(data.data?.submissions || []);
@@ -190,7 +248,7 @@ function AdminDashboard() {
       if (activeTab === 0) {
         // Export department distribution
         const ws = XLSX.utils.json_to_sheet(
-          analytics.department_distribution.map(d => ({
+          (analytics.department_distribution || []).map(d => ({
             'Department': d.department,
             'Code': d.code,
             'Student Count': d.count,
@@ -203,7 +261,7 @@ function AdminDashboard() {
       } else if (activeTab === 1) {
         // Export question affinity
         const ws = XLSX.utils.json_to_sheet(
-          analytics.question_affinity.map(q => ({
+          (analytics.question_affinity || []).map(q => ({
             'Question': q.question_text,
             'Category': q.category,
             'Response Count': q.response_count
@@ -215,7 +273,7 @@ function AdminDashboard() {
       } else if (activeTab === 3) {
         // Export submissions
         const ws = XLSX.utils.json_to_sheet(
-          submissions.map(s => ({
+          (submissions || []).map(s => ({
             'Assessment ID': s.id,
             'Student Name': s.student_name,
             'Student Email': s.student_email,
@@ -276,7 +334,7 @@ function AdminDashboard() {
       headerName: 'Completed', 
       width: 180, 
       sortable: true,
-      renderCell: (params) => new Date(params.value).toLocaleString()
+      renderCell: (params) => params.value ? new Date(params.value).toLocaleString() : 'Pending'
     },
     { 
       field: 'top_department', 
