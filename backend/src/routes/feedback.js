@@ -9,7 +9,6 @@ const { supabase } = require('../config/supabase');
 const { successResponse, createdResponse } = require('../utils/response');
 const { validate, schemas, validateUUID } = require('../middleware/validator');
 const { asyncHandler, AppError } = require('../middleware/errorHandler');
-const { authenticateAdmin } = require('../middleware/auth');
 
 /**
  * @route   POST /api/feedback
@@ -114,12 +113,11 @@ router.get(
 
 /**
  * @route   GET /api/feedback/recent
- * @desc    Get recent feedback (admin only)
- * @access  Private (Admin)
+ * @desc    Get recent feedback (previously admin only, now public)
+ * @access  Public
  */
 router.get(
   '/recent',
-  authenticateAdmin,
   asyncHandler(async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 20;
     const offset = parseInt(req.query.offset) || 0;

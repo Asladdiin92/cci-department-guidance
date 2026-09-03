@@ -9,10 +9,8 @@ const { supabaseAdmin } = require('../config/supabase');
 const { successResponse, createdResponse } = require('../utils/response');
 const { validate, schemas, validateUUID } = require('../middleware/validator');
 const { asyncHandler, AppError } = require('../middleware/errorHandler');
-const { authenticateAdmin, requireRole } = require('../middleware/auth');
 
-// All admin routes require authentication
-router.use(authenticateAdmin);
+// Note: All admin routes are now public (JWT auth removed per project requirements)
 
 /**
  * @route   GET /api/admin/questions
