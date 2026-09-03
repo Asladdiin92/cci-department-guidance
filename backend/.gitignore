@@ -2,10 +2,10 @@
 node_modules/
 package-lock.json
 
-# Environment Variables
-.env
-.env.local
-.env.production
+# Environment Variables (commented out - committing for deployment)
+# .env
+# .env.local
+# .env.production
 
 # Logs
 logs/
