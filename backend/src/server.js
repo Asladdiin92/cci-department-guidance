@@ -449,26 +449,27 @@ const startServer = async () => {
       }
     }
     
-    // Start HTTP server
-    server = app.listen(PORT, () => {
-      console.log('');
-      console.log('═'.repeat(70));
-      console.log('  🎓 CCI DEPARTMENT GUIDANCE SYSTEM - BACKEND API');
-      console.log('═'.repeat(70));
-      console.log('');
-      console.log('  📍 Server URL:    ', `http://localhost:${PORT}`);
-      console.log('  🌐 Environment:   ', NODE_ENV.toUpperCase());
-      console.log('  📦 Version:       ', API_VERSION);
-      console.log('  💾 Database:      ', dbConnected ? '✅ Connected (Supabase)' : '❌ Disconnected');
-      console.log('  🔐 CORS Origin:   ', process.env.CORS_ORIGIN || 'localhost:5173');
-      console.log('');
-      console.log('  📚 API Docs:      ', `http://localhost:${PORT}/api`);
-      console.log('  🏥 Health Check:  ', `http://localhost:${PORT}/api/health`);
-      console.log('');
-      console.log('═'.repeat(70));
-      console.log('  Ready to accept connections');
-      console.log('═'.repeat(70));
-      console.log('');
+    // Start HTTP server only if not in test mode
+    if (process.env.NODE_ENV !== 'test') {
+      server = app.listen(PORT, () => {
+        console.log('');
+        console.log('═'.repeat(70));
+        console.log('  🎓 CCI DEPARTMENT GUIDANCE SYSTEM - BACKEND API');
+        console.log('═'.repeat(70));
+        console.log('');
+        console.log('  📍 Server URL:    ', `http://localhost:${PORT}`);
+        console.log('  🌐 Environment:   ', NODE_ENV.toUpperCase());
+        console.log('  📦 Version:       ', API_VERSION);
+        console.log('  💾 Database:      ', dbConnected ? '✅ Connected (Supabase)' : '❌ Disconnected');
+        console.log('  🔐 CORS Origin:   ', process.env.CORS_ORIGIN || 'localhost:5173');
+        console.log('');
+        console.log('  📚 API Docs:      ', `http://localhost:${PORT}/api`);
+        console.log('  🏥 Health Check:  ', `http://localhost:${PORT}/api/health`);
+        console.log('');
+        console.log('═'.repeat(70));
+        console.log('  Ready to accept connections');
+        console.log('═'.repeat(70));
+        console.log('');
       
       // Log routes in development
       if (NODE_ENV === 'development') {
@@ -494,6 +495,7 @@ const startServer = async () => {
       }
       process.exit(1);
     });
+    } // Close the if (NODE_ENV !== 'test') block
     
   } catch (error) {
     console.error('');
