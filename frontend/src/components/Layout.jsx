@@ -1,17 +1,19 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import NavbarEnhanced from './NavbarEnhanced';
+import FooterEnhanced from './FooterEnhanced';
+import Breadcrumbs from './Breadcrumbs';
 import './Layout.css';
 
 const Layout = ({ children }) => {
   return (
     <div className="layout">
-      <Navbar />
+      <NavbarEnhanced />
+      <Breadcrumbs />
       <main className="layout-main">
         {children || <Outlet />}
       </main>
-      <Footer />
+      <FooterEnhanced />
     </div>
   );
 };
