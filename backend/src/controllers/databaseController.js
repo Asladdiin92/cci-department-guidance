@@ -22,7 +22,7 @@ const getTableData = async (req, res) => {
     if (!ALLOWED_TABLES.includes(table)) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid table name'
+        error: 'Invalid table name'
       });
     }
 
@@ -37,8 +37,8 @@ const getTableData = async (req, res) => {
       console.error(`Error fetching ${table}:`, error);
       return res.status(500).json({
         success: false,
-        message: `Failed to fetch ${table}`,
-        error: error.message
+        error: `Failed to fetch ${table}`,
+        details: error.message
       });
     }
 
@@ -54,8 +54,8 @@ const getTableData = async (req, res) => {
     console.error('Database fetch error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error',
-      error: error.message
+      error: 'Internal server error',
+      details: error.message
     });
   }
 };
@@ -72,7 +72,7 @@ const updateTableRow = async (req, res) => {
     if (!ALLOWED_TABLES.includes(table)) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid table name'
+        error: 'Invalid table name'
       });
     }
 
@@ -91,8 +91,8 @@ const updateTableRow = async (req, res) => {
       console.error(`Error updating ${table}:`, error);
       return res.status(500).json({
         success: false,
-        message: `Failed to update ${table}`,
-        error: error.message
+        error: `Failed to update ${table}`,
+        details: error.message
       });
     }
 
@@ -105,8 +105,8 @@ const updateTableRow = async (req, res) => {
     console.error('Database update error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error',
-      error: error.message
+      error: 'Internal server error',
+      details: error.message
     });
   }
 };
@@ -122,7 +122,7 @@ const deleteTableRow = async (req, res) => {
     if (!ALLOWED_TABLES.includes(table)) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid table name'
+        error: 'Invalid table name'
       });
     }
     
@@ -137,8 +137,8 @@ const deleteTableRow = async (req, res) => {
       console.error(`Error deleting from ${table}:`, error);
       return res.status(500).json({
         success: false,
-        message: `Failed to delete from ${table}`,
-        error: error.message
+        error: `Failed to delete from ${table}`,
+        details: error.message
       });
     }
 
@@ -150,8 +150,8 @@ const deleteTableRow = async (req, res) => {
     console.error('Database delete error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error',
-      error: error.message
+      error: 'Internal server error',
+      details: error.message
     });
   }
 };
@@ -168,7 +168,7 @@ const insertTableRow = async (req, res) => {
     if (!ALLOWED_TABLES.includes(table)) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid table name'
+        error: 'Invalid table name'
       });
     }
     
@@ -183,8 +183,8 @@ const insertTableRow = async (req, res) => {
       console.error(`Error inserting into ${table}:`, error);
       return res.status(500).json({
         success: false,
-        message: `Failed to insert into ${table}`,
-        error: error.message
+        error: `Failed to insert into ${table}`,
+        details: error.message
       });
     }
 
@@ -197,8 +197,8 @@ const insertTableRow = async (req, res) => {
     console.error('Database insert error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error',
-      error: error.message
+      error: 'Internal server error',
+      details: error.message
     });
   }
 };

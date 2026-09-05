@@ -263,8 +263,8 @@ app.get('/api/health', async (req, res) => {
   } catch (error) {
     res.status(503).json({
       success: false,
-      message: 'Service temporarily unavailable',
-      error: error.message
+      error: 'Service temporarily unavailable',
+      details: error.message
     });
   }
 });
@@ -394,19 +394,17 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 /**
  * Unhandled Promise Rejection Handler
- * Logs unhandled promise rejections
+ * Logs unhandled promise rejections and exits
+ * CRITICAL: Always exit to prevent corrupted state
  */
 process.on('unhandledRejection', (reason, promise) => {
   console.error('❌ Unhandled Promise Rejection at:', promise);
   console.error('Reason:', reason);
   
-  if (NODE_ENV === 'production') {
-    // In production, log to monitoring service and continue
-    // TODO: Integrate with logging service (e.g., Sentry, LogRocket)
-  } else {
-    // In development, exit to surface the issue
-    process.exit(1);
-  }
+  // Exit process immediately - unhandled rejections indicate critical bugs
+  // In production, process manager (PM2, Railway) will restart the app
+  console.error('⚠️  Process will exit to prevent corrupted state');
+  process.exit(1);
 });
 
 /**

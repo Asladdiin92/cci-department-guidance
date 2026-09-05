@@ -1,7 +1,21 @@
 // Base API URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'https://cci-department-guidance-production.up.railway.app/api';
 
-// Helper function for API calls
+/**
+ * Enhanced API Error Class
+ */
+class APIError extends Error {
+  constructor(message, statusCode, details = null) {
+    super(message);
+    this.name = 'APIError';
+    this.statusCode = statusCode;
+    this.details = details;
+  }
+}
+
+/**
+ * Helper function for API calls with enhanced error handling
+ */
 async function apiCall(endpoint, options = {}) {
   const url = `${API_URL}${endpoint}`;
   
@@ -14,16 +28,57 @@ async function apiCall(endpoint, options = {}) {
       ...options,
     });
 
-    const data = await response.json();
+    // Try to parse JSON response
+    let data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      // If JSON parsing fails, throw a generic error
+      throw new APIError(
+        `Server returned invalid response`,
+        response.status,
+        'Response was not valid JSON'
+      );
+    }
 
+    // Check if response is not OK
     if (!response.ok) {
-      throw new Error(data.error || `API Error: ${response.status}`);
+      // Extract error message from standardized error response
+      const errorMessage = data.error || data.message || `API Error: ${response.status}`;
+      throw new APIError(errorMessage, response.status, data.details);
     }
 
     return data;
   } catch (error) {
-    console.error(`API call failed for ${endpoint}:`, error);
-    throw error;
+    // Re-throw APIError as-is
+    if (error instanceof APIError) {
+      console.error(`API call failed for ${endpoint}:`, error.message);
+      throw error;
+    }
+    
+    // Handle network errors
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      console.error(`Network error for ${endpoint}:`, error);
+      throw new APIError(
+        'Unable to connect to server. Please check your internet connection.',
+        0,
+        error.message
+      );
+    }
+    
+    // Handle timeout errors
+    if (error.name === 'AbortError') {
+      console.error(`Request timeout for ${endpoint}`);
+      throw new APIError('Request timed out. Please try again.', 0, 'Timeout');
+    }
+    
+    // Handle other unknown errors
+    console.error(`Unexpected error for ${endpoint}:`, error);
+    throw new APIError(
+      error.message || 'An unexpected error occurred',
+      0,
+      error.toString()
+    );
   }
 }
 
@@ -77,3 +132,6 @@ export async function submitFeedback(feedbackData) {
   });
   return response.data;
 }
+
+// Export APIError for use in components
+export { APIError };
