@@ -87,27 +87,40 @@ const validate = (schema) => {
 const schemas = {
   // Assessment schemas
   startAssessment: Joi.object({
+    student_id: Joi.string()
+      .trim()
+      .min(3)
+      .max(50)
+      .required()
+      .messages({
+        'string.empty': 'Student ID is required',
+        'string.min': 'Student ID must be at least 3 characters',
+        'string.max': 'Student ID must not exceed 50 characters',
+        'any.required': 'Student ID is required'
+      }),
     student_name: Joi.string()
       .trim()
       .min(2)
       .max(100)
       .pattern(/^[a-zA-Z\s\-'.]+$/)
-      .optional()
-      .allow('', null)
+      .required()
       .messages({
         'string.pattern.base': 'Student name must contain only letters, spaces, hyphens, apostrophes, and periods',
         'string.min': 'Student name must be at least 2 characters',
-        'string.max': 'Student name must not exceed 100 characters'
+        'string.max': 'Student name must not exceed 100 characters',
+        'string.empty': 'Student name is required',
+        'any.required': 'Student name is required'
       }),
     student_email: Joi.string()
       .trim()
       .email({ tlds: { allow: false } })
       .max(255)
-      .optional()
-      .allow('', null)
+      .required()
       .messages({
         'string.email': 'Please provide a valid email address',
-        'string.max': 'Email must not exceed 255 characters'
+        'string.max': 'Email must not exceed 255 characters',
+        'string.empty': 'Email is required',
+        'any.required': 'Email is required'
       })
   }),
 

@@ -101,6 +101,10 @@ function Assessment() {
       return;
     }
 
+    console.log('🚀 handleStartAssessment - studentInfo state:', studentInfo);
+    console.log('🚀 Keys in studentInfo:', Object.keys(studentInfo));
+    console.log('🚀 student_id value:', studentInfo.student_id);
+
     try {
       setLoading(true);
       setError(null);

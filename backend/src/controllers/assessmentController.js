@@ -46,10 +46,19 @@ const validateSessionToken = async (assessmentId, sessionToken) => {
  */
 const startAssessment = async (req, res, next) => {
   try {
+    console.log('=== START ASSESSMENT REQUEST ===');
+    console.log('Body:', req.body);
+    console.log('Headers:', req.headers);
+    
     const { student_id, student_name, student_email } = req.body;
 
     // Validate student information
     if (!student_id || !student_name || !student_email) {
+      console.log('❌ Missing fields:', { 
+        has_id: !!student_id, 
+        has_name: !!student_name, 
+        has_email: !!student_email 
+      });
       throw new AppError('Student ID, name, and email are required', 400);
     }
 

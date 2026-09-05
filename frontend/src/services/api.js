@@ -41,6 +41,12 @@ export async function getDepartment(code) {
 
 // 3. Start new assessment
 export async function startAssessment(studentInfo = {}) {
+  console.log('🔍 API startAssessment called with:', studentInfo);
+  console.log('Keys:', Object.keys(studentInfo));
+  console.log('student_id:', studentInfo.student_id);
+  console.log('student_name:', studentInfo.student_name);
+  console.log('student_email:', studentInfo.student_email);
+  
   const response = await apiCall('/assessments/start', {
     method: 'POST',
     body: JSON.stringify(studentInfo)
