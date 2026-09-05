@@ -126,11 +126,28 @@ const schemas = {
 
   saveResponse: Joi.object({
     question_id: Joi.string().uuid().required(),
-    option_id: Joi.string().uuid().required()
+    option_id: Joi.string().uuid().required(),
+    session_token: Joi.string()
+      .trim()
+      .min(32)
+      .required()
+      .messages({
+        'string.empty': 'Session token is required',
+        'any.required': 'Session token is required',
+        'string.min': 'Invalid session token'
+      })
   }),
 
   submitAssessment: Joi.object({
-    // No body required, assessment ID from params
+    session_token: Joi.string()
+      .trim()
+      .min(32)
+      .required()
+      .messages({
+        'string.empty': 'Session token is required',
+        'any.required': 'Session token is required',
+        'string.min': 'Invalid session token'
+      })
   }),
 
   // Feedback schema
