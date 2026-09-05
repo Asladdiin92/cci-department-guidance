@@ -81,7 +81,7 @@ describe('CCI Department Guidance API Tests', () => {
         .expect(400);
 
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain('student_id');
+      expect(res.body.error).toMatch(/Student ID.*required/i);
     });
 
     it('should reject assessment without student_name', async () => {

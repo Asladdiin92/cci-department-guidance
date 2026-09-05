@@ -67,7 +67,7 @@ const validate = (schema) => {
         .map(detail => detail.message)
         .join(', ');
       
-      return next(new AppError('Validation error', 400, {
+      return next(new AppError(errorMessage, 400, {
         fields: error.details.map(detail => ({
           field: detail.path.join('.'),
           message: detail.message

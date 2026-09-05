@@ -244,6 +244,7 @@ app.get('/api/health', async (req, res) => {
     const memoryUsage = process.memoryUsage();
     
     res.json({
+      status: 'healthy',
       success: true,
       message: 'CCI Department Guidance API is healthy',
       timestamp: new Date().toISOString(),
