@@ -9,6 +9,12 @@ const { supabaseAdmin } = require('../config/supabase');
 const { successResponse, createdResponse } = require('../utils/response');
 const { validate, schemas, validateUUID } = require('../middleware/validator');
 const { asyncHandler, AppError } = require('../middleware/errorHandler');
+const {
+  statsSchema,
+  analyticsSchema,
+  submissionsSchema,
+  validateResponse
+} = require('../validators/adminSchemas');
 
 // Note: All admin routes are now public (JWT auth removed per project requirements)
 
@@ -283,7 +289,7 @@ router.get(
       const topRecommendation = submission.recommendations
         .sort((a, b) => a.rank - b.rank)[0];
       
-      const department = departments.find(d => d.code === topRecommendation?.department_id);
+      const department = (departments || []).find(d => d.code === topRecommendation?.department_id);
       
       return {
         id: submission.id,
@@ -326,7 +332,7 @@ router.get(
 
     // Count by department
     const departmentCounts = {};
-    recommendations.forEach(rec => {
+    (recommendations || []).forEach(rec => {
       departmentCounts[rec.department_id] = (departmentCounts[rec.department_id] || 0) + 1;
     });
 
@@ -336,7 +342,7 @@ router.get(
       .select('code, name, color');
 
     const departmentDistribution = Object.entries(departmentCounts).map(([code, count]) => {
-      const dept = departments.find(d => d.code === code);
+      const dept = (departments || []).find(d => d.code === code);
       return {
         department: dept?.name || code,
         code,
@@ -359,7 +365,7 @@ router.get(
 
     // Count responses per question
     const questionCounts = {};
-    responses.forEach(resp => {
+    (responses || []).forEach(resp => {
       const qId = resp.question_id;
       if (qId) {
         questionCounts[qId] = (questionCounts[qId] || 0) + 1;
@@ -369,7 +375,7 @@ router.get(
     // Get top 10 questions
     const questionAffinity = Object.entries(questionCounts)
       .map(([qId, count]) => {
-        const response = responses.find(r => r.question_id === qId);
+        const response = (responses || []).find(r => r.question_id === qId);
         return {
           question_id: qId,
           question_text: response?.questions?.text || 'Unknown',
@@ -392,7 +398,7 @@ router.get(
 
     // Group by date
     const completionsByDate = {};
-    completions.forEach(assessment => {
+    (completions || []).forEach(assessment => {
       const date = new Date(assessment.completed_at).toISOString().split('T')[0];
       completionsByDate[date] = (completionsByDate[date] || 0) + 1;
     });
