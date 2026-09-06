@@ -21,6 +21,7 @@ import Accessibility from './pages/Accessibility.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import ComponentDemo from './pages/ComponentDemo.jsx';
 import Test from './pages/Test.jsx';
+import TestAPI from './pages/TestAPI.jsx';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -46,6 +47,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/demo" element={<ComponentDemo />} />
             <Route path="/test" element={<Test />} />
+            <Route path="/test-api" element={<TestAPI />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>
