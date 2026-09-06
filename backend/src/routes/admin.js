@@ -181,44 +181,58 @@ router.delete(
 router.get(
   '/stats',
   asyncHandler(async (req, res, next) => {
-    // Get counts
-    const { count: assessmentsCount } = await supabaseAdmin
-      .from('assessments')
-      .select('*', { count: 'exact', head: true });
+    try {
+      // Get counts with better error handling
+      const { count: assessmentsCount, error: e1 } = await supabaseAdmin
+        .from('assessments')
+        .select('*', { count: 'exact', head: true });
 
-    const { count: completedCount } = await supabaseAdmin
-      .from('assessments')
-      .select('*', { count: 'exact', head: true })
-      .not('completed_at', 'is', null);
+      const { count: completedCount, error: e2 } = await supabaseAdmin
+        .from('assessments')
+        .select('*', { count: 'exact', head: true })
+        .not('completed_at', 'is', null);
 
-    const { count: feedbackCount } = await supabaseAdmin
-      .from('feedback')
-      .select('*', { count: 'exact', head: true });
+      const { count: feedbackCount, error: e3 } = await supabaseAdmin
+        .from('feedback')
+        .select('*', { count: 'exact', head: true });
 
-    const { count: questionsCount } = await supabaseAdmin
-      .from('questions')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true);
+      const { count: questionsCount, error: e4 } = await supabaseAdmin
+        .from('questions')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true);
 
-    // Get average rating
-    const { data: ratings } = await supabaseAdmin
-      .from('feedback')
-      .select('rating');
+      // Check for errors
+      if (e1 || e2 || e3 || e4) {
+        console.error('Stats query errors:', { e1, e2, e3, e4 });
+        throw new AppError('Failed to fetch statistics', 500);
+      }
 
-    const avgRating = ratings && ratings.length > 0
-      ? ratings.reduce((sum, f) => sum + f.rating, 0) / ratings.length
-      : 0;
+      // Get average rating safely
+      const { data: ratings, error: e5 } = await supabaseAdmin
+        .from('feedback')
+        .select('rating');
 
-    return successResponse(res, {
-      total_assessments: assessmentsCount || 0,
-      completed_assessments: completedCount || 0,
-      total_feedback: feedbackCount || 0,
-      active_questions: questionsCount || 0,
-      average_rating: Math.round(avgRating * 10) / 10,
-      completion_rate: assessmentsCount > 0 
-        ? Math.round((completedCount / assessmentsCount) * 100) 
-        : 0
-    });
+      const avgRating = ratings && ratings.length > 0
+        ? ratings.reduce((sum, f) => sum + (f.rating || 0), 0) / ratings.length
+        : 0;
+
+      const stats = {
+        total_assessments: assessmentsCount || 0,
+        completed_assessments: completedCount || 0,
+        total_feedback: feedbackCount || 0,
+        active_questions: questionsCount || 0,
+        average_rating: Math.round(avgRating * 10) / 10,
+        completion_rate: assessmentsCount > 0 
+          ? Math.round((completedCount / assessmentsCount) * 100) 
+          : 0
+      };
+
+      console.log('Admin stats:', stats);
+      return successResponse(res, stats);
+    } catch (error) {
+      console.error('Stats endpoint error:', error);
+      throw new AppError('Failed to fetch statistics', 500, { error: error.message });
+    }
   })
 );
 
@@ -230,89 +244,100 @@ router.get(
 router.get(
   '/submissions',
   asyncHandler(async (req, res, next) => {
-    const { 
-      page = 1, 
-      limit = 10, 
-      search = '',
-      sortBy = 'completed_at',
-      sortOrder = 'desc'
-    } = req.query;
+    try {
+      const { 
+        page = 1, 
+        limit = 10, 
+        search = '',
+        sortBy = 'completed_at',
+        sortOrder = 'desc'
+      } = req.query;
 
-    const offset = (page - 1) * limit;
+      const offset = (parseInt(page) - 1) * parseInt(limit);
 
-    // Build query
-    let query = supabaseAdmin
-      .from('assessments')
-      .select(`
-        id,
-        student_name,
-        student_email,
-        started_at,
-        completed_at,
-        recommendations (
-          department_id,
-          rank,
-          match_percentage
-        )
-      `, { count: 'exact' })
-      .not('completed_at', 'is', null);
+      // Build query
+      let query = supabaseAdmin
+        .from('assessments')
+        .select(`
+          id,
+          student_id,
+          student_name,
+          student_email,
+          started_at,
+          completed_at,
+          status,
+          top_match_department
+        `, { count: 'exact' })
+        .not('completed_at', 'is', null);
 
-    // Add search filter
-    if (search) {
-      query = query.or(`student_name.ilike.%${search}%,student_email.ilike.%${search}%`);
-    }
-
-    // Add sorting
-    query = query.order(sortBy, { ascending: sortOrder === 'asc' });
-
-    // Add pagination
-    query = query.range(offset, offset + parseInt(limit) - 1);
-
-    const { data: submissions, error, count } = await query;
-
-    if (error) {
-      throw new AppError('Failed to fetch submissions', 500, { dbError: error.message });
-    }
-
-    // Get department names for recommendations
-    const departmentCodes = [...new Set(
-      submissions.flatMap(s => s.recommendations.map(r => r.department_id))
-    )];
-
-    const { data: departments } = await supabaseAdmin
-      .from('departments')
-      .select('code, name')
-      .in('code', departmentCodes);
-
-    // Enrich submissions with department names
-    const enrichedSubmissions = submissions.map(submission => {
-      const topRecommendation = submission.recommendations
-        .sort((a, b) => a.rank - b.rank)[0];
-      
-      const department = (departments || []).find(d => d.code === topRecommendation?.department_id);
-      
-      return {
-        id: submission.id,
-        student_name: submission.student_name || 'Anonymous',
-        student_email: submission.student_email || 'N/A',
-        started_at: submission.started_at,
-        completed_at: submission.completed_at,
-        top_department: department?.name || topRecommendation?.department_id || 'N/A',
-        top_department_code: topRecommendation?.department_id,
-        match_percentage: topRecommendation?.match_percentage || 0,
-        total_recommendations: submission.recommendations.length
-      };
-    });
-
-    return successResponse(res, {
-      submissions: enrichedSubmissions,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / parseInt(limit))
+      // Add search filter
+      if (search && search.trim()) {
+        query = query.or(`student_name.ilike.%${search}%,student_email.ilike.%${search}%,student_id.ilike.%${search}%`);
       }
-    });
+
+      // Add sorting - validate sortBy to prevent SQL injection
+      const validSortFields = ['completed_at', 'started_at', 'student_name', 'student_email'];
+      const safeSortBy = validSortFields.includes(sortBy) ? sortBy : 'completed_at';
+      query = query.order(safeSortBy, { ascending: sortOrder === 'asc' });
+
+      // Add pagination
+      query = query.range(offset, offset + parseInt(limit) - 1);
+
+      const { data: submissions, error, count } = await query;
+
+      if (error) {
+        console.error('Submissions query error:', error);
+        throw new AppError('Failed to fetch submissions', 500, { dbError: error.message });
+      }
+
+      // Get department names for all possible matches
+      const { data: departments, error: deptError } = await supabaseAdmin
+        .from('departments')
+        .select('code, name');
+
+      if (deptError) {
+        console.error('Departments query error:', deptError);
+      }
+
+      // Enrich submissions with department names
+      const enrichedSubmissions = (submissions || []).map(submission => {
+        const deptCode = submission.top_match_department;
+        const department = (departments || []).find(d => d.code === deptCode);
+        
+        return {
+          id: submission.id,
+          student_id: submission.student_id || 'N/A',
+          student_name: submission.student_name || 'Anonymous',
+          student_email: submission.student_email || 'N/A',
+          started_at: submission.started_at,
+          completed_at: submission.completed_at,
+          status: submission.status || 'completed',
+          top_department: department?.name || deptCode || 'N/A',
+          top_department_code: deptCode
+        };
+      });
+
+      const result = {
+        submissions: enrichedSubmissions,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total: count || 0,
+          totalPages: Math.ceil((count || 0) / parseInt(limit))
+        }
+      };
+
+      console.log('Submissions:', {
+        returned: enrichedSubmissions.length,
+        total: count,
+        page: parseInt(page)
+      });
+
+      return successResponse(res, result);
+    } catch (error) {
+      console.error('Submissions endpoint error:', error);
+      throw new AppError('Failed to fetch submissions', 500, { error: error.message });
+    }
   })
 );
 
@@ -324,94 +349,128 @@ router.get(
 router.get(
   '/analytics',
   asyncHandler(async (req, res, next) => {
-    // Get department distribution
-    const { data: recommendations } = await supabaseAdmin
-      .from('recommendations')
-      .select('department_id, rank')
-      .eq('rank', 1); // Only top recommendations
+    try {
+      // Get department distribution with error handling
+      const { data: recommendations, error: recError } = await supabaseAdmin
+        .from('recommendations')
+        .select('department_id, rank')
+        .eq('rank', 1); // Only top recommendations
 
-    // Count by department
-    const departmentCounts = {};
-    (recommendations || []).forEach(rec => {
-      departmentCounts[rec.department_id] = (departmentCounts[rec.department_id] || 0) + 1;
-    });
-
-    // Get department names
-    const { data: departments } = await supabaseAdmin
-      .from('departments')
-      .select('code, name, color');
-
-    const departmentDistribution = Object.entries(departmentCounts).map(([code, count]) => {
-      const dept = (departments || []).find(d => d.code === code);
-      return {
-        department: dept?.name || code,
-        code,
-        count,
-        color: dept?.color || '#cccccc'
-      };
-    }).sort((a, b) => b.count - a.count);
-
-    // Get question affinity (questions with highest engagement/completion)
-    const { data: responses } = await supabaseAdmin
-      .from('assessment_responses')
-      .select(`
-        question_id,
-        questions (
-          id,
-          text,
-          category
-        )
-      `);
-
-    // Count responses per question
-    const questionCounts = {};
-    (responses || []).forEach(resp => {
-      const qId = resp.question_id;
-      if (qId) {
-        questionCounts[qId] = (questionCounts[qId] || 0) + 1;
+      if (recError) {
+        console.error('Recommendations query error:', recError);
       }
-    });
 
-    // Get top 10 questions
-    const questionAffinity = Object.entries(questionCounts)
-      .map(([qId, count]) => {
-        const response = (responses || []).find(r => r.question_id === qId);
+      // Count by department
+      const departmentCounts = {};
+      (recommendations || []).forEach(rec => {
+        if (rec.department_id) {
+          departmentCounts[rec.department_id] = (departmentCounts[rec.department_id] || 0) + 1;
+        }
+      });
+
+      // Get department names
+      const { data: departments, error: deptError } = await supabaseAdmin
+        .from('departments')
+        .select('code, name, color');
+
+      if (deptError) {
+        console.error('Departments query error:', deptError);
+      }
+
+      const departmentDistribution = Object.entries(departmentCounts).map(([code, count]) => {
+        const dept = (departments || []).find(d => d.code === code);
         return {
-          question_id: qId,
-          question_text: response?.questions?.text || 'Unknown',
-          category: response?.questions?.category || 'N/A',
-          response_count: count
+          department: dept?.name || code,
+          code,
+          count,
+          color: dept?.color || '#cccccc'
         };
-      })
-      .sort((a, b) => b.response_count - a.response_count)
-      .slice(0, 10);
+      }).sort((a, b) => b.count - a.count);
 
-    // Get completion trends (last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      // Get question affinity (questions with highest engagement/completion)
+      const { data: responses, error: respError } = await supabaseAdmin
+        .from('assessment_responses')
+        .select(`
+          question_id,
+          questions (
+            id,
+            text,
+            category
+          )
+        `);
 
-    const { data: completions } = await supabaseAdmin
-      .from('assessments')
-      .select('completed_at')
-      .not('completed_at', 'is', null)
-      .gte('completed_at', thirtyDaysAgo.toISOString());
+      if (respError) {
+        console.error('Responses query error:', respError);
+      }
 
-    // Group by date
-    const completionsByDate = {};
-    (completions || []).forEach(assessment => {
-      const date = new Date(assessment.completed_at).toISOString().split('T')[0];
-      completionsByDate[date] = (completionsByDate[date] || 0) + 1;
-    });
+      // Count responses per question
+      const questionCounts = {};
+      (responses || []).forEach(resp => {
+        const qId = resp?.question_id;
+        if (qId) {
+          questionCounts[qId] = (questionCounts[qId] || 0) + 1;
+        }
+      });
 
-    const completionTrend = Object.entries(completionsByDate)
-      .map(([date, count]) => ({ date, count }))
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
+      // Get top 10 questions
+      const questionAffinity = Object.entries(questionCounts)
+        .map(([qId, count]) => {
+          const response = (responses || []).find(r => r.question_id === qId);
+          const questionText = response?.questions?.text || 'Unknown Question';
+          return {
+            question_id: qId,
+            question_text: questionText.length > 50 ? questionText.substring(0, 47) + '...' : questionText,
+            category: response?.questions?.category || 'N/A',
+            response_count: count
+          };
+        })
+        .sort((a, b) => b.response_count - a.response_count)
+        .slice(0, 10);
 
-    return successResponse(res, {
-      department_distribution: departmentDistribution,
-      question_affinity: questionAffinity,
-      completion_trend: completionTrend
-    });
+      // Get completion trends (last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const { data: completions, error: compError } = await supabaseAdmin
+        .from('assessments')
+        .select('completed_at')
+        .not('completed_at', 'is', null)
+        .gte('completed_at', thirtyDaysAgo.toISOString());
+
+      if (compError) {
+        console.error('Completions query error:', compError);
+      }
+
+      // Group by date
+      const completionsByDate = {};
+      (completions || []).forEach(assessment => {
+        if (assessment.completed_at) {
+          const date = new Date(assessment.completed_at).toISOString().split('T')[0];
+          completionsByDate[date] = (completionsByDate[date] || 0) + 1;
+        }
+      });
+
+      const completionTrend = Object.entries(completionsByDate)
+        .map(([date, count]) => ({ date, count }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      const analyticsData = {
+        department_distribution: departmentDistribution,
+        question_affinity: questionAffinity,
+        completion_trend: completionTrend
+      };
+
+      console.log('Analytics data:', {
+        departments: departmentDistribution.length,
+        questions: questionAffinity.length,
+        trends: completionTrend.length
+      });
+
+      return successResponse(res, analyticsData);
+    } catch (error) {
+      console.error('Analytics endpoint error:', error);
+      throw new AppError('Failed to fetch analytics', 500, { error: error.message });
+    }
   })
 );
 
