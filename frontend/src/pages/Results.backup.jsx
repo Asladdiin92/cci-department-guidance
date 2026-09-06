@@ -30,7 +30,6 @@ import {
   ArrowForward
 } from '@mui/icons-material';
 import { getAssessmentResults } from '../services/api';
-import MatchBarChart from '../components/MatchBarChart';
 
 // Persona profiles based on top match - Haramaya University themed
 const PERSONA_PROFILES = {
@@ -532,7 +531,31 @@ function Results() {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
               Here's how you matched with all 6 departments:
             </Typography>
-            <MatchBarChart recommendations={recommendations} maxDisplay={6} />
+            {recommendations.map((rec, idx) => (
+              <Box key={rec.department_code} sx={{ mb: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                  <Typography variant="body2" fontWeight={600}>
+                    {rec.department_code} - {rec.department_name}
+                  </Typography>
+                  <Typography variant="body2" fontWeight={700}>
+                    {Math.round(rec.score)}%
+                  </Typography>
+                </Box>
+                <LinearProgress
+                  variant="determinate"
+                  value={rec.score}
+                  sx={{
+                    height: 8,
+                    borderRadius: 1,
+                    bgcolor: 'grey.200',
+                    '& .MuiLinearProgress-bar': {
+                      bgcolor: idx < 3 ? persona.color : 'grey.400',
+                      borderRadius: 1
+                    }
+                  }}
+                />
+              </Box>
+            ))}
           </CardContent>
         </Card>
 

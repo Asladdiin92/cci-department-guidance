@@ -106,7 +106,25 @@ export async function startAssessment(studentInfo = {}) {
     method: 'POST',
     body: JSON.stringify(studentInfo)
   });
-  return response.data;
+  
+  // Transform backend field names to match frontend expectations
+  const transformedData = {
+    ...response.data,
+    questions: response.data.questions.map(q => ({
+      ...q,
+      question_text: q.text,  // Backend: text → Frontend: question_text
+      options: (q.question_options || []).map(opt => ({
+        ...opt,
+        option_text: opt.text  // Backend: text → Frontend: option_text
+      }))
+    }))
+  };
+  
+  console.log('✅ Transformed first question:', transformedData.questions[0]);
+  console.log('✅ First question text:', transformedData.questions[0]?.question_text);
+  console.log('✅ First option text:', transformedData.questions[0]?.options[0]?.option_text);
+  
+  return transformedData;
 }
 
 // 4. Submit assessment (after responses saved)

@@ -254,7 +254,7 @@ INSERT INTO question_options (question_id, text, scores, order_index) VALUES
 (q12_id, 'Building and testing a campus or business application', '{"CS": 1, "SWE": 3, "IT": 1, "IS": 1, "ISC": 0, "STAT": 0}', 2),
 (q12_id, 'Deploying and troubleshooting networked systems', '{"CS": 0, "SWE": 1, "IT": 3, "IS": 1, "ISC": 0, "STAT": 0}', 3),
 (q12_id, 'Analyzing and redesigning an office information workflow', '{"CS": 0, "SWE": 1, "IT": 1, "IS": 3, "ISC": 1, "STAT": 0}', 4),
-(q12_id, 'Digitizing, cataloging, and improving access to institutional records or learning resources', '{"CS": 0, "SWE": 0, "IT": 1, "IS": 2, "ISC": 3, "STAT": 1}', 5),
+(q12_id, 'Digitizing, cataloging, and improving access to institutional records or learning resources', '{"CS": 0, "SWE": 0, "IT": 0, "IS": 1, "ISC": 3, "STAT": 0}', 5),
 (q12_id, 'Collecting and analyzing survey or socioeconomic data', '{"CS": 1, "SWE": 0, "IT": 0, "IS": 0, "ISC": 1, "STAT": 3}', 6);
 
 -- ================================================================
@@ -327,7 +327,7 @@ VALUES (
 
 INSERT INTO question_options (question_id, text, scores, order_index) VALUES
 (q16_id, 'Mathematics, logic, and theoretical problem-solving', '{"CS": 3, "SWE": 1, "IT": 0, "IS": 0, "ISC": 0, "STAT": 2}', 1),
-(q16_id, 'Programming, coding, and software development', '{"CS": 1, "SWE": 3, "IT": 1, "IS": 1, "ISC": 0, "STAT": 0}', 2),
+(q16_id, 'Programming, coding, and software development', '{"CS": 2, "SWE": 3, "IT": 1, "IS": 1, "ISC": 0, "STAT": 0}', 2),
 (q16_id, 'Hardware, networks, and system configuration', '{"CS": 0, "SWE": 1, "IT": 3, "IS": 1, "ISC": 0, "STAT": 0}', 3),
 (q16_id, 'Communication, analysis, and understanding business needs', '{"CS": 0, "SWE": 1, "IT": 1, "IS": 3, "ISC": 1, "STAT": 0}', 4),
 (q16_id, 'Organization, classification, and information management', '{"CS": 0, "SWE": 0, "IT": 1, "IS": 2, "ISC": 3, "STAT": 1}', 5),

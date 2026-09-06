@@ -91,34 +91,20 @@ const NavbarEnhanced = () => {
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box
+            component="img"
+            src="/cci-logo.png"
+            alt="CCI Department Guidance"
             sx={{
-              width: 40,
-              height: 40,
-              borderRadius: '50%',
+              height: 45,
+              width: 'auto',
+              borderRadius: 1,
               border: '2px solid',
               borderColor: 'primary.main',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              bgcolor: 'background.paper',
+              objectFit: 'contain',
+              bgcolor: 'white',
+              p: 0.5,
             }}
-          >
-            <Typography
-              sx={{
-                fontWeight: 900,
-                fontSize: '1rem',
-                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              HU
-            </Typography>
-          </Box>
-          <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-            CCI Guidance
-          </Typography>
+          />
         </Box>
         <IconButton
           onClick={handleDrawerToggle}
@@ -242,76 +228,32 @@ const NavbarEnhanced = () => {
                 display: 'flex',
                 alignItems: 'center',
                 textDecoration: 'none',
-                flexGrow: { xs: 1, md: 0 },
                 mr: { md: 4 },
                 transition: 'all 0.3s ease',
+                height: '100%',
+                py: 1,
               }}
             >
-              {/* Logo */}
+              {/* Logo Image */}
               <Box
+                component="img"
+                src="/cci-logo.png"
+                alt="CCI Department Guidance"
                 sx={{
-                  width: scrolled ? 44 : 52,
-                  height: scrolled ? 44 : 52,
-                  borderRadius: '50%',
-                  border: '3px solid',
+                  height: '100%',
+                  width: 'auto',
+                  maxHeight: scrolled ? 56 : 68,
+                  borderRadius: 1.5,
+                  border: '2px solid',
                   borderColor: 'primary.main',
-                  bgcolor: 'background.paper',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  mr: 1.5,
+                  bgcolor: 'white',
+                  p: 0.5,
                   flexShrink: 0,
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: scrolled ? theme.shadows[2] : 'none',
+                  boxShadow: scrolled ? theme.shadows[2] : theme.shadows[1],
+                  objectFit: 'contain',
                 }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 900,
-                    fontSize: scrolled ? '1.1rem' : '1.3rem',
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    transition: 'font-size 0.3s ease',
-                  }}
-                >
-                  HU
-                </Typography>
-              </Box>
-
-              {/* Brand Text */}
-              <Box>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 800,
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    lineHeight: 1.2,
-                    fontSize: scrolled
-                      ? { xs: '0.95rem', sm: '1.1rem' }
-                      : { xs: '1rem', sm: '1.25rem' },
-                    transition: 'font-size 0.3s ease',
-                  }}
-                >
-                  CCI Department Guidance
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    color: 'secondary.main',
-                    fontSize: scrolled ? '0.65rem' : '0.7rem',
-                    fontWeight: 600,
-                    display: { xs: 'none', sm: 'block' },
-                    transition: 'font-size 0.3s ease',
-                  }}
-                >
-                  Haramaya University
-                </Typography>
-              </Box>
+              />
             </Box>
 
             {/* Desktop Navigation */}

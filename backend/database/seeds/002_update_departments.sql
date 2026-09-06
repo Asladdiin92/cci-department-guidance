@@ -1,17 +1,15 @@
 -- ================================================================
--- CCI Department Guidance System - Seed Departments Data
--- Version: 1.0
+-- CCI Department Guidance System - UPDATE Departments Data
+-- Version: 2.0 (Update existing departments with accurate curriculum)
 -- Date: September 1, 2026
--- Description: Insert 6 CCI departments with full information
+-- Description: Update 6 CCI departments with real exit exam curriculum data
 -- ================================================================
 
--- Insert Computer Science Department
-INSERT INTO departments (code, name, description, strengths, curriculum, career_paths, industry_demand, color, icon)
-VALUES (
-    'CS',
-    'Computer Science',
-    'Concentrates on the scientific and theoretical aspects of computing, focusing on underlying concepts, principles, algorithms, and computational thinking. Develops rigorous reasoning about computation, complexity, and formal methods.',
-    ARRAY[
+-- Update Computer Science Department
+UPDATE departments 
+SET 
+    description = 'Concentrates on the scientific and theoretical aspects of computing, focusing on underlying concepts, principles, algorithms, and computational thinking. Develops rigorous reasoning about computation, complexity, and formal methods.',
+    strengths = ARRAY[
         'Theoretical foundations and computational thinking',
         'Algorithm design and complexity analysis',
         'Artificial intelligence and machine learning',
@@ -19,7 +17,7 @@ VALUES (
         'Research and academic excellence',
         'Mathematical and logical reasoning'
     ],
-    '{
+    curriculum = '{
         "overview": "Computer Science provides deep understanding of computation, algorithms, data structures, and theoretical foundations of computing. The 16-lesson curriculum emphasizes rigorous reasoning, formal methods, and computational theory with strong focus on algorithms and theoretical computer science.",
         "core_courses": [
             {"lesson": 1, "name": "Software Engineering", "category": "System Development"},
@@ -54,29 +52,14 @@ VALUES (
             "Research-oriented curriculum"
         ],
         "exit_exam_coverage": "16 comprehensive lessons covering theoretical CS, algorithms, systems programming, and computational theory"
-    }'::jsonb,
-    ARRAY[
-        'Software Developer / Engineer',
-        'Machine Learning Engineer',
-        'Research Scientist',
-        'Data Scientist',
-        'University Lecturer / Professor',
-        'Algorithm Engineer',
-        'AI Specialist',
-        'Systems Programmer'
-    ],
-    'HIGH',
-    '#4f46e5',
-    '💻'
-);
+    }'::jsonb
+WHERE code = 'CS';
 
--- Insert Software Engineering Department
-INSERT INTO departments (code, name, description, strengths, curriculum, career_paths, industry_demand, color, icon)
-VALUES (
-    'SWE',
-    'Software Engineering',
-    'Focuses on the systematic, disciplined, and quantifiable approach to software development, operation, and maintenance. Emphasizes engineering principles, software lifecycle, quality assurance, and practical application development.',
-    ARRAY[
+-- Update Software Engineering Department
+UPDATE departments 
+SET 
+    description = 'Focuses on the systematic, disciplined, and quantifiable approach to software development, operation, and maintenance. Emphasizes engineering principles, software lifecycle, quality assurance, and practical application development.',
+    strengths = ARRAY[
         'Software development lifecycle mastery',
         'Design patterns and architecture',
         'Quality assurance and testing',
@@ -84,7 +67,7 @@ VALUES (
         'Team collaboration and project management',
         'Real-world application development'
     ],
-    '{
+    curriculum = '{
         "overview": "Software Engineering prepares students to build high-quality software systems through systematic approaches, engineering principles, and best practices. The 15-lesson curriculum emphasizes full software development lifecycle, quality assurance, project management, and modern development practices including mobile and web development.",
         "core_courses": [
             {"lesson": 1, "name": "Computer Programming", "category": "Problem Analysis and Programming"},
@@ -119,33 +102,14 @@ VALUES (
             "Most comprehensive software development curriculum"
         ],
         "exit_exam_coverage": "15 comprehensive lessons covering full software lifecycle, from requirements to deployment and maintenance"
-        "Microservices Architecture",
-            "Software Security",
-            "UI/UX Engineering"
-        ],
-    }'::jsonb,
-    ARRAY[
-        'Software Engineer',
-        'Full Stack Developer',
-        'Frontend / Backend Developer',
-        'DevOps Engineer',
-        'Quality Assurance Engineer',
-        'Software Architect',
-        'Technical Lead',
-        'Scrum Master / Agile Coach'
-    ],
-    'HIGH',
-    '#ea580c',
-    '⚙️'
-);
+    }'::jsonb
+WHERE code = 'SWE';
 
--- Insert Information Technology Department
-INSERT INTO departments (code, name, description, strengths, curriculum, career_paths, industry_demand, color, icon)
-VALUES (
-    'IT',
-    'Information Technology',
-    'Emphasizes the practical application of computing technology to meet organizational needs. Focuses on infrastructure, networking, system administration, security, and user support with hands-on technical skills.',
-    ARRAY[
+-- Update Information Technology Department
+UPDATE departments 
+SET 
+    description = 'Emphasizes the practical application of computing technology to meet organizational needs. Focuses on infrastructure, networking, system administration, security, and user support with hands-on technical skills.',
+    strengths = ARRAY[
         'Network design and administration',
         'System configuration and management',
         'Cloud infrastructure and services',
@@ -153,7 +117,7 @@ VALUES (
         'Technical support and troubleshooting',
         'Enterprise technology solutions'
     ],
-    '{
+    curriculum = '{
         "overview": "Information Technology prepares students to deploy, manage, and secure organizational computing infrastructure with hands-on technical skills. The 18+ subject curriculum emphasizes practical networking, system administration, security, and infrastructure management with strong certification-oriented training.",
         "core_subjects": [
             {"name": "Advanced Programming (Java)", "chapters": 8, "category": "Core Programming", "has_mcq": true},
@@ -190,29 +154,14 @@ VALUES (
             "Industry certification preparation (CompTIA, Cisco, Microsoft)"
         ],
         "exit_exam_coverage": "18+ subjects covering practical IT infrastructure, networking, system administration, security, and hands-on technical skills"
-    }'::jsonb,
-    ARRAY[
-        'Network Administrator',
-        'System Administrator',
-        'Cloud Engineer',
-        'Cybersecurity Analyst',
-        'IT Support Specialist',
-        'Database Administrator',
-        'IT Consultant',
-        'DevOps Engineer'
-    ],
-    'HIGH',
-    '#0d9488',
-    '🌐'
-);
+    }'::jsonb
+WHERE code = 'IT';
 
--- Insert Information System Department
-INSERT INTO departments (code, name, description, strengths, curriculum, career_paths, industry_demand, color, icon)
-VALUES (
-    'IS',
-    'Information System',
-    'Focuses on the integration of information technology solutions with business processes and organizational goals. Bridges the gap between technical teams and management, emphasizing systems analysis, business intelligence, and strategic IT planning.',
-    ARRAY[
+-- Update Information Systems Department
+UPDATE departments 
+SET 
+    description = 'Focuses on the integration of information technology solutions with business processes and organizational goals. Bridges the gap between technical teams and management, emphasizing systems analysis, business intelligence, and strategic IT planning.',
+    strengths = ARRAY[
         'Business process analysis and modeling',
         'Enterprise resource planning (ERP)',
         'Business intelligence and analytics',
@@ -220,7 +169,7 @@ VALUES (
         'Strategic IT management',
         'Organizational change management'
     ],
-    '{
+    curriculum = '{
         "overview": "Information Systems prepares students to bridge business and technology by designing and managing information systems that support organizational decision-making and operations. The 15-lesson curriculum combines technical knowledge with business acumen, emphasizing enterprise systems, strategic IT management, and business process integration.",
         "core_courses": [
             {"lesson": 1, "name": "Basic Computer Programming", "category": "Programming and Web Technology"},
@@ -254,29 +203,14 @@ VALUES (
             "Decision support and business intelligence emphasis"
         ],
         "exit_exam_coverage": "15 lessons bridging business and technology with focus on enterprise systems, MIS strategy, and organizational IT management"
-    }'::jsonb,
-    ARRAY[
-        'Business Analyst',
-        'Systems Analyst',
-        'IT Project Manager',
-        'Business Intelligence Analyst',
-        'ERP Consultant',
-        'Data Analyst',
-        'IT Strategy Consultant',
-        'Chief Information Officer (CIO)'
-    ],
-    'MEDIUM',
-    '#db2777',
-    '📱'
-);
+    }'::jsonb
+WHERE code = 'IS';
 
--- Insert Information Science Department
-INSERT INTO departments (code, name, description, strengths, curriculum, career_paths, industry_demand, color, icon)
-VALUES (
-    'ISC',
-    'Information Science',
-    'Deals with the collection, classification, storage, retrieval, and dissemination of recorded knowledge. Focuses on information organization, digital libraries, knowledge management, and user information needs.',
-    ARRAY[
+-- Update Information Science Department
+UPDATE departments 
+SET 
+    description = 'Deals with the collection, classification, storage, retrieval, and dissemination of recorded knowledge. Focuses on information organization, digital libraries, knowledge management, and user information needs.',
+    strengths = ARRAY[
         'Information architecture and organization',
         'Digital library systems',
         'Metadata standards and cataloging',
@@ -284,7 +218,7 @@ VALUES (
         'Information retrieval systems',
         'User information behavior'
     ],
-    '{
+    curriculum = '{
         "overview": "Information Science prepares students to organize, preserve, and provide access to information resources through systematic approaches. The 12-lesson curriculum combines technology with library science, knowledge organization, and information management, focusing on digital libraries, metadata standards, and scholarly communication.",
         "core_courses": [
             {"lesson": 1, "name": "Introduction to Information Science", "category": "Foundation of Information Science"},
@@ -315,29 +249,14 @@ VALUES (
             "Information retrieval and search systems"
         ],
         "exit_exam_coverage": "12 lessons covering information organization, digital libraries, knowledge management, and scholarly communication systems"
-    }'::jsonb,
-    ARRAY[
-        'Information Architect',
-        'Digital Librarian',
-        'Knowledge Manager',
-        'Records Manager',
-        'Data Curator',
-        'Information Specialist',
-        'Content Manager',
-        'Archivist'
-    ],
-    'MEDIUM',
-    '#7c3aed',
-    '📚'
-);
+    }'::jsonb
+WHERE code = 'ISC';
 
--- Insert Statistics Department
-INSERT INTO departments (code, name, description, strengths, curriculum, career_paths, industry_demand, color, icon)
-VALUES (
-    'STAT',
-    'Statistics',
-    'Focuses on the collection, analysis, interpretation, presentation, and organization of data. Emphasizes statistical theory, methods, probability, and quantitative research with applications across many fields.',
-    ARRAY[
+-- Update Statistics Department
+UPDATE departments 
+SET 
+    description = 'Focuses on the collection, analysis, interpretation, presentation, and organization of data. Emphasizes statistical theory, methods, probability, and quantitative research with applications across many fields.',
+    strengths = ARRAY[
         'Statistical theory and methods',
         'Data analysis and visualization',
         'Probability and inference',
@@ -345,7 +264,7 @@ VALUES (
         'Quantitative research methods',
         'Statistical software proficiency'
     ],
-    '{
+    curriculum = '{
         "overview": "Statistics prepares students to extract meaningful insights from data using mathematical and computational methods. The 14-lesson curriculum provides strong foundation in probability, statistical theory, inference, and applied statistics with emphasis on R programming, research methods, and quantitative analysis across domains.",
         "core_courses": [
             {"lesson": 1, "name": "Basic Statistics", "category": "Fundamental of Statistics"},
@@ -380,35 +299,15 @@ VALUES (
             "Social science applications (demography, economic statistics)"
         ],
         "exit_exam_coverage": "14 lessons covering statistical theory, methods, R computing, modeling, and applications in research and social sciences"
-    }'::jsonb,
-    ARRAY[
-        'Data Analyst',
-        'Statistician',
-        'Biostatistician',
-        'Market Research Analyst',
-        'Quantitative Researcher',
-        'Actuary',
-        'Econometrician',
-        'Survey Statistician'
-    ],
-    'MEDIUM',
-    '#eab308',
-    '📈'
-);
+    }'::jsonb
+WHERE code = 'STAT';
 
--- ================================================================
 -- Verification Query
--- ================================================================
-
 SELECT 
     code,
     name,
-    LEFT(description, 50) || '...' as description_preview,
-    array_length(strengths, 1) as strength_count,
-    array_length(career_paths, 1) as career_count,
-    industry_demand,
-    color,
-    icon
+    LEFT(description, 60) || '...' as description_preview,
+    jsonb_array_length(curriculum->'core_courses') as course_count
 FROM departments
 ORDER BY 
     CASE code
@@ -419,31 +318,3 @@ ORDER BY
         WHEN 'ISC' THEN 5
         WHEN 'STAT' THEN 6
     END;
-
--- ================================================================
--- COMPLETION MESSAGE
--- ================================================================
-
-DO $$
-DECLARE
-    dept_count INTEGER;
-BEGIN
-    SELECT COUNT(*) INTO dept_count FROM departments;
-    
-    RAISE NOTICE '==================================================';
-    RAISE NOTICE 'Departments Seeded Successfully!';
-    RAISE NOTICE '==================================================';
-    RAISE NOTICE 'Departments Inserted: %', dept_count;
-    RAISE NOTICE 'Expected: 6 (CS, SWE, IT, IS, ISC, STAT)';
-    RAISE NOTICE '==================================================';
-    
-    IF dept_count = 6 THEN
-        RAISE NOTICE 'Status: ✅ All departments seeded correctly';
-    ELSE
-        RAISE WARNING 'Status: ⚠️ Department count mismatch!';
-    END IF;
-    
-    RAISE NOTICE '==================================================';
-    RAISE NOTICE 'Next Step: Run 003_seed_questions.sql';
-    RAISE NOTICE '==================================================';
-END $$;

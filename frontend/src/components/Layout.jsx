@@ -1,20 +1,21 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
 import NavbarEnhanced from './NavbarEnhanced';
-import FooterEnhanced from './FooterEnhanced';
+import Footer from './Footer'; // FooterEnhanced has bugs, using original for now
 import Breadcrumbs from './Breadcrumbs';
 import './Layout.css';
 
 const Layout = ({ children }) => {
   return (
-    <div className="layout">
+    <Box className="layout" sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <NavbarEnhanced />
-      <Breadcrumbs />
-      <main className="layout-main">
+      {/* <Breadcrumbs /> */}
+      <Container component="main" sx={{ flex: 1, py: 4 }}>
         {children || <Outlet />}
-      </main>
-      <FooterEnhanced />
-    </div>
+      </Container>
+      <Footer />
+    </Box>
   );
 };
 

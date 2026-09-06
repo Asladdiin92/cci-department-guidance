@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -17,6 +17,7 @@ import {
   Divider,
   alpha,
   useTheme,
+  Link,
 } from '@mui/material';
 import {
   Facebook,
@@ -165,9 +166,9 @@ const FooterEnhanced = () => {
             </Typography>
             <Stack spacing={1.5}>
               {footerLinks.explore.map((link, idx) => (
-                <Box
+                <Link
                   key={idx}
-                  component={Link}
+                  component={RouterLink}
                   to={link.path}
                   sx={{
                     display: 'flex',
@@ -185,7 +186,7 @@ const FooterEnhanced = () => {
                 >
                   <Box sx={{ fontSize: '1.25rem', display: 'flex' }}>{link.icon}</Box>
                   {link.label}
-                </Box>
+                </Link>
               ))}
             </Stack>
           </Grid>
@@ -205,9 +206,9 @@ const FooterEnhanced = () => {
             </Typography>
             <Stack spacing={1.5}>
               {footerLinks.company.map((link, idx) => (
-                <Box
+                <Link
                   key={idx}
-                  component={Link}
+                  component={RouterLink}
                   to={link.path}
                   sx={{
                     display: 'flex',
@@ -225,7 +226,7 @@ const FooterEnhanced = () => {
                 >
                   <Box sx={{ fontSize: '1.25rem', display: 'flex' }}>{link.icon}</Box>
                   {link.label}
-                </Box>
+                </Link>
               ))}
             </Stack>
           </Grid>
@@ -349,41 +350,47 @@ const FooterEnhanced = () => {
           </Typography>
           <Stack direction="row" spacing={3}>
             <Link
+              component={RouterLink}
               to="/privacy"
-              style={{
-                color: theme.palette.grey[500],
+              sx={{
+                color: 'grey.500',
                 textDecoration: 'none',
                 fontSize: '0.875rem',
                 transition: 'color 0.2s ease',
+                '&:hover': {
+                  color: 'primary.main',
+                },
               }}
-              onMouseEnter={(e) => (e.target.style.color = theme.palette.primary.main)}
-              onMouseLeave={(e) => (e.target.style.color = theme.palette.grey[500])}
             >
               Privacy
             </Link>
             <Link
+              component={RouterLink}
               to="/terms"
-              style={{
-                color: theme.palette.grey[500],
+              sx={{
+                color: 'grey.500',
                 textDecoration: 'none',
                 fontSize: '0.875rem',
                 transition: 'color 0.2s ease',
+                '&:hover': {
+                  color: 'primary.main',
+                },
               }}
-              onMouseEnter={(e) => (e.target.style.color = theme.palette.primary.main)}
-              onMouseLeave={(e) => (e.target.style.color = theme.palette.grey[500])}
             >
               Terms
             </Link>
             <Link
+              component={RouterLink}
               to="/accessibility"
-              style={{
-                color: theme.palette.grey[500],
+              sx={{
+                color: 'grey.500',
                 textDecoration: 'none',
                 fontSize: '0.875rem',
                 transition: 'color 0.2s ease',
+                '&:hover': {
+                  color: 'primary.main',
+                },
               }}
-              onMouseEnter={(e) => (e.target.style.color = theme.palette.primary.main)}
-              onMouseLeave={(e) => (e.target.style.color = theme.palette.grey[500])}
             >
               Accessibility
             </Link>

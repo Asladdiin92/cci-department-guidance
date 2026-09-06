@@ -181,13 +181,22 @@ function AssessmentNew() {
       setLoading(true);
       setError(null);
       const response = await startAssessment(studentInfo);
+      console.log('✅ Start assessment response:', response);
+      console.log('Questions received:', response.questions?.length || 0);
+      console.log('Assessment ID:', response.assessment_id);
+      
+      if (!response.questions || response.questions.length === 0) {
+        throw new Error('No questions received from server');
+      }
+      
       setAssessmentId(response.assessment_id);
       setSessionToken(response.session_token);
       setQuestions(response.questions);
       setShowStudentForm(false);
+      console.log('✅ State updated, should show questions now');
     } catch (err) {
-      console.error('Error loading assessment:', err);
-      setError('Failed to start assessment. Please check your information and try again.');
+      console.error('❌ Error loading assessment:', err);
+      setError(err.message || 'Failed to start assessment. Please check your information and try again.');
     } finally {
       setLoading(false);
     }

@@ -11,9 +11,16 @@ import AssessmentNew from './pages/AssessmentNew.jsx'; // New wizard experience
 import Results from './pages/Results.jsx';
 import Compare from './pages/Compare.jsx';
 import Departments from './pages/Departments.jsx';
+import DepartmentsSimple from './pages/DepartmentsSimple.jsx';
 import DepartmentDetails from './pages/DepartmentDetails.jsx';
+import Feedback from './pages/Feedback.jsx';
+import ExitExamUnified from './pages/ExitExamUnified.jsx';
+import Privacy from './pages/Privacy.jsx';
+import Terms from './pages/Terms.jsx';
+import Accessibility from './pages/Accessibility.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import ComponentDemo from './pages/ComponentDemo.jsx';
+import Test from './pages/Test.jsx';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -29,16 +36,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/assessment-old" element={<Assessment />} />
             <Route path="/results/:assessmentId" element={<Results />} />
             <Route path="/compare" element={<Compare />} />
-            <Route path="/departments" element={<Departments />} />
+            <Route path="/departments" element={<DepartmentsSimple />} />
             <Route path="/departments/:code" element={<DepartmentDetails />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/exit-exam" element={<ExitExamUnified />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/accessibility" element={<Accessibility />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/demo" element={<ComponentDemo />} />
-            <Route path="/exit-exam" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Exit Exam Prep - Coming Soon</h1></div>} />
-            <Route path="/feedback" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Feedback Page - Coming Soon</h1></div>} />
-            <Route path="/about" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>About Page - Coming Soon</h1></div>} />
-            <Route path="/privacy" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Privacy Policy - Coming Soon</h1></div>} />
-            <Route path="/terms" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Terms of Service - Coming Soon</h1></div>} />
-            <Route path="/accessibility" element={<div style={{ padding: '100px 20px', textAlign: 'center' }}><h1>Accessibility - Coming Soon</h1></div>} />
+            <Route path="/test" element={<Test />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>
