@@ -515,12 +515,15 @@ const startServer = async () => {
 // EXPORT & START
 // ================================================================
 
-// Start the server (only if not in serverless environment)
-if (process.env.VERCEL !== '1' && process.env.AWS_LAMBDA_FUNCTION_NAME !== 'true') {
+// Start the server (only if not running in test mode or serverless)
+if (process.env.NODE_ENV !== 'test' && 
+    process.env.VERCEL !== '1' && 
+    process.env.AWS_LAMBDA_FUNCTION_NAME !== 'true' &&
+    require.main === module) {
   startServer();
-} else {
+} else if (process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME === 'true') {
   console.log('🔧 Running in serverless mode');
 }
 
-// Export app for serverless platforms (Vercel, AWS Lambda, etc.)
+// Export app for testing and serverless platforms
 module.exports = app;
