@@ -1,5 +1,11 @@
+// Import Supabase fallback functions
+import * as SupabaseAPI from './supabaseApi.js';
+
 // Base API URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'https://cci-department-guidance-production.up.railway.app/api';
+
+// Flag to track if backend is available
+let useSupabaseFallback = false;
 
 /**
  * Enhanced API Error Class
@@ -84,71 +90,148 @@ async function apiCall(endpoint, options = {}) {
 
 // 1. Fetch all 6 departments
 export async function getDepartments() {
-  const response = await apiCall('/departments');
-  return response.data.departments;
+  try {
+    if (useSupabaseFallback) {
+      console.log('📡 Using Supabase direct connection for departments');
+      const departments = await SupabaseAPI.getDepartmentsFromSupabase();
+      return departments;
+    }
+    
+    const response = await apiCall('/departments');
+    return response.data.departments;
+  } catch (error) {
+    console.warn('⚠️ Backend failed, switching to Supabase fallback');
+    useSupabaseFallback = true;
+    const departments = await SupabaseAPI.getDepartmentsFromSupabase();
+    return departments;
+  }
 }
 
 // 2. Fetch single department by code
 export async function getDepartment(code) {
-  const response = await apiCall(`/departments/${code}`);
-  return response.data;
+  try {
+    if (useSupabaseFallback) {
+      console.log('📡 Using Supabase direct connection for department');
+      return await SupabaseAPI.getDepartmentFromSupabase(code);
+    }
+    
+    const response = await apiCall(`/departments/${code}`);
+    return response.data;
+  } catch (error) {
+    console.warn('⚠️ Backend failed, switching to Supabase fallback');
+    useSupabaseFallback = true;
+    return await SupabaseAPI.getDepartmentFromSupabase(code);
+  }
 }
 
 // 3. Start new assessment
 export async function startAssessment(studentInfo = {}) {
   console.log('🔍 API startAssessment called with:', studentInfo);
-  console.log('Keys:', Object.keys(studentInfo));
-  console.log('student_id:', studentInfo.student_id);
-  console.log('student_name:', studentInfo.student_name);
-  console.log('student_email:', studentInfo.student_email);
   
-  const response = await apiCall('/assessments/start', {
-    method: 'POST',
-    body: JSON.stringify(studentInfo)
-  });
-  
-  // Transform backend field names to match frontend expectations
-  const transformedData = {
-    ...response.data,
-    questions: response.data.questions.map(q => ({
-      ...q,
-      question_text: q.text,  // Backend: text → Frontend: question_text
-      options: (q.question_options || []).map(opt => ({
-        ...opt,
-        option_text: opt.text  // Backend: text → Frontend: option_text
+  try {
+    if (useSupabaseFallback) {
+      console.log('📡 Using Supabase direct connection for assessment');
+      return await SupabaseAPI.startAssessmentFromSupabase(studentInfo);
+    }
+    
+    const response = await apiCall('/assessments/start', {
+      method: 'POST',
+      body: JSON.stringify(studentInfo)
+    });
+    
+    // Transform backend field names to match frontend expectations
+    const transformedData = {
+      ...response.data,
+      questions: response.data.questions.map(q => ({
+        ...q,
+        question_text: q.text,  // Backend: text → Frontend: question_text
+        options: (q.question_options || []).map(opt => ({
+          ...opt,
+          option_text: opt.text  // Backend: text → Frontend: option_text
+        }))
       }))
-    }))
-  };
-  
-  console.log('✅ Transformed first question:', transformedData.questions[0]);
-  console.log('✅ First question text:', transformedData.questions[0]?.question_text);
-  console.log('✅ First option text:', transformedData.questions[0]?.options[0]?.option_text);
-  
-  return transformedData;
+    };
+    
+    console.log('✅ Transformed first question:', transformedData.questions[0]);
+    return transformedData;
+  } catch (error) {
+    console.warn('⚠️ Backend failed, switching to Supabase fallback');
+    useSupabaseFallback = true;
+    return await SupabaseAPI.startAssessmentFromSupabase(studentInfo);
+  }
 }
 
 // 4. Submit assessment (after responses saved)
 export async function submitAssessment(assessmentId, sessionToken) {
-  const response = await apiCall(`/assessments/${assessmentId}/submit`, {
-    method: 'POST',
-    body: JSON.stringify({ session_token: sessionToken })
-  });
-  return response.data;
+  try {
+    if (useSupabaseFallback) {
+      console.log('📡 Using Supabase direct connection for submit');
+      return await SupabaseAPI.submitAssessmentToSupabase(assessmentId, sessionToken);
+    }
+    
+    const response = await apiCall(`/assessments/${assessmentId}/submit`, {
+      method: 'POST',
+      body: JSON.stringify({ session_token: sessionToken })
+    });
+    return response.data;
+  } catch (error) {
+    console.warn('⚠️ Backend failed, switching to Supabase fallback');
+    useSupabaseFallback = true;
+    return await SupabaseAPI.submitAssessmentToSupabase(assessmentId, sessionToken);
+  }
+}
+
+// 4.5. Save individual response (for Supabase fallback)
+export async function saveResponse(assessmentId, questionId, optionId) {
+  try {
+    if (useSupabaseFallback) {
+      return await SupabaseAPI.saveResponseToSupabase(assessmentId, questionId, optionId);
+    }
+    
+    // If using backend, responses are saved in bulk on submit
+    // This is a no-op for backend mode
+    return { success: true };
+  } catch (error) {
+    console.warn('⚠️ Failed to save response, will retry on submit');
+    return { success: false };
+  }
 }
 
 // 5. Get assessment results
 export async function getAssessmentResults(assessmentId) {
-  const response = await apiCall(`/assessments/${assessmentId}/results`);
-  return response.data;
+  try {
+    if (useSupabaseFallback) {
+      console.log('📡 Using Supabase direct connection for results');
+      return await SupabaseAPI.getAssessmentResultsFromSupabase(assessmentId);
+    }
+    
+    const response = await apiCall(`/assessments/${assessmentId}/results`);
+    return response.data;
+  } catch (error) {
+    console.warn('⚠️ Backend failed, switching to Supabase fallback');
+    useSupabaseFallback = true;
+    return await SupabaseAPI.getAssessmentResultsFromSupabase(assessmentId);
+  }
 }
 
 // 6. Submit feedback
 export async function submitFeedback(feedbackData) {
-  const response = await apiCall('/feedback', {
-    method: 'POST',
-    body: JSON.stringify(feedbackData),
-  });
-  return response.data;
+  try {
+    if (useSupabaseFallback) {
+      console.log('📡 Using Supabase direct connection for feedback');
+      return await SupabaseAPI.submitFeedbackToSupabase(feedbackData);
+    }
+    
+    const response = await apiCall('/feedback', {
+      method: 'POST',
+      body: JSON.stringify(feedbackData),
+    });
+    return response.data;
+  } catch (error) {
+    console.warn('⚠️ Backend failed, switching to Supabase fallback');
+    useSupabaseFallback = true;
+    return await SupabaseAPI.submitFeedbackToSupabase(feedbackData);
+  }
 }
 
 // Export APIError for use in components
