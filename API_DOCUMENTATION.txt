@@ -1,0 +1,663 @@
+================================================================================
+CCI DEPARTMENT GUIDANCE SYSTEM - API DOCUMENTATION
+================================================================================
+Base URL: https://cci-department-guidance-production.up.railway.app
+Version: 1.0
+Last Updated: 2026-09-07
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Overview
+2. Authentication
+3. Response Format
+4. Error Handling
+5. Endpoints
+   5.1 Health & Info
+   5.2 Departments
+   5.3 Assessments
+   5.4 Feedback
+   5.5 Admin
+6. Rate Limiting
+7. Testing
+
+================================================================================
+1. OVERVIEW
+================================================================================
+
+The CCI Department Guidance API provides programmatic access to:
+- Department information and curricula
+- Assessment questions and scoring
+- Student assessment management
+- Result calculation and recommendations
+- Feedback collection
+- Administrative analytics
+
+Protocol: REST
+Format: JSON
+Status Codes: Standard HTTP
+
+================================================================================
+2. AUTHENTICATION
+================================================================================
+
+PUBLIC ENDPOINTS:
+- No authentication required for:
+  - Department information
+  - Starting/completing assessments
+  - Submitting feedback
+
+ADMIN ENDPOINTS:
+- Currently open (no auth)
+- Future: JWT-based authentication planned
+
+================================================================================
+3. RESPONSE FORMAT
+================================================================================
+
+SUCCESS RESPONSE:
+{
+  "success": true,
+  "data": { ... },
+  "message": "Optional success message"
+}
+
+ERROR RESPONSE:
+{
+  "success": false,
+  "error": "Error message",
+  "details": { ... } // Optional error details
+}
+
+================================================================================
+4. ERROR HANDLING
+================================================================================
+
+HTTP Status Codes:
+200 - Success
+201 - Created
+400 - Bad Request (validation error)
+401 - Unauthorized
+403 - Forbidden
+404 - Not Found
+429 - Too Many Requests
+500 - Internal Server Error
+
+Common Errors:
+- Missing required fields
+- Invalid data format
+- Resource not found
+- Session token mismatch
+- Rate limit exceeded
+
+================================================================================
+5. ENDPOINTS
+================================================================================
+
+--------------------------------------------------------------------------------
+5.1 HEALTH & INFO ENDPOINTS
+--------------------------------------------------------------------------------
+
+GET /
+----
+Description: API information and available endpoints
+Auth: None
+
+Response:
+{
+  "success": true,
+  "message": "CCI Department Guidance System API",
+  "version": "v1",
+  "environment": "production",
+  "documentation": "/api",
+  "status": "operational"
+}
+
+GET /api/health
+---------------
+Description: Health check with database status
+Auth: None
+
+Response:
+{
+  "status": "healthy",
+  "success": true,
+  "message": "CCI Department Guidance API is healthy",
+  "timestamp": "2026-09-07T10:00:00.000Z",
+  "environment": "production",
+  "uptime": "45 minutes",
+  "database": {
+    "status": "Connected",
+    "provider": "Supabase"
+  },
+  "memory": {
+    "used": "120MB",
+    "total": "256MB"
+  }
+}
+
+GET /api
+--------
+Description: List all available endpoints
+Auth: None
+
+Response: JSON object with endpoint documentation
+
+--------------------------------------------------------------------------------
+5.2 DEPARTMENTS ENDPOINTS
+--------------------------------------------------------------------------------
+
+GET /api/departments
+--------------------
+Description: Get all 6 CCI departments
+Auth: None
+Query Parameters: None
+
+Response:
+{
+  "success": true,
+  "data": {
+    "departments": [
+      {
+        "id": "uuid",
+        "code": "CS",
+        "name": "Computer Science",
+        "description": "Full description...",
+        "core_courses": ["Course 1", "Course 2", ...],
+        "career_paths": ["Path 1", "Path 2", ...],
+        "industry_demand": "High",
+        "color": "#007bff",
+        "icon": "💻",
+        "created_at": "2026-01-01T00:00:00.000Z",
+        "updated_at": "2026-01-01T00:00:00.000Z"
+      },
+      // ... 5 more departments
+    ]
+  }
+}
+
+Department Codes:
+- CS: Computer Science
+- SWE: Software Engineering
+- IT: Information Technology
+- IS: Information System
+- ISC: Information Science
+- STAT: Statistics
+
+GET /api/departments/:code
+---------------------------
+Description: Get single department by code
+Auth: None
+Parameters:
+  - code (path): Department code (CS, SWE, IT, IS, ISC, STAT)
+
+Response:
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "code": "CS",
+    "name": "Computer Science",
+    "description": "Comprehensive description...",
+    "core_courses": [
+      "Data Structures and Algorithms",
+      "Computer Architecture",
+      "Operating Systems",
+      ...
+    ],
+    "career_paths": [
+      "Software Developer",
+      "System Architect",
+      ...
+    ],
+    "industry_demand": "High",
+    "color": "#007bff"
+  }
+}
+
+Error (404):
+{
+  "success": false,
+  "error": "Department not found"
+}
+
+--------------------------------------------------------------------------------
+5.3 ASSESSMENT ENDPOINTS
+--------------------------------------------------------------------------------
+
+POST /api/assessments/start
+----------------------------
+Description: Start new assessment session
+Auth: None
+Content-Type: application/json
+
+Request Body:
+{
+  "student_id": "HU/IT/2024/001",     // Required
+  "student_name": "John Doe",          // Required
+  "student_email": "john@example.com"  // Required, must be valid email
+}
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "assessment_id": "uuid",
+    "session_token": "token-string",
+    "questions": [
+      {
+        "id": "uuid",
+        "question_text": "What interests you most?",
+        "text": "What interests you most?",
+        "category": "interests",
+        "question_order": 1,
+        "options": [
+          {
+            "id": "uuid",
+            "option_text": "Programming and coding",
+            "text": "Programming and coding",
+            "option_order": 1,
+            "cs_score": 3,
+            "swe_score": 3,
+            "it_score": 2,
+            "is_score": 1,
+            "isc_score": 1,
+            "stat_score": 0
+          },
+          // ... more options
+        ]
+      },
+      // ... 19 more questions
+    ]
+  }
+}
+
+Validation Errors (400):
+{
+  "success": false,
+  "error": "Validation failed",
+  "details": {
+    "fields": [
+      {
+        "field": "student_email",
+        "message": "Invalid email format"
+      }
+    ]
+  }
+}
+
+POST /api/assessments/:id/responses
+------------------------------------
+Description: Save individual question response
+Auth: Session token
+Content-Type: application/json
+
+Parameters:
+  - id (path): Assessment ID
+
+Request Body:
+{
+  "question_id": "uuid",
+  "option_id": "uuid",
+  "session_token": "token-string"
+}
+
+Response (200):
+{
+  "success": true,
+  "message": "Response saved successfully"
+}
+
+POST /api/assessments/:id/submit
+---------------------------------
+Description: Submit completed assessment and calculate results
+Auth: Session token
+Content-Type: application/json
+
+Parameters:
+  - id (path): Assessment ID
+
+Request Body:
+{
+  "session_token": "token-string"
+}
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "assessment_id": "uuid",
+    "top_match": {
+      "department_code": "CS",
+      "department_name": "Computer Science",
+      "department_description": "...",
+      "score": 45,
+      "match_percentage": 85.5
+    },
+    "scores": [
+      {
+        "department_code": "CS",
+        "score": 45,
+        "match_percentage": 85.5,
+        "rank": 1
+      },
+      {
+        "department_code": "SWE",
+        "score": 42,
+        "match_percentage": 80.0,
+        "rank": 2
+      },
+      // ... 4 more departments
+    ],
+    "all_departments": [ ... ] // Same as scores
+  }
+}
+
+Error (403 - Invalid Token):
+{
+  "success": false,
+  "error": "Invalid or expired session token"
+}
+
+Error (404 - Not Found):
+{
+  "success": false,
+  "error": "Assessment not found"
+}
+
+GET /api/assessments/:id/results
+---------------------------------
+Description: Get assessment results (after submission)
+Auth: None (results are public)
+
+Parameters:
+  - id (path): Assessment ID
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "assessment_id": "uuid",
+    "student_name": "John Doe",
+    "student_email": "john@example.com",
+    "status": "completed",
+    "completed_at": "2026-09-07T10:30:00.000Z",
+    "top_match": {
+      "department_code": "CS",
+      "department_name": "Computer Science",
+      "department_description": "...",
+      "score": 45,
+      "match_percentage": 85.5
+    },
+    "scores": [ ... ],
+    "all_departments": [ ... ]
+  }
+}
+
+Error (404):
+{
+  "success": false,
+  "error": "Results not found"
+}
+
+GET /api/assessments/:id/progress
+----------------------------------
+Description: Get assessment progress
+Auth: Session token
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "total_questions": 20,
+    "answered_questions": 15,
+    "remaining_questions": 5,
+    "progress_percentage": 75
+  }
+}
+
+--------------------------------------------------------------------------------
+5.4 FEEDBACK ENDPOINTS
+--------------------------------------------------------------------------------
+
+POST /api/feedback
+------------------
+Description: Submit user feedback
+Auth: None
+Content-Type: application/json
+
+Request Body:
+{
+  "assessment_id": "uuid",              // Optional
+  "rating": 5,                          // Required (1-5)
+  "comment": "Great system!",           // Optional
+  "helpful": true,                      // Optional
+  "would_recommend": true,              // Optional
+  "user_name": "John Doe",             // Optional
+  "user_email": "john@example.com"     // Optional
+}
+
+Response (200):
+{
+  "success": true,
+  "message": "Feedback submitted successfully",
+  "data": {
+    "id": "uuid"
+  }
+}
+
+Validation Errors (400):
+{
+  "success": false,
+  "error": "Validation failed",
+  "details": {
+    "fields": [
+      {
+        "field": "rating",
+        "message": "Rating must be between 1 and 5"
+      }
+    ]
+  }
+}
+
+GET /api/feedback
+-----------------
+Description: Get all feedback (admin only)
+Auth: Admin (future)
+Query Parameters:
+  - page: Page number (default: 1)
+  - limit: Items per page (default: 10)
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "feedback": [ ... ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 100,
+      "totalPages": 10
+    }
+  }
+}
+
+--------------------------------------------------------------------------------
+5.5 ADMIN ENDPOINTS
+--------------------------------------------------------------------------------
+
+GET /api/admin/stats
+--------------------
+Description: Get dashboard statistics
+Auth: Admin (future)
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "total_assessments": 1234,
+    "completed_assessments": 1000,
+    "total_feedback": 800,
+    "active_questions": 20,
+    "average_rating": 4.5,
+    "completion_rate": 81
+  }
+}
+
+GET /api/admin/analytics
+-------------------------
+Description: Get analytics data for charts
+Auth: Admin (future)
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "department_distribution": [
+      {
+        "department": "Computer Science",
+        "code": "CS",
+        "count": 450,
+        "color": "#007bff"
+      },
+      // ... more departments
+    ],
+    "question_affinity": [
+      {
+        "question_id": "uuid",
+        "question_text": "What interests you most?",
+        "category": "interests",
+        "response_count": 1234
+      },
+      // ... top 10 questions
+    ],
+    "completion_trend": [
+      {
+        "date": "2026-09-01",
+        "count": 45
+      },
+      // ... last 30 days
+    ]
+  }
+}
+
+GET /api/admin/submissions
+---------------------------
+Description: Get all student submissions
+Auth: Admin (future)
+Query Parameters:
+  - page: Page number (default: 1)
+  - limit: Items per page (default: 10)
+  - search: Search by name/email
+  - sortBy: Sort field (completed_at, student_name, etc.)
+  - sortOrder: asc or desc (default: desc)
+
+Response (200):
+{
+  "success": true,
+  "data": {
+    "submissions": [
+      {
+        "id": "uuid",
+        "student_id": "HU/IT/2024/001",
+        "student_name": "John Doe",
+        "student_email": "john@example.com",
+        "started_at": "2026-09-07T10:00:00.000Z",
+        "completed_at": "2026-09-07T10:15:00.000Z",
+        "status": "completed",
+        "top_department": "Computer Science",
+        "top_department_code": "CS"
+      },
+      // ... more submissions
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 1000,
+      "totalPages": 100
+    }
+  }
+}
+
+GET /api/admin/questions
+-------------------------
+Description: Get all questions with options
+Auth: Admin (future)
+
+Response: List of questions with nested options
+
+PUT /api/admin/questions/:id
+-----------------------------
+Description: Update question
+Auth: Admin (future)
+Content-Type: application/json
+
+Request Body:
+{
+  "text": "Updated question text",
+  "category": "skills",
+  "is_active": true
+}
+
+POST /api/admin/questions
+--------------------------
+Description: Create new question
+Auth: Admin (future)
+
+DELETE /api/admin/questions/:id
+--------------------------------
+Description: Delete question
+Auth: Admin (future)
+
+================================================================================
+6. RATE LIMITING
+================================================================================
+
+Current Limits:
+- 100 requests per 15 minutes per IP
+- In development mode: No limits
+
+Headers:
+- RateLimit-Limit: Maximum requests
+- RateLimit-Remaining: Requests remaining
+- RateLimit-Reset: Reset timestamp
+
+Rate Limit Exceeded (429):
+{
+  "success": false,
+  "error": "Too many requests. Please try again later.",
+  "retryAfter": 900
+}
+
+================================================================================
+7. TESTING
+================================================================================
+
+Test Base URL: http://localhost:3001
+Production URL: https://cci-department-guidance-production.up.railway.app
+
+Example cURL Commands:
+
+# Get all departments
+curl -X GET https://cci-department-guidance-production.up.railway.app/api/departments
+
+# Start assessment
+curl -X POST https://cci-department-guidance-production.up.railway.app/api/assessments/start \
+  -H "Content-Type: application/json" \
+  -d '{
+    "student_id": "TEST-001",
+    "student_name": "Test Student",
+    "student_email": "test@example.com"
+  }'
+
+# Submit feedback
+curl -X POST https://cci-department-guidance-production.up.railway.app/api/feedback \
+  -H "Content-Type: application/json" \
+  -d '{
+    "rating": 5,
+    "comment": "Excellent system!"
+  }'
+
+================================================================================
+END OF DOCUMENTATION
+================================================================================

@@ -1,24 +1,24 @@
-/**
- * Jest Configuration for Backend API Testing
- */
-
 module.exports = {
   testEnvironment: 'node',
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'src/**/*.js',
-    '!src/server.js', // Exclude server entry point
-    '!**/node_modules/**'
+    '!src/**/*.test.js',
+    '!src/**/*.spec.js'
   ],
   testMatch: [
-    '**/__tests__/**/*.test.js',
-    '**/?(*.)+(spec|test).js'
+    '**/tests/**/*.test.js',
+    '**/tests/**/*.spec.js'
   ],
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70
+    }
+  },
   verbose: true,
-  testTimeout: 30000, // 30 seconds for API calls
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
-  testEnvironment: 'node',
-  globals: {
-    'process.env.NODE_ENV': 'test'
-  }
+  testTimeout: 30000,
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.js']
 };

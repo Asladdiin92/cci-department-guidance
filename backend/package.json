@@ -6,9 +6,12 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest --verbose",
+    "test": "jest --verbose --coverage",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "test:unit": "jest tests/database.test.js",
+    "test:api": "jest tests/api.test.js",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
   },
   "keywords": [
     "haramaya",
