@@ -1,13 +1,15 @@
+# Railway Configuration for CCI Department Guidance System
+# This tells Railway to deploy the backend service
+
 [build]
-builder = "NIXPACKS"
+builder = "nixpacks"
+buildCommand = "cd backend && npm install --production"
 
 [deploy]
-startCommand = "npm start"
-restartPolicyType = "ON_FAILURE"
+startCommand = "cd backend && node src/server.js"
+restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
 
-[nixpacks]
-nixpkgsArchive = "55ad876d48ebc99e3a77bd47e58c9cb96c00c4be"
-
-[phases.setup]
-nixPkgs = ["nodejs_22"]
+# Health check configuration
+[deploy.healthcheckPath]
+path = "/api/health"
