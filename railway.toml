@@ -1,14 +1,16 @@
 # Railway Configuration for CCI Department Guidance System
-# This tells Railway to deploy the backend service
+# This tells Railway to deploy the backend service from the backend directory
 
 [build]
 builder = "nixpacks"
-buildCommand = "cd backend && npm install --production"
+# Railway will automatically detect package.json in watchPaths directory
 
 [deploy]
-startCommand = "cd backend && node src/server.js"
+startCommand = "node src/server.js"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
+# Tell Railway the backend code is in the backend directory
+watchPaths = ["/backend/**"]
 
 # Health check configuration
 [deploy.healthcheckPath]
