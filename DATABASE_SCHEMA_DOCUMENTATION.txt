@@ -1,0 +1,508 @@
+================================================================================
+CCI DEPARTMENT GUIDANCE SYSTEM - DATABASE SCHEMA DOCUMENTATION
+================================================================================
+Database: Supabase PostgreSQL
+Version: 1.0
+Last Updated: 2026-09-07
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Overview
+2. Entity Relationship Diagram
+3. Table Specifications
+4. Row Level Security (RLS) Policies
+5. Indexes & Performance
+6. Views & Functions
+7. Connection Details
+8. Common Queries
+
+================================================================================
+1. OVERVIEW
+================================================================================
+
+Total Tables: 7 main tables + 3 views
+Total Columns: ~60 columns
+Primary Keys: UUID (using uuid_generate_v4())
+Foreign Keys: 8 relationships
+RLS: Enabled on all user-facing tables
+
+================================================================================
+2. ENTITY RELATIONSHIP DIAGRAM
+================================================================================
+
+┌─────────────────┐
+│   departments   │
+│─────────────────│
+│ id (PK)         │
+│ code (UK)       │◄─────────┐
+│ name            │          │
+│ description     │          │
+│ core_courses[]  │          │
+│ career_paths[]  │          │
+└─────────────────┘          │
+                             │
+┌─────────────────┐          │
+│   questions     │          │
+│─────────────────│          │
+│ id (PK)         │◄─────┐   │
+│ text            │      │   │
+│ category        │      │   │
+│ question_order  │      │   │
+│ is_active       │      │   │
+└─────────────────┘      │   │
+                         │   │
+┌─────────────────┐      │   │
+│question_options │      │   │
+│─────────────────│      │   │
+│ id (PK)         │      │   │
+│ question_id (FK)├──────┘   │
+│ text            │          │
+│ cs_score        │          │
+│ swe_score       │          │
+│ it_score        │          │
+│ is_score        │          │
+│ isc_score       │          │
+│ stat_score      │          │
+│ option_order    │          │
+└─────────────────┘          │
+         │                   │
+         │                   │
+┌─────────────────┐          │
+│  assessments    │          │
+│─────────────────│          │
+│ id (PK)         │          │
+│ student_id      │          │
+│ student_name    │          │
+│ student_email   │          │
+│ status          │          │
+│ top_match_dept  ├──────────┘
+│ started_at      │
+│ completed_at    │
+│ session_token   │
+└─────────────────┘
+         │
+         │
+         ├──────────────────┐
+         │                  │
+         ▼                  ▼
+┌─────────────────┐  ┌─────────────────┐
+│assessment_resp. │  │ recommendations │
+│─────────────────│  │─────────────────│
+│ id (PK)         │  │ id (PK)         │
+│ assessment_id(FK)│ │ assessment_id(FK)│
+│ question_id (FK)─┤  │ department_id   │
+│ option_id (FK)──┼─►│ score           │
+│ answered_at     │  │ rank            │
+└─────────────────┘  │ match_percent   │
+                     └─────────────────┘
+
+┌─────────────────┐
+│    feedback     │
+│─────────────────│
+│ id (PK)         │
+│ assessment_id(FK)│
+│ rating          │
+│ comment         │
+│ created_at      │
+└─────────────────┘
+
+================================================================================
+3. TABLE SPECIFICATIONS
+================================================================================
+
+--------------------------------------------------------------------------------
+TABLE: departments
+--------------------------------------------------------------------------------
+Purpose: Stores information about 6 CCI departments
+Primary Key: id (UUID)
+Unique Keys: code (VARCHAR(10))
+
+COLUMNS:
+┌──────────────────┬──────────────┬──────────┬─────────────────────────────┐
+│ Column           │ Type         │ Nullable │ Description                 │
+├──────────────────┼──────────────┼──────────┼─────────────────────────────┤
+│ id               │ UUID         │ NO       │ Primary key                 │
+│ code             │ VARCHAR(10)  │ NO       │ Dept code: CS,SWE,IT,etc.   │
+│ name             │ VARCHAR(100) │ NO       │ Full department name        │
+│ description      │ TEXT         │ NO       │ Department overview         │
+│ core_courses     │ TEXT[]       │ YES      │ Array of course names       │
+│ career_paths     │ TEXT[]       │ YES      │ Career opportunities        │
+│ industry_demand  │ VARCHAR(20)  │ YES      │ High/Medium/Low             │
+│ color            │ VARCHAR(7)   │ YES      │ Hex color for UI            │
+│ icon             │ VARCHAR(10)  │ YES      │ Icon identifier             │
+│ created_at       │ TIMESTAMPTZ  │ NO       │ Creation timestamp          │
+│ updated_at       │ TIMESTAMPTZ  │ NO       │ Last update timestamp       │
+└──────────────────┴──────────────┴──────────┴─────────────────────────────┘
+
+INDEXES:
+- PRIMARY KEY: id
+- UNIQUE: code
+- INDEX: name
+- GIN INDEX: core_courses (array search)
+
+DATA:
+6 departments: CS, SWE, IT, IS, ISC, STAT
+
+--------------------------------------------------------------------------------
+TABLE: questions
+--------------------------------------------------------------------------------
+Purpose: Assessment questions (20 questions)
+Primary Key: id (UUID)
+Unique Keys: question_order
+
+COLUMNS:
+┌──────────────────┬──────────────┬──────────┬─────────────────────────────┐
+│ Column           │ Type         │ Nullable │ Description                 │
+├──────────────────┼──────────────┼──────────┼─────────────────────────────┤
+│ id               │ UUID         │ NO       │ Primary key                 │
+│ text             │ TEXT         │ NO       │ Question text               │
+│ category         │ VARCHAR(50)  │ NO       │ interests/skills/etc.       │
+│ difficulty       │ VARCHAR(20)  │ YES      │ EASY/MEDIUM/HARD            │
+│ question_order   │ INTEGER      │ NO       │ Display order (1-20)        │
+│ is_active        │ BOOLEAN      │ NO       │ Active question?            │
+│ created_at       │ TIMESTAMPTZ  │ NO       │ Creation timestamp          │
+│ updated_at       │ TIMESTAMPTZ  │ NO       │ Last update timestamp       │
+└──────────────────┴──────────────┴──────────┴─────────────────────────────┘
+
+CONSTRAINTS:
+- category IN ('interests', 'skills', 'learning_style', 'career_goals', 'problem_solving')
+- difficulty IN ('EASY', 'MEDIUM', 'HARD')
+- question_order BETWEEN 1 AND 100
+
+INDEXES:
+- PRIMARY KEY: id
+- UNIQUE: question_order
+- INDEX: is_active WHERE is_active = TRUE
+- INDEX: category
+
+DATA:
+20 active questions
+
+--------------------------------------------------------------------------------
+TABLE: question_options
+--------------------------------------------------------------------------------
+Purpose: Multiple choice options (4-6 per question)
+Primary Key: id (UUID)
+Foreign Keys: question_id -> questions(id)
+
+COLUMNS:
+┌──────────────────┬──────────────┬──────────┬─────────────────────────────┐
+│ Column           │ Type         │ Nullable │ Description                 │
+├──────────────────┼──────────────┼──────────┼─────────────────────────────┤
+│ id               │ UUID         │ NO       │ Primary key                 │
+│ question_id      │ UUID         │ NO       │ FK to questions             │
+│ text             │ TEXT         │ NO       │ Option text                 │
+│ cs_score         │ INTEGER      │ NO       │ CS department score (0-3)   │
+│ swe_score        │ INTEGER      │ NO       │ SWE department score (0-3)  │
+│ it_score         │ INTEGER      │ NO       │ IT department score (0-3)   │
+│ is_score         │ INTEGER      │ NO       │ IS department score (0-3)   │
+│ isc_score        │ INTEGER      │ NO       │ ISC department score (0-3)  │
+│ stat_score       │ INTEGER      │ NO       │ STAT department score (0-3) │
+│ option_order     │ INTEGER      │ NO       │ Display order within Q      │
+│ created_at       │ TIMESTAMPTZ  │ NO       │ Creation timestamp          │
+└──────────────────┴──────────────┴──────────┴─────────────────────────────┘
+
+CONSTRAINTS:
+- option_order BETWEEN 1 AND 10
+- UNIQUE (question_id, option_order)
+
+INDEXES:
+- PRIMARY KEY: id
+- INDEX: question_id
+- INDEX: (question_id, option_order)
+
+DATA:
+~120 options (20 questions × 6 options avg)
+
+--------------------------------------------------------------------------------
+TABLE: assessments
+--------------------------------------------------------------------------------
+Purpose: Student assessment sessions
+Primary Key: id (UUID)
+Unique Keys: session_token
+
+COLUMNS:
+┌──────────────────┬──────────────┬──────────┬─────────────────────────────┐
+│ Column           │ Type         │ Nullable │ Description                 │
+├──────────────────┼──────────────┼──────────┼─────────────────────────────┤
+│ id               │ UUID         │ NO       │ Primary key                 │
+│ student_id       │ VARCHAR(50)  │ YES      │ University ID               │
+│ student_name     │ VARCHAR(100) │ YES      │ Student full name           │
+│ student_email    │ VARCHAR(255) │ YES      │ Email address               │
+│ status           │ VARCHAR(20)  │ NO       │ in_progress/completed       │
+│ top_match_dept   │ VARCHAR(10)  │ YES      │ Top matched dept code       │
+│ started_at       │ TIMESTAMPTZ  │ NO       │ Start time                  │
+│ completed_at     │ TIMESTAMPTZ  │ YES      │ Completion time             │
+│ session_token    │ VARCHAR(255) │ YES      │ Session identifier          │
+│ ip_address       │ VARCHAR(45)  │ YES      │ Client IP                   │
+│ user_agent       │ TEXT         │ YES      │ Browser info                │
+│ created_at       │ TIMESTAMPTZ  │ NO       │ Creation timestamp          │
+└──────────────────┴──────────────┴──────────┴─────────────────────────────┘
+
+CONSTRAINTS:
+- status IN ('in_progress', 'completed', 'abandoned')
+- student_email format validation (regex)
+
+INDEXES:
+- PRIMARY KEY: id
+- UNIQUE: session_token
+- INDEX: status
+- INDEX: student_id
+- INDEX: completed_at WHERE completed_at IS NOT NULL
+- INDEX: started_at
+
+--------------------------------------------------------------------------------
+TABLE: assessment_responses
+--------------------------------------------------------------------------------
+Purpose: Individual question responses
+Primary Key: id (UUID)
+Foreign Keys: assessment_id, question_id, option_id
+
+COLUMNS:
+┌──────────────────┬──────────────┬──────────┬─────────────────────────────┐
+│ Column           │ Type         │ Nullable │ Description                 │
+├──────────────────┼──────────────┼──────────┼─────────────────────────────┤
+│ id               │ UUID         │ NO       │ Primary key                 │
+│ assessment_id    │ UUID         │ NO       │ FK to assessments           │
+│ question_id      │ UUID         │ NO       │ FK to questions             │
+│ option_id        │ UUID         │ NO       │ FK to question_options      │
+│ answered_at      │ TIMESTAMPTZ  │ NO       │ Response timestamp          │
+└──────────────────┴──────────────┴──────────┴─────────────────────────────┘
+
+CONSTRAINTS:
+- UNIQUE (assessment_id, question_id) - prevents answering same Q twice
+
+INDEXES:
+- PRIMARY KEY: id
+- INDEX: assessment_id
+- INDEX: question_id
+- INDEX: option_id
+- INDEX: answered_at
+
+ON DELETE: CASCADE (deletes with assessment)
+
+--------------------------------------------------------------------------------
+TABLE: recommendations
+--------------------------------------------------------------------------------
+Purpose: Calculated department recommendations
+Primary Key: id (UUID)
+Foreign Keys: assessment_id, department_id
+
+COLUMNS:
+┌──────────────────┬──────────────┬──────────┬─────────────────────────────┐
+│ Column           │ Type         │ Nullable │ Description                 │
+├──────────────────┼──────────────┼──────────┼─────────────────────────────┤
+│ id               │ UUID         │ NO       │ Primary key                 │
+│ assessment_id    │ UUID         │ NO       │ FK to assessments           │
+│ department_id    │ VARCHAR(10)  │ NO       │ FK to departments(code)     │
+│ score            │ INTEGER      │ NO       │ Total score                 │
+│ rank             │ INTEGER      │ NO       │ 1=best, 6=worst             │
+│ match_percentage │ DECIMAL(5,2) │ NO       │ Match % (0-100)             │
+│ created_at       │ TIMESTAMPTZ  │ NO       │ Creation timestamp          │
+└──────────────────┴──────────────┴──────────┴─────────────────────────────┘
+
+CONSTRAINTS:
+- score >= 0
+- rank BETWEEN 1 AND 6
+- match_percentage BETWEEN 0 AND 100
+- UNIQUE (assessment_id, department_id)
+- UNIQUE (assessment_id, rank)
+
+INDEXES:
+- PRIMARY KEY: id
+- INDEX: assessment_id
+- INDEX: department_id
+- INDEX: (assessment_id, rank)
+- INDEX: score DESC
+
+ON DELETE: CASCADE (deletes with assessment)
+
+--------------------------------------------------------------------------------
+TABLE: feedback
+--------------------------------------------------------------------------------
+Purpose: Student feedback after assessment
+Primary Key: id (UUID)
+Foreign Keys: assessment_id (optional)
+
+COLUMNS:
+┌──────────────────┬──────────────┬──────────┬─────────────────────────────┐
+│ Column           │ Type         │ Nullable │ Description                 │
+├──────────────────┼──────────────┼──────────┼─────────────────────────────┤
+│ id               │ UUID         │ NO       │ Primary key                 │
+│ assessment_id    │ UUID         │ YES      │ FK to assessments           │
+│ rating           │ INTEGER      │ NO       │ Star rating (1-5)           │
+│ comment          │ TEXT         │ YES      │ Text feedback               │
+│ helpful          │ BOOLEAN      │ YES      │ Was assessment helpful?     │
+│ would_recommend  │ BOOLEAN      │ YES      │ Would recommend to others?  │
+│ created_at       │ TIMESTAMPTZ  │ NO       │ Creation timestamp          │
+└──────────────────┴──────────────┴──────────┴─────────────────────────────┘
+
+CONSTRAINTS:
+- rating BETWEEN 1 AND 5
+
+INDEXES:
+- PRIMARY KEY: id
+- INDEX: assessment_id
+- INDEX: rating
+- INDEX: created_at
+
+================================================================================
+4. ROW LEVEL SECURITY (RLS) POLICIES
+================================================================================
+
+RLS STATUS: ✅ ENABLED on all user-facing tables
+
+--------------------------------------------------------------------------------
+PUBLIC TABLES (Read-Only)
+--------------------------------------------------------------------------------
+✓ departments - Anyone can read
+✓ questions - Anyone can read (only is_active=true)
+✓ question_options - Anyone can read
+
+--------------------------------------------------------------------------------
+USER TABLES (Restricted)
+--------------------------------------------------------------------------------
+
+assessments:
+  ✓ INSERT: Anyone can create new assessment
+  ✓ SELECT: Anyone can read (session-based filtering recommended)
+  ✓ UPDATE: Anyone can update (session-based filtering recommended)
+
+assessment_responses:
+  ✓ INSERT: Anyone can save responses
+  ✓ SELECT: Anyone can read own responses
+
+recommendations:
+  ✓ SELECT: Anyone can read results
+
+feedback:
+  ✓ INSERT: Anyone can submit feedback
+  ✓ SELECT: Anyone can read (optionally restrict)
+
+--------------------------------------------------------------------------------
+ADMIN ACCESS
+--------------------------------------------------------------------------------
+When using SUPABASE_SERVICE_ROLE_KEY:
+  ✓ BYPASSES all RLS policies
+  ✓ Full read/write/delete access
+  ✓ Used for admin dashboard
+
+================================================================================
+5. INDEXES & PERFORMANCE
+================================================================================
+
+CRITICAL INDEXES (for query performance):
+┌────────────────────────────────────────────────────────────┐
+│ Table                    │ Index                          │
+├──────────────────────────┼────────────────────────────────┤
+│ assessments              │ completed_at (WHERE NOT NULL)  │
+│ assessment_responses     │ assessment_id                  │
+│ recommendations          │ (assessment_id, rank)          │
+│ questions                │ is_active (WHERE TRUE)         │
+│ question_options         │ question_id                    │
+└──────────────────────────┴────────────────────────────────┘
+
+EXPECTED QUERY TIMES:
+- Get departments: <50ms
+- Get questions with options: <200ms
+- Save response: <100ms
+- Calculate results: <500ms
+
+================================================================================
+6. VIEWS & FUNCTIONS
+================================================================================
+
+VIEW: view_assessment_statistics
+- Aggregated metrics for dashboard
+- Total/completed assessments
+- Completion rate
+- Average completion time
+
+VIEW: view_department_popularity
+- Department recommendation counts
+- First-rank counts
+- Average match percentages
+
+VIEW: view_feedback_summary
+- Aggregated feedback metrics
+- Average rating
+- Recommendation rate
+
+FUNCTION: calculate_match_percentage(score, max_score)
+- Calculates percentage match
+- Returns DECIMAL(5,2)
+
+FUNCTION: update_updated_at_column()
+- Trigger function for auto-updating timestamps
+
+================================================================================
+7. CONNECTION DETAILS
+================================================================================
+
+SUPABASE CONFIGURATION:
+┌──────────────────────────────────────────────────────────────┐
+│ URL:     https://dztzjfqipllddyrrfcze.supabase.co           │
+│ Region:  EU Central (aws-0-eu-central-1)                     │
+│ Schema:  public                                              │
+│ Version: PostgreSQL 15+                                      │
+└──────────────────────────────────────────────────────────────┘
+
+REQUIRED ENVIRONMENT VARIABLES:
+  SUPABASE_URL=https://dztzjfqipllddyrrfcze.supabase.co
+  SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6... (optional)
+
+================================================================================
+8. COMMON QUERIES
+================================================================================
+
+-- Get all departments with courses
+SELECT code, name, core_courses 
+FROM departments 
+ORDER BY code;
+
+-- Get active questions with options
+SELECT q.*, qo.* 
+FROM questions q
+JOIN question_options qo ON q.id = qo.question_id
+WHERE q.is_active = TRUE
+ORDER BY q.question_order, qo.option_order;
+
+-- Get assessment with responses
+SELECT a.*, ar.*, q.text as question_text, qo.text as option_text
+FROM assessments a
+LEFT JOIN assessment_responses ar ON a.id = ar.assessment_id
+LEFT JOIN questions q ON ar.question_id = q.id
+LEFT JOIN question_options qo ON ar.option_id = qo.id
+WHERE a.id = 'assessment-uuid-here';
+
+-- Calculate department scores for an assessment
+SELECT 
+  SUM(qo.cs_score) as cs_total,
+  SUM(qo.swe_score) as swe_total,
+  SUM(qo.it_score) as it_total,
+  SUM(qo.is_score) as is_total,
+  SUM(qo.isc_score) as isc_total,
+  SUM(qo.stat_score) as stat_total
+FROM assessment_responses ar
+JOIN question_options qo ON ar.option_id = qo.id
+WHERE ar.assessment_id = 'assessment-uuid-here';
+
+-- Get top recommendations for an assessment
+SELECT r.*, d.name as department_name
+FROM recommendations r
+JOIN departments d ON r.department_id = d.code
+WHERE r.assessment_id = 'assessment-uuid-here'
+ORDER BY r.rank;
+
+-- Get completion statistics
+SELECT 
+  COUNT(*) as total_assessments,
+  COUNT(*) FILTER (WHERE completed_at IS NOT NULL) as completed,
+  ROUND(AVG(EXTRACT(EPOCH FROM (completed_at - started_at))/60), 2) as avg_minutes
+FROM assessments;
+
+================================================================================
+END OF DOCUMENTATION
+================================================================================
