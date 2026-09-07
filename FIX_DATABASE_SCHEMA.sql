@@ -10,9 +10,15 @@ ALTER TABLE questions
 ADD COLUMN IF NOT EXISTS question_order INTEGER;
 
 -- Update question_order based on existing data or set defaults
+WITH numbered_questions AS (
+  SELECT id, ROW_NUMBER() OVER (ORDER BY created_at) as rn
+  FROM questions
+)
 UPDATE questions 
-SET question_order = ROW_NUMBER() OVER (ORDER BY created_at)
-WHERE question_order IS NULL;
+SET question_order = numbered_questions.rn
+FROM numbered_questions
+WHERE questions.id = numbered_questions.id
+  AND questions.question_order IS NULL;
 
 -- Add NOT NULL constraint after populating data
 ALTER TABLE questions 
@@ -31,15 +37,29 @@ ADD COLUMN IF NOT EXISTS isc_score INTEGER DEFAULT 0,
 ADD COLUMN IF NOT EXISTS stat_score INTEGER DEFAULT 0;
 
 -- Update option_order based on existing data
+WITH numbered_options AS (
+  SELECT id, ROW_NUMBER() OVER (PARTITION BY question_id ORDER BY created_at) as rn
+  FROM question_options
+)
 UPDATE question_options 
-SET option_order = ROW_NUMBER() OVER (PARTITION BY question_id ORDER BY created_at)
-WHERE option_order IS NULL;
+SET option_order = numbered_options.rn
+FROM numbered_options
+WHERE question_options.id = numbered_options.id
+  AND question_options.option_order IS NULL;
 
 -- Set NOT NULL after populating
 ALTER TABLE question_options 
 ALTER COLUMN option_order SET NOT NULL;
 
 -- Add check constraints for score ranges (0-3)
+ALTER TABLE question_options
+DROP CONSTRAINT IF EXISTS chk_cs_score,
+DROP CONSTRAINT IF EXISTS chk_swe_score,
+DROP CONSTRAINT IF EXISTS chk_it_score,
+DROP CONSTRAINT IF EXISTS chk_is_score,
+DROP CONSTRAINT IF EXISTS chk_isc_score,
+DROP CONSTRAINT IF EXISTS chk_stat_score;
+
 ALTER TABLE question_options
 ADD CONSTRAINT chk_cs_score CHECK (cs_score >= 0 AND cs_score <= 3),
 ADD CONSTRAINT chk_swe_score CHECK (swe_score >= 0 AND swe_score <= 3),
@@ -67,12 +87,20 @@ ADD COLUMN IF NOT EXISTS top_match_department VARCHAR(10);
 
 -- Add check constraint for status
 ALTER TABLE assessments
+DROP CONSTRAINT IF EXISTS chk_status;
+
+ALTER TABLE assessments
 ADD CONSTRAINT chk_status CHECK (status IN ('in_progress', 'completed', 'abandoned'));
 
 -- ============================================================================
 
 -- Fix 5: Enable DELETE permissions for cleanup (RLS policies)
 -- This allows test cleanup to work properly
+
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Allow delete own assessments" ON assessments;
+DROP POLICY IF EXISTS "Allow delete own responses" ON assessment_responses;
+DROP POLICY IF EXISTS "Allow delete own feedback" ON feedback;
 
 -- Allow authenticated users to delete their own assessments
 CREATE POLICY "Allow delete own assessments" ON assessments
