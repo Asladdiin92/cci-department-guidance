@@ -148,15 +148,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Academic Calendar Notice */}
-        <div className="footer-notice">
-          <div className="footer-notice-icon">📅</div>
-          <div className="footer-notice-content">
-            <strong>Academic Calendar 2026:</strong> Department selection deadline is September 30, 2026. 
-            Complete your assessment early to make an informed decision.
-          </div>
-        </div>
       </div>
 
       {/* Bottom Bar */}
