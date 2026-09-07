@@ -15,7 +15,8 @@ import {
   Alert,
   IconButton,
   useTheme,
-  alpha
+  alpha,
+  Paper
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -38,55 +39,67 @@ const DEPARTMENT_METADATA = {
     mathIntensity: 'High',
     codingLevel: 'High',
     theoryPractice: '70/30',
-    tags: ['Algorithm Design', 'Theoretical Computing', 'Research-Focused', 'Math Heavy'],
+    tags: ['Algorithm Design', 'AI & Machine Learning', 'Research-Focused', 'Problem Solving'],
     focus: 'Theory & Algorithms',
     icon: <Psychology />,
-    color: '#2e7d32' // Haramaya green
+    color: '#2e7d32', // Haramaya green
+    tagline: 'Master the science behind computing and artificial intelligence',
+    highlights: ['🎓 Research Excellence', '🧠 Deep Problem Solving', '🤖 AI Innovation']
   },
   SWE: {
     mathIntensity: 'Medium',
     codingLevel: 'Very High',
     theoryPractice: '30/70',
-    tags: ['High Programming', 'Software Development', 'Project-Based', 'Practical'],
+    tags: ['Full-Stack Development', 'Agile Methods', 'Project-Based', 'Industry-Ready'],
     focus: 'Building Software',
     icon: <Code />,
-    color: '#f57c00' // Haramaya gold
+    color: '#f57c00', // Haramaya gold
+    tagline: 'Build tomorrow\'s applications with cutting-edge technologies',
+    highlights: ['💻 High Coding', '🚀 Practical Projects', '⚡ Fast-Paced']
   },
   IT: {
     mathIntensity: 'Low',
     codingLevel: 'Medium',
     theoryPractice: '20/80',
-    tags: ['Infrastructure', 'Networks', 'Cloud Computing', 'Hands-On'],
+    tags: ['Cloud Computing', 'Network Security', 'System Administration', 'DevOps'],
     focus: 'Systems & Networks',
     icon: <Computer />,
-    color: '#1976d2' // Haramaya blue
+    color: '#1976d2', // Haramaya blue
+    tagline: 'Design and secure the digital infrastructure of tomorrow',
+    highlights: ['☁️ Cloud & Networks', '🔒 Cybersecurity', '⚙️ Hands-On Labs']
   },
   IS: {
     mathIntensity: 'Low',
     codingLevel: 'Medium',
     theoryPractice: '40/60',
-    tags: ['Business & Systems', 'Database Management', 'ERP', 'Analysis'],
+    tags: ['Business Analytics', 'Enterprise Systems', 'ERP Solutions', 'Digital Transformation'],
     focus: 'Business Technology',
     icon: <Business />,
-    color: '#c62828' // Haramaya red
+    color: '#c62828', // Haramaya red
+    tagline: 'Bridge technology and business for digital transformation',
+    highlights: ['📊 Business + Tech', '💼 Enterprise Focus', '📈 Strategic Impact']
   },
   ISC: {
     mathIntensity: 'Low',
     codingLevel: 'Low',
     theoryPractice: '60/40',
-    tags: ['Information Organization', 'Digital Libraries', 'Knowledge Management', 'Research'],
+    tags: ['Digital Libraries', 'Knowledge Systems', 'Information Architecture', 'Data Curation'],
     focus: 'Information Management',
     icon: <Storage />,
-    color: '#6a1b9a' // Purple
+    color: '#6a1b9a', // Purple
+    tagline: 'Organize and manage the world\'s digital information',
+    highlights: ['📚 Knowledge Systems', '🗂️ Data Organization', '🔍 Information Science']
   },
   STAT: {
     mathIntensity: 'Very High',
     codingLevel: 'Medium',
     theoryPractice: '50/50',
-    tags: ['Data & AI', 'Statistical Modeling', 'Research', 'Math Heavy'],
+    tags: ['Data Science', 'Machine Learning', 'Statistical Modeling', 'Predictive Analytics'],
     focus: 'Data Science',
     icon: <TrendingUp />,
-    color: '#f57c00' // Haramaya gold
+    color: '#f57c00', // Haramaya gold
+    tagline: 'Turn data into insights and drive data-driven decisions',
+    highlights: ['📊 Data Analytics', '🤖 ML & AI', '📈 Predictive Models']
   }
 };
 
@@ -247,10 +260,12 @@ function Departments() {
               sx={{ 
                 maxWidth: 700,
                 mx: 'auto',
-                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' }
+                fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.15rem' },
+                lineHeight: 1.6
               }}
             >
-              Discover your perfect fit among 6 specialized departments. Filter by skills, interests, and career goals.
+              Discover your perfect fit among <Box component="span" sx={{ fontWeight: 700, color: '#2e7d32' }}>6 world-class departments</Box>. 
+              Filter by skills, interests, and career goals to find where you'll thrive.
             </Typography>
           </Box>
         </Paper>
@@ -500,22 +515,46 @@ function DepartmentCard({ department }) {
           gutterBottom
           sx={{ 
             color: 'text.primary',
-            fontSize: { xs: '1rem', sm: '1.125rem' }
+            fontSize: { xs: '1.1rem', sm: '1.25rem' },
+            mb: 1
           }}
         >
           {name}
         </Typography>
+        
+        {/* Tagline */}
         <Typography 
           variant="body2" 
           sx={{ 
-            color: color,
-            fontWeight: 600,
+            color: 'text.secondary',
+            fontStyle: 'italic',
             mb: 2,
-            fontSize: { xs: '0.75rem', sm: '0.875rem' }
+            fontSize: { xs: '0.75rem', sm: '0.8125rem' },
+            lineHeight: 1.5
           }}
         >
-          {metadata.focus}
+          {metadata.tagline}
         </Typography>
+
+        {/* Highlights */}
+        {metadata.highlights && (
+          <Box sx={{ mb: 2 }}>
+            {metadata.highlights.map((highlight, idx) => (
+              <Typography 
+                key={idx}
+                variant="caption" 
+                sx={{ 
+                  display: 'block',
+                  color: 'text.secondary',
+                  fontSize: { xs: '0.7rem', sm: '0.75rem' },
+                  mb: 0.5
+                }}
+              >
+                {highlight}
+              </Typography>
+            ))}
+          </Box>
+        )}
 
         {/* Badges */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
@@ -539,17 +578,15 @@ function DepartmentCard({ department }) {
           />
         </Box>
 
-        {/* Description */}
+        {/* Description - More visible and attractive */}
         <Typography 
           variant="body2" 
           color="text.secondary"
           sx={{ 
-            mb: 2,
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            fontSize: { xs: '0.75rem', sm: '0.875rem' }
+            mb: 2.5,
+            lineHeight: 1.7,
+            fontSize: { xs: '0.8125rem', sm: '0.9rem' },
+            minHeight: { xs: '48px', sm: '54px' }
           }}
         >
           {description}
@@ -575,20 +612,32 @@ function DepartmentCard({ department }) {
           )}
         </Box>
 
-        {/* Learn More */}
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pt: 2, borderTop: `1px solid ${alpha(color, 0.1)}` }}>
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: color,
-              fontWeight: 600,
-              fontSize: { xs: '0.75rem', sm: '0.875rem' }
-            }}
-          >
-            Explore Program
-          </Typography>
-          <ArrowForward sx={{ color: color, fontSize: 20 }} />
-        </Box>
+        {/* Learn More Button - More prominent */}
+        <Button
+          fullWidth
+          endIcon={<ArrowForward />}
+          sx={{
+            mt: 'auto',
+            py: 1.5,
+            bgcolor: alpha(color, 0.08),
+            color: color,
+            fontWeight: 700,
+            fontSize: { xs: '0.875rem', sm: '0.95rem' },
+            borderRadius: 2,
+            textTransform: 'none',
+            border: `2px solid ${alpha(color, 0.2)}`,
+            '&:hover': {
+              bgcolor: color,
+              color: 'white',
+              border: `2px solid ${color}`,
+              transform: 'translateX(4px)',
+              boxShadow: `0 8px 24px ${alpha(color, 0.3)}`
+            },
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
+        >
+          Learn More & Apply
+        </Button>
       </CardContent>
     </Card>
   );
