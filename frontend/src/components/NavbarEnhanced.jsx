@@ -34,6 +34,7 @@ import {
   CompareArrows,
   ArrowForward,
 } from '@mui/icons-material';
+import logo from '../assets/logo.png';
 
 const NavbarEnhanced = () => {
   const theme = useTheme();
@@ -92,17 +93,14 @@ const NavbarEnhanced = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box
             component="img"
-            src="/cci-logo.png"
+            src={logo}
             alt="CCI Department Guidance"
             sx={{
-              height: 45,
-              width: 'auto',
-              borderRadius: 1,
-              border: '2px solid',
-              borderColor: 'primary.main',
-              objectFit: 'contain',
-              bgcolor: 'white',
-              p: 0.5,
+              height: 50,
+              width: 50,
+              borderRadius: '50%',
+              objectFit: 'cover',
+              boxShadow: 2,
             }}
           />
         </Box>
@@ -237,21 +235,16 @@ const NavbarEnhanced = () => {
               {/* Logo Image */}
               <Box
                 component="img"
-                src="/cci-logo.png"
+                src={logo}
                 alt="CCI Department Guidance"
                 sx={{
-                  height: '100%',
-                  width: 'auto',
-                  maxHeight: scrolled ? 56 : 68,
-                  borderRadius: 1.5,
-                  border: '2px solid',
-                  borderColor: 'primary.main',
-                  bgcolor: 'white',
-                  p: 0.5,
+                  height: scrolled ? 50 : 60,
+                  width: scrolled ? 50 : 60,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
                   flexShrink: 0,
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: scrolled ? theme.shadows[2] : theme.shadows[1],
-                  objectFit: 'contain',
+                  boxShadow: scrolled ? 3 : 2,
                 }}
               />
             </Box>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import logo from '../assets/logo.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -39,9 +40,15 @@ const Footer = () => {
           <div className="footer-column">
             <div className="footer-brand">
               <img 
-                src="/cci-logo.png" 
+                src={logo}
                 alt="CCI Logo" 
                 className="footer-logo"
+                style={{ 
+                  borderRadius: '50%', 
+                  width: '60px', 
+                  height: '60px',
+                  objectFit: 'cover'
+                }}
               />
               <div className="footer-brand-text">
                 <h3 className="footer-brand-title">CCI Department Guidance</h3>
